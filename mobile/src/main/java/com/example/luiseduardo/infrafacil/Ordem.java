@@ -70,6 +70,7 @@ public class Ordem extends AppCompatActivity implements AdapterView.OnItemClickL
 
         OcorList = new ArrayList<>();
         //tx =(TextView)findViewById(R.id.TextViwerOrdem);
+        //
         lv = (ListView) findViewById(R.id.list);
         lv.setOnItemClickListener(this);
 
