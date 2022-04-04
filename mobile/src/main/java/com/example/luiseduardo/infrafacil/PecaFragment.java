@@ -42,9 +42,9 @@ public class PecaFragment   extends Fragment {
     private static String IDORDEM = Status_Ordem.IDORDEM;
 
     JSONParser jsonParser = new JSONParser();
-    private static String urlvenda = "http://futsexta.16mb.com/Poker/Infra_Get_produtosvendido.php";
+    private static String urlvenda = "http://futsexta.16mb.com/InfraFacil/Infra_Get_produtosvendido.php";
 
-    public static String idvenda, idprod,  qtd,  idcliente,  idocor, datavenda,  idforne,  valoruni,  valortotal,  formadepagamento,  status,  qtdparcel, parcela,  valorparcela,  name;
+    public static String idvenda, idprod,  qtd,  idcliente,  idocor, datavenda,  idforne,  valoruni, valorpago, valortotal,  formadepagamento,  status,  qtdparcel, parcela,  valorparcela,  name;
     public static int Somavebdas, somatotal;
 
 
@@ -88,7 +88,7 @@ public class PecaFragment   extends Fragment {
     }
 
     public void insertItem(int position){
-        lsvendas.add(new Vendas(idvenda, idprod,  qtd,  idcliente,  idocor, datavenda,  idforne,  valoruni,  valortotal,  formadepagamento,  status,  qtdparcel, parcela, valorparcela,  name));
+        lsvendas.add(new Vendas(idvenda, idprod,  qtd,  idcliente,  idocor, datavenda,  idforne,  valoruni, valorpago,  valortotal,  formadepagamento,  status,  qtdparcel, parcela, valorparcela,  name));
         VendasAdapter.notifyItemChanged();
     }
     public void removetItem(int position){
@@ -140,7 +140,7 @@ public class PecaFragment   extends Fragment {
 
             if (jsonStr != null) {
                 try {
-                    Log.e(TAG, "Não nulo");
+                    Log.e(TAG, "Não nulo 1");
                     JSONObject jsonObj = new JSONObject(String.valueOf(jsonStr));
 
                     // Getting JSON Array node
@@ -161,8 +161,9 @@ public class PecaFragment   extends Fragment {
                         String idcli = c.getString("idcliente");
                         String sidocorrencia = c.getString("idocorrencia");
                         String sdatavenda = c.getString("datavenda");
-                        String idfornecedor = c.getString("idforne");
-                        String valorunitario = c.getString("volorvendido");
+                        String idfornecedor = c.getString("idfornecedor");
+                        String valorunitario = c.getString("valorvendido");
+                        String valorpg = c.getString("valorpago");
                         String svalortotal = c.getString("valortotal");
                         String sformapag = c.getString("formadepagamento");
                         String sstatus = c.getString("status");
@@ -180,6 +181,7 @@ public class PecaFragment   extends Fragment {
                         datavenda = sdatavenda;
                         idforne =  idfornecedor;
                         valoruni =  valorunitario;
+                        valorpago =  valorpg;
                         valortotal =  svalortotal;
                         formadepagamento =  sformapag;
                         status =  sstatus;
@@ -189,7 +191,7 @@ public class PecaFragment   extends Fragment {
                         name =  sdescricao;
 
 
-                        lsvendas.add(new Vendas(idvend, idpro,  quantidade,  idcli,  sidocorrencia, sdatavenda,  idfornecedor,  valorunitario,  svalortotal,  sformapag,  sstatus,  qtdparcela,sparcela,  svalorparcela,  sdescricao));
+                        lsvendas.add(new Vendas(idvend, idpro,  quantidade,  idcli,  sidocorrencia, sdatavenda,  idfornecedor,  valoruni, valorpago, svalortotal,  sformapag,  sstatus,  qtdparcela,sparcela,  svalorparcela,  sdescricao));
 
                         Somavebdas = Somavebdas + (int)Double.parseDouble(valortotal);
 
@@ -197,7 +199,7 @@ public class PecaFragment   extends Fragment {
 
                     }
                 } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    Log.e(TAG, "Json parsing error : " + e.getMessage());
                 }
             } else {
                 Log.e(TAG, "Couldn't get json from server.");

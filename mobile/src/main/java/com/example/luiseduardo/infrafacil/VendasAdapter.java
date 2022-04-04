@@ -32,7 +32,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
     Context mContext;
     List<Vendas> mData;
     public static String idocor = Status_Ordem.IDORDEM;
-    public static String  idvenda, idprod, idforne, valorvenda, qtdprodvend, descri;
+    public static String  idvenda, idprod, idforne, valorvenda, valorpg, qtdprodvend, descri;
     private static String urldelvenda = "http://futsexta.16mb.com/Poker/Infra_Delete_produtosvendido.php";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";

@@ -10,11 +10,14 @@ public class Vendas {
     private String datavenda;
     private String idforne;
     private String valoruni;
+    private String valorpago;
     private String valortotal;
     private String formadepagamento;
     private String status;
     private String qtdparcel;
     private String parcela;
+
+
 
     public String getParcela() {
         return parcela;
@@ -57,6 +60,10 @@ public class Vendas {
 
     public void setValoruni(String valoruni) {
         this.valoruni = valoruni;
+    }
+
+    public void setValorpago(String valorpago) {
+        this.valorpago = valorpago;
     }
 
     public void setValortotal(String valortotal) {
@@ -115,6 +122,10 @@ public class Vendas {
         return valoruni;
     }
 
+    public String getValorpago() {
+        return valorpago;
+    }
+
     public String getValortotal() {
         return valortotal;
     }
@@ -145,7 +156,7 @@ public class Vendas {
 
 
 
-    public Vendas(String idvenda,String idprod, String qtd, String idcliente, String idocor,String datavenda, String idforne, String valoruni, String valortotal, String formadepagamento, String status, String qtdparcel,String parcela, String valorparcela, String name) {
+    public Vendas(String idvenda,String idprod, String qtd, String idcliente, String idocor,String datavenda, String idforne, String valoruni, String valorpago, String valortotal, String formadepagamento, String status, String qtdparcel,String parcela, String valorparcela, String name) {
         this.idvenda = idvenda;
         this.idprod = idprod;
         this.qtd =  qtd;
@@ -154,6 +165,7 @@ public class Vendas {
         this.datavenda = datavenda;
         this.idforne =  idforne;
         this.valoruni =  valoruni;
+        this.valorpago =  valorpago;
         this.valortotal =  valortotal;
         this.formadepagamento =  formadepagamento;
         this.status =  status;

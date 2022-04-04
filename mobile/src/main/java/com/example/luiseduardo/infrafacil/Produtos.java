@@ -61,7 +61,7 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
     String[] Itemtar1 = { "Adicionar Tarefa", "Formatação", "Visita Técnica", "Conf. Router", "Instalar Office", "Outro"};
 
     private String TAG = Produtos.class.getSimpleName();
-    private String qtdvendalaste, qtdvendanow, somaqtdnew,qtdprodvend, idvenda, idprod,  qtd,    idocor, datavenda,  idforne,  valoruni,  valortotal,  formadepagamento,  status,  parcela, qtdparcel,  valorparcela,  name, descri;
+    private String qtdvendalaste, qtdvendanow, somaqtdnew,qtdprodvend, idvenda, idprod,  qtd,    idocor, datavenda,  idforne,  valoruni, valorpago,  valortotal,  formadepagamento,  status,  parcela, qtdparcel,  valorparcela,  name, descri;
     public String DescriProd = "%",nome;
     private  String Origem;
 	private  RadioButton buttonavista, buttonparcelado;
@@ -255,7 +255,7 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                                      valortotal = String.valueOf(isoma);
                                      formadepagamento = "Dinheiro - Avista";
 
-                                     lsvendas.add(new Vendas(idvenda, idprod, qtdprodvend, IDCLIENTE, IDORDEM, datavenda, idforne, valoruni, valortotal, formadepagamento, status, qtdparcel,parcela, valorparcela, descri));
+                                     lsvendas.add(new Vendas(idvenda, idprod, qtdprodvend, IDCLIENTE, IDORDEM, datavenda, idforne, valoruni, valorpago, valortotal, formadepagamento, status, qtdparcel,parcela, valorparcela, descri));
                                     finish();
                             } else {
                                     int positiondel = getAdapterItemPositiondel(Integer.parseInt(idprod));
@@ -308,7 +308,7 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                                                 lsvendas.remove(position);
                                                 formadepagamento = "Dinheiro - Avista";
 
-                                                lsvendas.add(new Vendas(idvenda, idprod, qtdprodvend, IDCLIENTE, IDORDEM, datavenda, idforne, valoruni, valortotal, formadepagamento, status, qtdparcel, parcela, valorparcela, descri));
+                                                lsvendas.add(new Vendas(idvenda, idprod, qtdprodvend, IDCLIENTE, IDORDEM, datavenda, idforne, valoruni,valorpago, valortotal, formadepagamento, status, qtdparcel, parcela, valorparcela, descri));
                                                 finish();}
 
 
@@ -426,7 +426,7 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                                                     cont = cont +1;
                                                     parcela = cont+"-"+qtdparcel;
                                                     formadepagamento = "Parcelado";
-                                                    lsvendas.add(new Vendas(idvenda, idprod,  qtdprodvend,  IDCLIENTE,  idocor, datavenda,  idforne,  valoruni,  valortotal,  formadepagamento,  status,  qtdparcel, parcela,  valorparcela,  descri));
+                                                    lsvendas.add(new Vendas(idvenda, idprod,  qtdprodvend,  IDCLIENTE,  idocor, datavenda,  idforne,  valoruni,valorpago,  valortotal,  formadepagamento,  status,  qtdparcel, parcela,  valorparcela,  descri));
                                                 }
                                             }
 
@@ -741,7 +741,7 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                         valorparcela =  svalorparcela;
                         name =  sdescricao;
 
-                        lsvendas.add(new Vendas(idvenda, idprod,  qtd,  IDCLIENTE,  idocor, datavenda,  idforne,  valoruni,  valortotal,  formadepagamento,  status,  qtdparcel,parcela,  valorparcela,  name));
+                        lsvendas.add(new Vendas(idvenda, idprod,  qtd,  IDCLIENTE,  idocor, datavenda,  idforne,  valoruni,valorpago,  valortotal,  formadepagamento,  status,  qtdparcel,parcela,  valorparcela,  name));
 
                         Somavebdas = Somavebdas + (int)Double.parseDouble(valortotal);
 
