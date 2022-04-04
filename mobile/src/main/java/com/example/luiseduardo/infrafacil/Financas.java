@@ -33,7 +33,7 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
 
     private Context context;
     JSONParser jsonParser = new JSONParser();
-    private static String url = "http://futsexta.16mb.com/Poker/Infra_Get_volores.php";
+    private static String url = "http://futsexta.16mb.com/InfraFacil/Infra_Get_volores.php";
     private static String urlpc = "http://futsexta.16mb.com/Poker/Infra_Get_volorlucropc.php";
     public String ntotalfatu;
     public String ntotalmo;
