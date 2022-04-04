@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="0dp"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="677dp">
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingTop="10dp"
+                android:paddingRight="5dp"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+                <!-- Linha 1 com uma coluna-->
+                <TableRow
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imgNewCliente"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/information" />
+
+                    <TableLayout>
+
+
+                        <TextView
+                            android:id="@+id/tvNocli"
+
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="Ocorencia Nº"
+                            android:textAppearance="@style/TextAppearance.Compat.Notification"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textViewNumCli"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:editable="false"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:text="000"
+                            android:textAppearance="@style/TextAppearance.Compat.Notification"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textViewStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="Status"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+
+                    </TableLayout>
+
+
+                </TableRow>
+                <!-- Linha 2 com 2 colunas -->
+
+
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+
+
+                <!-- Linha 2 com 2 colunas -->
+
+
+                <TableRow android:gravity="center_horizontal">
+
+                    <EditText
+                        android:id="@+id/edtquantidade"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:ems="10"
+                        android:inputType="textPersonName" />
+                </TableRow>
+
+
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+
+                <TableRow>
+
+
+                    <TextView
+                        android:id="@+id/lnomecli"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:gravity="center"
+                        android:text="Cliente:"
+                        android:textAppearance="@style/TextAppearance.Compat.Notification" />
+
+                    <AutoCompleteTextView
+                        android:id="@+id/editNome"
+                        android:layout_width="303dp"
+                        android:layout_alignParentLeft="false"
+                        android:layout_marginTop="0dp"
+
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:imeOptions="actionNext"
+                        android:longClickable="false"
+                        android:singleLine="true">
+
+
+                    </AutoCompleteTextView>
+
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+
+
+                <!-- Linha 2 com 2 colunas -->
+
+
+                <TableRow
+                    android:gravity="center_horizontal"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="5dp">
+
+                    <EditText
+                        android:id="@+id/editDescri"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?attr/colorButtonNormal"
+                        android:enabled="false"
+                        android:gravity="top"
+                        android:hint="Descrição Ocor.:"
+                        android:imeOptions="actionNext"
+                        android:inputType="textMultiLine"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="10dp" />
+
+                </TableRow>
+
+
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/TLayAddtar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+
+                <TableRow
+                    android:paddingTop="5dp"
+                    android:paddingEnd="5dp">
+
+                    <TextView
+                        android:id="@+id/ltarefa"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|left"
+                        android:text="Tarefa:"
+                        android:textAppearance="@style/TextAppearance.Compat.Notification" />
+
+                    <Spinner
+                        android:id="@+id/spinnertarefa"
+                        android:layout_width="273dp"
+                        android:layout_height="40dp" />
+
+                    <ImageButton
+                        android:id="@+id/btnaddtar"
+                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:onClick="onClickAddtar"
+                        android:paddingTop="5dp"
+                        app:srcCompat="@android:drawable/ic_menu_upload_you_tube" />
+                </TableRow>
+
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+
+                <TableRow
+                    android:paddingTop="5dp"
+                    android:paddingEnd="5dp">
+
+                    <TextView
+                        android:id="@+id/lfone"
+                        android:layout_width="128dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="left"
+                        android:text="Tecnico Responsavel:"
+                        android:textAppearance="@style/TextAppearance.Compat.Notification" />
+
+                    <AutoCompleteTextView
+                        android:id="@+id/editTecResp"
+                        android:layout_width="315dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="fill_vertical"
+                        android:enabled="false"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true" />
+
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+
+                <TableRow android:paddingTop="5dp">
+
+
+                    <TextView
+                        android:id="@+id/ldataprev"
+                        android:layout_gravity="center|left"
+                        android:layout_span="2"
+                        android:text="Data Previsão:"
+                        android:textAppearance="@style/TextAppearance.Compat.Notification" />
+
+                    <EditText
+                        android:id="@+id/editEmailcli"
+                        android:layout_width="150dp"
+                        android:layout_gravity="fill_vertical"
+                        android:layout_span="5"
+                        android:layout_weight="0"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:imeOptions="actionNext"
+                        android:inputType="date"
+                        android:paddingRight="5dp" />
+
+                    <ImageButton
+                        android:id="@+id/btn_date"
+                        android:layout_width="5dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:enabled="false"
+                        android:onClick="onClickEdit"
+                        app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+
+                </TableRow>
+
+
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:orientation="vertical"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+
+                <TableRow android:id="@+id/Tablemonetaria">
+
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="43dp"
+                        android:layout_height="42dp"
+                        app:srcCompat="@drawable/piggybank" />
+
+                    <TextView
+                        android:id="@+id/lvalor"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Peça:"
+                        android:textAppearance="@style/TextAppearance.Compat.Notification" />
+
+                    <EditText
+                        android:id="@+id/editValor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="false"
+                        android:enabled="false"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:longClickable="false"
+                        android:numeric="decimal"
+                        android:singleLine="true"
+                        android:text="000,00"
+                        android:textAlignment="textStart"
+                        android:textSize="14sp">
+
+
+                    </EditText>
+
+                    <TextView
+                        android:id="@+id/lvalormo"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="M.O:"
+                        android:textAppearance="@style/TextAppearance.Compat.Notification" />
+
+                    <EditText
+                        android:id="@+id/editValormo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="false"
+                        android:enabled="false"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:longClickable="false"
+                        android:numeric="decimal"
+                        android:singleLine="true"
+                        android:text="000,00"
+                        android:textAlignment="textStart"
+                        android:textSize="14sp">
+
+
+                    </EditText>
+
+                    <TextView
+                        android:id="@+id/lvalor2"
+
+                        android:layout_width="47dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Total:"
+                        android:textAppearance="@style/TextAppearance.Compat.Notification" />
+
+                    <EditText
+                        android:id="@+id/editValorTotal"
+                        android:layout_width="74dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:inputType="number"
+                        android:text="000,00"
+                        android:textAlignment="textStart" />
+
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp">
+
+                    <android.support.design.widget.TabLayout
+                        android:id="@+id/tablayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical">
+
+                        <android.support.design.widget.TabItem
+                            android:id="@+id/tabservico"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Serviços" />
+
+                        <android.support.design.widget.TabItem
+                            android:id="@+id/tabpeca"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Peças" />
+
+                    </android.support.design.widget.TabLayout>
+
+                </TableRow>
+            </TableLayout>
+
+
+            <TableLayout
+                android:id="@+id/tableviwerpag"
+                android:layout_width="match_parent"
+                android:layout_height="248dp"
+                android:baselineAligned="true"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <android.support.v4.view.ViewPager
+                                android:id="@+id/viwerpage"
+                                android:layout_width="match_parent"
+                                android:layout_height="300dp"
+                                android:layout_gravity="center|center_horizontal"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp">
+
+                                <TextView
+                                    android:id="@+id/textView2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="TextView" />
+                            </android.support.v4.view.ViewPager>
+                        </LinearLayout>
+                    </ScrollView>
+
+                </TableRow>
+
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/tableStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:shrinkColumns="*"
+                android:stretchColumns="*">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <TextView
+                        android:id="@+id/lstatus"
+
+                        android:layout_width="66dp"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:gravity="center"
+                        android:text="Status:"
+                        android:textAppearance="@style/TextAppearance.Compat.Notification" />
+
+                    <Spinner
+                        android:id="@+id/editStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:enabled="false" />
+
+                </TableRow>
+            </TableLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingRight="5dp">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:baselineAligned="true"
+            android:orientation="vertical"
+            android:shrinkColumns="*"
+            android:stretchColumns="*">
+
+            <TableRow
+                android:id="@+id/Tbutons"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:id="@+id/btnedit"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="@android:color/holo_orange_light"
+                    android:elevation="0dp"
+                    android:hapticFeedbackEnabled="true"
+                    android:onClick="onClickEdit"
+                    android:text="Editar"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/btnfinaliza"
+                    android:layout_width="50dp"
+                    android:background="@color/colorPrimary"
+                    android:elevation="1dp"
+                    android:onClick="onClickEdit"
+                    android:text="Finalizar"
+                    android:textColor="@android:color/background_light" />
+            </TableRow>
+
+
+        </TableLayout>
+    </LinearLayout>
+
+</LinearLayout>
