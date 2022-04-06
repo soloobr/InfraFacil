@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,7 +43,7 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
    
 
 
-    private TextView txvalorfaturado, totalpc, totalmo,detalhafatdisp;
+    private TextView txvalorfaturado, totalpc, totallpc, totalmo,totalliq,detalhafatdisp;
     private static final String ARG_SECTION_NUMBER = "section_number";
     private Spinner mySpinneryear, mySpinner;
 
@@ -192,8 +193,9 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     YearMonth yearMonthObject = YearMonth.of(1999, 1);
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     datafinal = currentYear+Month+daysInMonth;
-                    new GetValorlucropc().execute();
+
                     new GetValores().execute();
+                    new GetValorlucropc().execute();
 
 
                 }
@@ -222,9 +224,9 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     YearMonth yearMonthObject = YearMonth.of(1999, 3);
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     datafinal = currentYear+Month+daysInMonth;
-                    new GetValorlucropc().execute();
-                    new GetValores().execute();
 
+                    new GetValores().execute();
+                    new GetValorlucropc().execute();
 
                 }
                 if(selectedItem.equals("abril"))
@@ -237,9 +239,9 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     YearMonth yearMonthObject = YearMonth.of(1999, 4);
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     datafinal = currentYear+Month+daysInMonth;
-                    new GetValorlucropc().execute();
-                    new GetValores().execute();
 
+                    new GetValores().execute();
+                    new GetValorlucropc().execute();
 
                 }
                 if(selectedItem.equals("maio"))
@@ -252,9 +254,9 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     YearMonth yearMonthObject = YearMonth.of(1999, 5);
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     datafinal = currentYear+Month+daysInMonth;
-                    new GetValorlucropc().execute();
-                    new GetValores().execute();
 
+                    new GetValores().execute();
+                    new GetValorlucropc().execute();
 
                 }
                 if(selectedItem.equals("junho"))
@@ -267,9 +269,9 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     YearMonth yearMonthObject = YearMonth.of(1999, 6);
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     datafinal = currentYear+Month+daysInMonth;
-                    new GetValorlucropc().execute();
-                    new GetValores().execute();
 
+                    new GetValores().execute();
+                    new GetValorlucropc().execute();
 
                 }
                 if(selectedItem.equals("julho"))
@@ -282,8 +284,9 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     YearMonth yearMonthObject = YearMonth.of(1999, 7);
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     datafinal = currentYear+Month+daysInMonth;
-                    new GetValorlucropc().execute();
+
                     new GetValores().execute();
+                    new GetValorlucropc().execute();
 
                 }
                 if(selectedItem.equals("agosto"))
@@ -296,9 +299,9 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     YearMonth yearMonthObject = YearMonth.of(1999, 8);
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     datafinal = currentYear+Month+daysInMonth;
-                    new GetValorlucropc().execute();
-                    new GetValores().execute();
 
+                    new GetValores().execute();
+                    new GetValorlucropc().execute();
 
                 }
                 if(selectedItem.equals("setembro"))
@@ -311,9 +314,9 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     YearMonth yearMonthObject = YearMonth.of(1999, 9);
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     datafinal = currentYear+Month+daysInMonth;
-                    new GetValorlucropc().execute();
-                    new GetValores().execute();
 
+                    new GetValores().execute();
+                    new GetValorlucropc().execute();
 
                 }
                 if(selectedItem.equals("outubro"))
@@ -326,9 +329,9 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     YearMonth yearMonthObject = YearMonth.of(1999, 10);
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     datafinal = currentYear+Month+daysInMonth;
-                    new GetValorlucropc().execute();
-                    new GetValores().execute();
 
+                    new GetValores().execute();
+                    new GetValorlucropc().execute();
 
                 }
                 if(selectedItem.equals("novembro"))
@@ -341,9 +344,9 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     YearMonth yearMonthObject = YearMonth.of(1999, 11);
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     datafinal = currentYear+Month+daysInMonth;
-                    new GetValorlucropc().execute();
-                    new GetValores().execute();
 
+                    new GetValores().execute();
+                    new GetValorlucropc().execute();
 
                 }
                 if(selectedItem.equals("dezembro"))
@@ -356,9 +359,9 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     YearMonth yearMonthObject = YearMonth.of(1999, 12);
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     datafinal = currentYear+Month+daysInMonth;
-                    new GetValorlucropc().execute();
-                    new GetValores().execute();
 
+                    new GetValores().execute();
+                    new GetValorlucropc().execute();
 
                 }
             } // to close the onItemSelected
@@ -559,37 +562,37 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
         protected void onPostExecute(String file_url) {
             //super.onPostExecute(result);
 
-            txvalorfaturado = (TextView) findViewById(R.id.txvalorfaturado);
-            totalpc = (TextView) findViewById(R.id.txvalorfaturadopc);
-            totalmo = (TextView) findViewById(R.id.txvalorfaturadoliqd);
+            //txvalorfaturado = (TextView) findViewById(R.id.txvalorfaturado);
+            //totalpc = (TextView) findViewById(R.id.txvalorfaturadopc);
+            //totalmo = (TextView) findViewById(R.id.txvalorfaturadoliqd);
 
 
 
-            if (ntotalfatu == "0" ) {
-                Log.e("Total Faturado null", ntotalfatu);
-                int fat = Integer.parseInt("0");
-                int pc = Integer.parseInt("0");
-                int lq = Integer.parseInt("0");
-                DecimalFormat decFormat = new DecimalFormat("'R$ ' ,##0,00");
-                txvalorfaturado.setText(decFormat.format(fat));
-                totalmo.setText(decFormat.format(lq));
-                totalpc.setText(decFormat.format(pc));
+            //if (ntotalfatu == "0" ) {
+                //Log.e("Total Faturado null", ntotalfatu);
+                //int fat = Integer.parseInt("0");
+                //int pc = Integer.parseInt("0");
+                //int lq = Integer.parseInt("0");
+                //DecimalFormat decFormat = new DecimalFormat("'R$ ' ,##0,00");
+                //txvalorfaturado.setText(decFormat.format(fat));
+                //totalmo.setText(decFormat.format(lq));
+                //totalpc.setText(decFormat.format(pc));
 
-            }else{
-                Log.e("Total Faturado", ntotalfatu);
+            //}else{
+                //Log.e("Total Faturado", ntotalfatu);
 
-                int fat = Integer.parseInt(ntotalfatu);
-                int pc = Integer.parseInt(ntotalpc);
-                int lq = Integer.parseInt(ntotalmo);
+                //int fat = Integer.parseInt(ntotalfatu);
+                //int pc = Integer.parseInt(ntotalpc);
+                //int lq = Integer.parseInt(ntotalmo);
                 //int lpc = Integer.parseInt(ntotallucropc);
                 //int tlq = lpc + lq;
-                DecimalFormat decFormat = new DecimalFormat("'R$ ' ,##0,00");
-                txvalorfaturado.setText(decFormat.format(fat));
-                totalmo.setText(decFormat.format(lq));
-                totalpc.setText(decFormat.format(pc));
-                totaldisp = decFormat.format(pc);
+                //DecimalFormat decFormat = new DecimalFormat("'R$ ' ,##0,00");
+                //txvalorfaturado.setText(decFormat.format(fat));
+                //totalmo.setText(decFormat.format(lq));
+                //totalpc.setText(decFormat.format(pc));
+                //totaldisp = decFormat.format(pc);
 
-            }
+            //}
         }
     }
 
@@ -668,29 +671,44 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
         protected void onPostExecute(String file_url) {
             //super.onPostExecute(result);
 
-            totalmo = (TextView) findViewById(R.id.txvalorfaturadoliqd);
-
-
-
-            if (ntotalfatu == "0" ) {
-                Log.e("Total Faturado null", ntotalfatu);
-                int fat = Integer.parseInt("0");
-                int pc = Integer.parseInt("0");
-                int lq = Integer.parseInt("0");
+            if (TextUtils.isEmpty(ntotalfatu) || ntotalfatu == "0") {
+                txvalorfaturado.setText("R$ 0,00");
+                totalmo.setText("R$ 0,00");
+                totalpc.setText("R$ 0,00");
+                totallpc.setText("R$ 0,00");
+                totalliq.setText("R$ 0,00");
+            }else{
                 DecimalFormat decFormat = new DecimalFormat("'R$ ' ,##0,00");
+                int fat = Integer.parseInt(ntotalfatu);
+                txvalorfaturado = (TextView) findViewById(R.id.txvalorfaturado);
                 txvalorfaturado.setText(decFormat.format(fat));
-                totalmo.setText(decFormat.format(lq));
+
+                int pc = Integer.parseInt(ntotalpc);
+                totalpc = (TextView) findViewById(R.id.txvalorfaturadopc);
                 totalpc.setText(decFormat.format(pc));
 
-            }else{
-                Log.e("Total Faturado", ntotalfatu);
-                int lq = Integer.parseInt(ntotalmo);
-                int lpc = Integer.parseInt(ntotallucropc);
+                int lupc = Integer.parseInt(ntotallucropc);
+                totallpc = (TextView) findViewById(R.id.txvalorlucropc);
+                totallpc.setText(decFormat.format(lupc));
 
-                DecimalFormat decFormat = new DecimalFormat("'R$ ' ,##0,00");
-                int lucro = lq+lpc;
-                //totalmo.setText(decFormat.format(lq));
-                totalmo.setText(decFormat.format(lucro));
+                int mo = Integer.parseInt(ntotalmo);
+                totalmo = (TextView) findViewById(R.id.txvalormo);
+                totalmo.setText(decFormat.format(mo));
+
+                totalliq = (TextView) findViewById(R.id.txvalorfaturadoliqd);
+
+                if (TextUtils.isEmpty(ntotallucropc) || ntotallucropc == "0") {
+                    int lpc = Integer.parseInt("0");
+                    int lq = Integer.parseInt(ntotalmo);
+                    int lucro = lq+lpc;
+                    totalliq.setText(decFormat.format(lucro));
+                }else{
+                    int lpc = Integer.parseInt(ntotallucropc);
+                    int lq = Integer.parseInt(ntotalmo);
+                    int lucro = lq+lpc;
+                    totalliq.setText(decFormat.format(lucro));
+                }
+
 
             }
 
