@@ -148,6 +148,7 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                 descri = ((TextView) view.findViewById(R.id.tvnome)).getText().toString();
                 idprod = adapterListView.getItem(position).getNumero();
 				valoruni = adapterListView.getItem(position).getValor();
+                valorpago = adapterListView.getItem(position).getValor();
 
 
 
@@ -190,11 +191,14 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                 // spinnerfornecedor.setAdapter(aa);
                 //spinnerfornecedor.setSelection(0);
 
-                
-                
-                
+
+
+
                 final EditText valordevenda = alertLayout.findViewById(R.id.editvalorvendido);
                 valordevenda.addTextChangedListener(new Status_Ordem.MoneyTextWatcher(valordevenda));
+
+                final EditText valordecompra = alertLayout.findViewById(R.id.editvalorpago);
+                valordecompra.addTextChangedListener(new Status_Ordem.MoneyTextWatcher(valordecompra));
 
                 final TextView tvdescriproduto = alertLayout.findViewById(R.id.tvdescriproduto);
                 final TextView txnumeroid = alertLayout.findViewById(R.id.txnumeroid);
@@ -203,6 +207,7 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                 tvdescriproduto.setText(descri);
                 txnumeroid.setText(idprod);
                 valordevenda.setText(valoruni);
+                valordecompra.setText(valorpago);
                 qtd.setText("1");
                 //idfornecedor.setText("1");
 
@@ -229,6 +234,12 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                         String Vlr_Pexaold = String.format("[%s\\s]", Status_Ordem.MoneyTextWatcher.getCurrencySymbol());
                         valoruni = valoruni.replaceAll(Vlr_Pexaold, "");
                         valoruni = valoruni.replaceAll(",", "");
+
+                        valorpago = valordecompra.getText().toString();
+                        String Vlr_pagoold = String.format("[%s\\s]", Status_Ordem.MoneyTextWatcher.getCurrencySymbol());
+                        valorpago = valorpago.replaceAll(Vlr_pagoold, "");
+                        valorpago = valorpago.replaceAll(",", "");
+
 
                         qtdprodvend = qtd.getText().toString();
                         //idcliente = Status_Ordem.idcliente;

@@ -154,7 +154,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
     private static String Id_Comp = "";
     private static int number1, number2;
 
-    public static String idvenda, idprod, idforne, valorvenda, qtdprodvend, descri, parcela, qtdparcela, valorparcela, idcliente,formadepagamento,valortotal,dataprev;
+    public static String idvenda, idprod, idforne, valorvenda, valorcompra, qtdprodvend, descri, parcela, qtdparcela, valorparcela, idcliente,formadepagamento,valortotal,dataprev;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -885,11 +885,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             }
 
             return null;
-
         }
-
-
-
 
         protected void onPostExecute(String file_url) {
             // dismiss the dialog once product deleted
@@ -903,11 +899,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
         }
 
-
-
     }
-
-
 
     class ConcluirChamado extends AsyncTask<String, String, String> {
 
@@ -1118,6 +1110,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                 datavenda =  PecaFragment.lsvendas.get(counter).getDatavenda();
                 idforne = PecaFragment.lsvendas.get(counter).getIdforne();
                 valorvenda = PecaFragment.lsvendas.get(counter).getValoruni();
+                valorcompra = PecaFragment.lsvendas.get(counter).getValorpago();
                 valortotal = PecaFragment.lsvendas.get(counter).getValortotal();
                 formadepagamento = PecaFragment.lsvendas.get(counter).getFormadepagamento();
                 //status
@@ -1140,6 +1133,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                     obj_new.put("datavenda", datavenda);
                     obj_new.put("idfornecedor", idforne);
                     obj_new.put("volorvendido", valorvenda);
+                    obj_new.put("volorpago", valorcompra);
                     obj_new.put("valortotal", valortotal);
                     obj_new.put("formadepagamento", formadepagamento);
                     obj_new.put("status", "Executando");
@@ -1213,12 +1207,13 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
 
             try {
+                //json_string = "[{\"idproduto\":\"68\", \"quantidadeproduto\": \"1\", \"valorvenda\": \"1000\"},{\"idproduto\": \"68\", \"quantidadeproduto\": \"1\", \"valorvenda\": \"2000\"}]";
                 HttpParams httpParams = new BasicHttpParams();
                 HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_MILLISEC);
                 HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_MILLISEC);
                 HttpClient client = new DefaultHttpClient(httpParams);
 
-                String url = "http://futsexta.16mb.com/Poker/IsertItem_OrdemMobile1.php";
+                String url = "http://futsexta.16mb.com/InfraFacil/IsertItem_OrdemMobile1.php";
 
                 HttpPost request = new HttpPost(url);
                 request.setEntity(new ByteArrayEntity(json_string.getBytes("UTF8")));
@@ -1237,7 +1232,6 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             return date;
         }
     }
-
 
     public static class MoneyTextWatcher implements TextWatcher {
         private WeakReference<EditText> editTextWeakReference;
@@ -1364,7 +1358,6 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             return NumberFormat.getCurrencyInstance(Locale.getDefault()).getCurrency().getSymbol();
         }
     }
-
 
     @Override
     protected void onStart() {
