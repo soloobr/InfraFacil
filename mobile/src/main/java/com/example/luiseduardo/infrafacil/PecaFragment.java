@@ -44,7 +44,7 @@ public class PecaFragment   extends Fragment {
     JSONParser jsonParser = new JSONParser();
     private static String urlvenda = "http://futsexta.16mb.com/InfraFacil/Infra_Get_produtosvendido.php";
 
-    public static String idvenda, idprod,  qtd,  idcliente,  idocor, datavenda,  idforne,  valoruni, valorpago, valortotal,  formadepagamento,  status,  qtdparcel, parcela,  valorparcela,  name;
+    public static String idvenda, idprod,  qtd,  idcliente,  idocor, datavenda,  idforne,  valoruni, valorpago, valortotal,  formadepagamento,  status,  qtdparcel, parcela,  valorparcela, datavencparcela,  name;
     public static int Somavebdas, somatotal;
 
 
@@ -170,6 +170,7 @@ public class PecaFragment   extends Fragment {
                         String qtdparcela = c.getString("qtdparcela");
                         String sparcela = c.getString("parcela");
                         String svalorparcela = c.getString("valorparcela");
+                        String sdatavencparcela = c.getString("datavencparcela");
                         String sdescricao = c.getString("descricao");
 
 
@@ -188,6 +189,8 @@ public class PecaFragment   extends Fragment {
                         qtdparcel =  qtdparcela;
                         parcela = sparcela;
                         valorparcela =  svalorparcela;
+                        datavencparcela =  sdatavencparcela;
+
                         name =  sdescricao;
 
 

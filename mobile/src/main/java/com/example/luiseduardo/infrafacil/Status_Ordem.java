@@ -100,8 +100,8 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
     private static String urlvenda = "http://futsexta.16mb.com/Poker/Infra_Get_produtosvendido.php";
     private static String urldelvenda = "http://futsexta.16mb.com/Poker/Infra_Delete_produtosvendido.php";
 
-    private static String GETINFO_URL = "http://futsexta.16mb.com/Poker/Edit_OrdemMobile.php";
-    private static String COMCLUIR_URL = "http://futsexta.16mb.com/Poker/ordem_servico_Comcluir.php";
+    private static String GETINFO_URL = "http://futsexta.16mb.com/InfraFacil/Infra_Edit_OrdemMobile.php";
+    private static String COMCLUIR_URL = "http://futsexta.16mb.com/InfraFacil/Infra_ordem_servico_Comcluir.php";
     private static String urlAll = "http://futsexta.16mb.com/Poker/ordem_servicomobile_GetAll.php";
     private static String IsertItem = "http://futsexta.16mb.com/Poker/IsertItem_OrdemMobile.php";
 
@@ -618,7 +618,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             List params = new ArrayList();
             params.add(new BasicNameValuePair("NUM_Ocor",NUM_Ocor));
 
-            JSONObject json = jsonParser.makeHttpRequest(url,"POST",
+            JSONObject json = jsonParser.makeHttpRequest(url,"GET",
                     params);
 
             Log.i("Profile JSON: ", json.toString());
@@ -1050,7 +1050,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                 params.add(new BasicNameValuePair("idprod", idprod));
                 params.add(new BasicNameValuePair("quantidadeproduto", qtdprodvend));
                 params.add(new BasicNameValuePair("idfornecedor", idforne));
-                params.add(new BasicNameValuePair("volorvendido", valorvenda));
+                params.add(new BasicNameValuePair("valorvendido", valorvenda));
                 params.add(new BasicNameValuePair("formadepagamento", "Dinheiro - Avista"));
                 params.add(new BasicNameValuePair("datavenda", date));
 
@@ -1132,8 +1132,8 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                     obj_new.put("idocorrencia", IDORDEM);
                     obj_new.put("datavenda", datavenda);
                     obj_new.put("idfornecedor", idforne);
-                    obj_new.put("volorvendido", valorvenda);
-                    obj_new.put("volorpago", valorcompra);
+                    obj_new.put("valorvendido", valorvenda);
+                    obj_new.put("valorpago", valorcompra);
                     obj_new.put("valortotal", valortotal);
                     obj_new.put("formadepagamento", formadepagamento);
                     obj_new.put("status", "Executando");

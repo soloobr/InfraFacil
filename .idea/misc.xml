@@ -4,8 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_financas.xml" value="0.33" />
+        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/custom_alertparcelamento.xml" value="0.5" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/custom_alertprod.xml" value="0.33" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/fragment_peca.xml" value="0.17074275362318841" />
+        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/item_vendas.xml" value="0.33" />
+        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/list_item_despesas.xml" value="0.19010416666666666" />
+        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/list_item_pecas_pecas.xml" value="0.33" />
         <entry key="..\:/Projetos/Android/InfraFacil/mobile/src/main/res/layout/activity_financas.xml" value="0.33" />
         <entry key="..\:/Projetos/Android/InfraFacil/mobile/src/main/res/layout/activity_ordemserv.xml" value="0.25" />
         <entry key="..\:/Projetos/Android/InfraFacil/mobile/src/main/res/layout/activity_produtos.xml" value="0.1" />

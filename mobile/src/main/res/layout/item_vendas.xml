@@ -15,30 +15,37 @@
         <TextView
             android:id="@+id/main_line_qtd"
             android:layout_width="43dp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:gravity="center"
             android:text="Qtd" />
 
         <TextView
             android:id="@+id/main_line_nome"
             android:layout_width="155dp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:gravity="center"
             android:text="Descrição do Item"
             android:textAlignment="gravity" />
 
         <TextView
             android:id="@+id/main_line_valor"
-            android:layout_width="88dp"
-            android:layout_height="50dp"
+            android:layout_width="79dp"
+            android:layout_height="30dp"
             android:gravity="center"
             android:text="Valor"
             android:textColor="#4CAF50" />
 
         <ImageButton
+            android:id="@+id/main_parce"
+            android:layout_width="39dp"
+            android:layout_height="30dp"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/money100" />
+
+        <ImageButton
             android:id="@+id/main_delete"
             android:layout_width="39dp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:background="@android:color/transparent"
             android:src="@android:drawable/ic_menu_delete" />
 

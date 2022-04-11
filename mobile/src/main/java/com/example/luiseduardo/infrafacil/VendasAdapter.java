@@ -76,6 +76,9 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
         holder.idvenda = (mData.get(position).getIdvenda());
         holder.idproduto = (mData.get(position).getIdprod());
         holder.idocor = (mData.get(position).getIdocor());
+        if(!mData.get(position).getQtdparcel().equals("0")) {
+            holder.imgparce.setImageResource(R.mipmap.parce100);
+        }
 
         holder.img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,6 +151,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
         private TextView tv_qtd;
         private TextView tv_valor;
         private ImageButton img;
+        private ImageButton imgparce;
         private String idvenda;
         private String idproduto;
         private String idocor;
@@ -161,6 +165,8 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
             tv_qtd = (TextView)itemView.findViewById(R.id.main_line_qtd);
             tv_valor = (TextView)itemView.findViewById(R.id.main_line_valor);
             img = (ImageButton) itemView.findViewById(R.id.main_delete);
+            imgparce = (ImageButton) itemView.findViewById(R.id.main_parce);
+
 
         }
 

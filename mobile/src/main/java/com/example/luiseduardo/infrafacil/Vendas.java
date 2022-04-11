@@ -16,19 +16,27 @@ public class Vendas {
     private String status;
     private String qtdparcel;
     private String parcela;
+    private String valorparcela;
+    private String name;
+    private int iconeRid;
 
-
+    public int getIconeRid()
+    {
+        return iconeRid;
+    }
 
     public String getParcela() {
         return parcela;
     }
 
+    public void setIconeRid(int iconeRid)
+    {
+        this.iconeRid = iconeRid;
+    }
+
     public void setParcela(String parcela) {
         this.parcela = parcela;
     }
-
-    private String valorparcela;
-    private String name;
 
     public void setIdvenda(String idvenda) {
         this.idvenda = idvenda;
@@ -58,9 +66,7 @@ public class Vendas {
         this.idforne = idforne;
     }
 
-    public void setValoruni(String valoruni) {
-        this.valoruni = valoruni;
-    }
+    public void setValoruni(String valoruni) { this.valoruni = valoruni; }
 
     public void setValorpago(String valorpago) {
         this.valorpago = valorpago;
@@ -70,9 +76,7 @@ public class Vendas {
         this.valortotal = valortotal;
     }
 
-    public void setFormadepagamento(String formadepagamento) {
-        this.formadepagamento = formadepagamento;
-    }
+    public void setFormadepagamento(String formadepagamento) { this.formadepagamento = formadepagamento; }
 
     public void setStatus(String status) {
         this.status = status;
@@ -118,9 +122,7 @@ public class Vendas {
         return idforne;
     }
 
-    public String getValoruni() {
-        return valoruni;
-    }
+    public String getValoruni() { return valoruni; }
 
     public String getValorpago() {
         return valorpago;
@@ -173,6 +175,7 @@ public class Vendas {
         this.parcela = parcela;
         this.valorparcela =  valorparcela;
         this.name =  name;
+        this.iconeRid = iconeRid;
 
     }
 
