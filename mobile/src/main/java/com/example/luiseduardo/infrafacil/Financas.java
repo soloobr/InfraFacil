@@ -88,40 +88,40 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
 
         for (int i = 1; i <=12; i++) {
             if (i ==1){
-                list.add("janeiro");
+                list.add("Janeiro");
             }
             if (i ==2){
-                list.add("fevereiro");
+                list.add("Fevereiro");
             }
             if (i ==3){
-                list.add("março");
+                list.add("Março");
             }
             if (i ==4){
-                list.add("abril");
+                list.add("Abril");
             }
             if (i ==5){
-                list.add("maio");
+                list.add("Maio");
             }
             if (i ==6){
-                list.add("junho");
+                list.add("Junho");
             }
             if (i ==7){
-                list.add("julho");
+                list.add("Julho");
             }
             if (i ==8){
-                list.add("agosto");
+                list.add("Agosto");
             }
             if (i ==9){
-                list.add("setembro");
+                list.add("Setembro");
             }
             if (i ==10){
-                list.add("outubro");
+                list.add("Outubro");
             }
             if (i ==11){
-                list.add("novembro");
+                list.add("Novembro");
             }
             if (i ==12){
-                list.add("dezembro");
+                list.add("Dezembro");
             }
         }
 
@@ -183,7 +183,7 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
                 String selectedItem = parent.getItemAtPosition(position).toString();
-                if(selectedItem.equals("janeiro"))
+                if(selectedItem.equals("Janeiro"))
                 {
                     //System.out.println("FOI" );
                     //String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
@@ -199,22 +199,24 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
 
 
                 }
-                if(selectedItem.equals("fevereiro"))
+                if(selectedItem.equals("Fevereiro"))
                 {
                     //System.out.println("FOI" );
                     //String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
                     String currentYear = String.valueOf(mySpinneryear.getSelectedItem());
                     String Month = "02";
                     dataini = currentYear+Month+"01";
-                    YearMonth yearMonthObject = YearMonth.of(2000, 2);
+                    YearMonth yearMonthObject = YearMonth.of(1999, 2);
                     int daysInMonth = yearMonthObject.lengthOfMonth();
                     datafinal = currentYear+Month+daysInMonth;
-                    new GetValorlucropc().execute();
+
                     new GetValores().execute();
+                    new GetValorlucropc().execute();
+
 
 
                 }
-                if(selectedItem.equals("março"))
+                if(selectedItem.equals("Março"))
                 {
                     //System.out.println("FOI" );
                     //String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
@@ -229,7 +231,7 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     new GetValorlucropc().execute();
 
                 }
-                if(selectedItem.equals("abril"))
+                if(selectedItem.equals("Abril"))
                 {
                     //System.out.println("FOI" );
                     //String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
@@ -244,7 +246,7 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     new GetValorlucropc().execute();
 
                 }
-                if(selectedItem.equals("maio"))
+                if(selectedItem.equals("Maio"))
                 {
                     //System.out.println("FOI" );
                     //String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
@@ -259,7 +261,7 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     new GetValorlucropc().execute();
 
                 }
-                if(selectedItem.equals("junho"))
+                if(selectedItem.equals("Junho"))
                 {
                     //System.out.println("FOI" );
                     //String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
@@ -274,7 +276,7 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     new GetValorlucropc().execute();
 
                 }
-                if(selectedItem.equals("julho"))
+                if(selectedItem.equals("Julho"))
                 {
                     //System.out.println("FOI" );
                     //String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
@@ -289,7 +291,7 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     new GetValorlucropc().execute();
 
                 }
-                if(selectedItem.equals("agosto"))
+                if(selectedItem.equals("Agosto"))
                 {
                     //System.out.println("FOI" );
                     //String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
@@ -304,7 +306,7 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     new GetValorlucropc().execute();
 
                 }
-                if(selectedItem.equals("setembro"))
+                if(selectedItem.equals("Setembro"))
                 {
                     //System.out.println("FOI" );
                     //String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
@@ -319,7 +321,7 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     new GetValorlucropc().execute();
 
                 }
-                if(selectedItem.equals("outubro"))
+                if(selectedItem.equals("Outubro"))
                 {
                     //System.out.println("FOI" );
                     //String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
@@ -334,7 +336,7 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     new GetValorlucropc().execute();
 
                 }
-                if(selectedItem.equals("novembro"))
+                if(selectedItem.equals("Novembro"))
                 {
                     //System.out.println("FOI" );
                     //String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
@@ -349,7 +351,7 @@ public class Financas extends AppCompatActivity  implements View.OnClickListener
                     new GetValorlucropc().execute();
 
                 }
-                if(selectedItem.equals("dezembro"))
+                if(selectedItem.equals("Dezembro"))
                 {
                     //System.out.println("FOI" );
                     //String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
