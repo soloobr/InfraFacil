@@ -7,14 +7,16 @@ public class PlayersListView {
         private String nome;
         private String rebuy;
         private String addon;
+        private String valor;
         private int iconeRid;
 
 
-        public PlayersListView(String status, int trabalho100)
+
+    public PlayersListView(String status, int trabalho100)
         {
         }
 
-        public PlayersListView(String id, String idjogo, String nome,String rebuy, String addon,   int iconeRid)
+        public PlayersListView(String id, String idjogo, String nome,String rebuy, String addon, String valor,   int iconeRid)
 
         {
             this.id = id;
@@ -22,8 +24,12 @@ public class PlayersListView {
             this.nome = nome;
             this.rebuy = rebuy;
             this.addon = addon;
+            this.valor = valor;
             this.iconeRid = iconeRid;
         }
+        public String getValor() { return valor; }
+
+        public void setValor(String valor) { this.valor = valor; }
 
         public String getId() {
             return id;

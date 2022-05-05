@@ -1,10 +1,11 @@
 package com.example.luiseduardo.infrafacil;
 
-import static com.example.luiseduardo.infrafacil.Poker.itens;
+//import static com.example.luiseduardo.infrafacil.Poker.itens;
 import static com.example.luiseduardo.infrafacil.Poker.lsplayer;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.DataSetObserver;
@@ -37,13 +38,15 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
     Context mContext;
     List<PlayersListView> mData;
     public static String idocor = Status_Ordem.IDORDEM;
-    public static String  idvenda, idprod, idforne, valorvenda, valorpg, qtdprodvend, descri;
+    public static String  idplayer,rebuy, addon, valor;
     private static String urldelvenda = "http://futsexta.16mb.com/Poker/Infra_Delete_produtosvendido.php";
+    private static String URLUP = "http://futsexta.16mb.com/Poker/Poker_Edit_Players.php";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
     public static String TAG = Ordem.class.getSimpleName();
     JSONParser jsonParser = new JSONParser();
     private final Locale locale = Locale.getDefault();
+    private ProgressDialog pDialog;
 
     public AdapterListViewPlayers(Context mContext, List<PlayersListView> mData) {
         this.mContext = mContext;
@@ -67,14 +70,17 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
     }
     @Override
     public void onBindViewHolder(final MyViwerHolder holder, @SuppressLint("RecyclerView") final int position) {
+        holder.tv_idplayer.setText(mData.get(position).getId());
         holder.tv_nome.setText(mData.get(position).getNome());
-        //holder.tv_qtd.setText(mData.get(position).getQtd());
+        holder.tv_qtdrebuy.setText(mData.get(position).getRebuy());
+        holder.tv_qtdaddon.setText(mData.get(position).getAddon());
 
-       // String valor = mData.get(position).getValoruni();
+        valor = mData.get(position).getValor();
+
         //BigDecimal parsed = parseToBigDecimal(valor);
         //String formatted;
         //formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
-        //holder.tv_valor.setText(formatted);
+        holder.tv_valortotal.setText(valor);
 
         //holder.tv_valor.setText(mData.get(position).getValoruni());
 
@@ -82,7 +88,7 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
        // holder.idproduto = (mData.get(position).getIdprod());
         //holder.idocor = (mData.get(position).getIdocor());
       //  if(!mData.get(position).getQtdparcel().equals("0")) {
-            holder.imgparce.setImageResource(R.mipmap.parce100);
+    //            holder.imgparce.setImageResource(R.mipmap.parce100);
         //}
 
         holder.img.setOnClickListener(new View.OnClickListener() {
@@ -90,26 +96,93 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
             public void onClick(View v) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle("Excluir item:");
+                builder.setTitle("Adicionar  Rebuy:");
                 builder.setMessage(holder.tv_nome.getText());
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
-                        idvenda = (String) holder.idvenda;
-                        //idvenda = PecaFragment.lsvendas.get(counter).getIdvenda();
-                        idprod = (String) holder.idproduto;
-                        String Vlr_venda = String.valueOf(holder.tv_valor.getText());
-                        new ExcluiDadosVenda().execute();
-                        removeAt(position);
-                        int number1 = (int)Double.parseDouble(Status_Ordem.Vlr_Peca);
-                        int number2 = (int)Double.parseDouble(Status_Ordem.Vlr_MO);
-                        // int number3 = (int)Double.parseDouble(Vlr_venda);
+                        //idvenda = (String) holder.idvenda;
+                        rebuy = String.valueOf(holder.tv_qtdrebuy.getText());
+                        addon = String.valueOf(holder.tv_qtdaddon.getText());
+                        valor = String.valueOf(holder.tv_valortotal.getText());
+                        //addon = (String) holder.tv_qtdaddon.getText();
+                        //String Vlr_venda = String.valueOf(holder.tv_valor.getText());
+                        //String Vlr_venda = String.valueOf(holder.tv_valor.getText());
+                        //new ExcluiDadosVenda().execute();
+                        //removeAt(position);
+                        int number1 = (int)Double.parseDouble(rebuy);
+                        int number2 = (int)Double.parseDouble(addon);
+                        int number3 = (int)Double.parseDouble(valor);
 
-                        // int res = number1 - number3;
+                        int res = number1 + 1;
+                        int restota = res * 20;
+                        int restotal = restota + number3;
                         // Status_Ordem.editValorpca.setText(String.valueOf(res));
                         // int res1 = res + number2;
 
-                        //Status_Ordem.editValorTotal.setText(String.valueOf(res1));
+                        holder.tv_qtdrebuy.setText(String.valueOf(res));
+                        holder.tv_valortotal.setText(String.valueOf(restotal));
 
+                        idplayer = String.valueOf(holder.tv_idplayer.getText());
+                        rebuy = String.valueOf(res);
+                        //addon = String.valueOf(res);
+                        valor = String.valueOf(holder.tv_valortotal.getText());
+
+                       new UpdatePlayer().execute();
+                    }
+                });
+                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                    }
+                });
+                //cria o AlertDialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+
+            }
+        });
+        holder.imgaddon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle("Adicionar  Addon:");
+                builder.setMessage(holder.tv_nome.getText());
+                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        //idvenda = (String) holder.idvenda;
+                        rebuy = String.valueOf(holder.tv_qtdrebuy.getText());
+                        addon = String.valueOf(holder.tv_qtdaddon.getText());
+
+
+
+                        //addon = (String) holder.tv_qtdaddon.getText();
+                        //String Vlr_venda = String.valueOf(holder.tv_valor.getText());
+                        //String Vlr_venda = String.valueOf(holder.tv_valor.getText());
+                        //new ExcluiDadosVenda().execute();
+                        //removeAt(position);
+                        int number2 = (int)Double.parseDouble(rebuy);
+                        int number1 = (int)Double.parseDouble(addon);
+                        int number3 = (int)Double.parseDouble(valor);
+
+                        int res1 = number1 +1;
+                        int res = number2 * 20;
+                        int restotal = res + number3;
+                        // Status_Ordem.editValorpca.setText(String.valueOf(res));
+                        // int res1 = res + number2;
+
+                        holder.tv_qtdaddon.setText(String.valueOf(res1));
+                        holder.tv_valortotal.setText(String.valueOf(restotal));
+
+                        idplayer = String.valueOf(holder.tv_idplayer.getText());
+                        //rebuy = String.valueOf(res);
+                        addon = String.valueOf(res);
+                        valor = String.valueOf(holder.tv_valortotal.getText());
+
+
+                        new UpdatePlayer().execute();
                     }
                 });
                 builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -143,9 +216,9 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
         return mData.size();
     }
     public void removeAt(int position) {
-        itens.remove(position);
+        lsplayer.remove(position);
         notifyItemRemoved(position);
-        notifyItemRangeChanged(position, itens.size());
+        notifyItemRangeChanged(position, lsplayer.size());
     }
 
     @Override
@@ -196,10 +269,15 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
 
     public class MyViwerHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private TextView tv_idplayer;
         private TextView tv_nome;
-        private TextView tv_qtd;
-        private TextView tv_valor;
+        private TextView tv_qtdrebuy;
+        private TextView tv_qtdaddon;
+        private TextView tv_valortotal;
+
+
         private ImageButton img;
+        private ImageButton imgaddon;
         private ImageButton imgparce;
         private String idvenda;
         private String idproduto;
@@ -210,10 +288,14 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
         public MyViwerHolder(@NonNull View itemView) {
             super(itemView);
 
+            tv_idplayer = (TextView) itemView.findViewById(R.id.idplayer);
             tv_nome = (TextView) itemView.findViewById(R.id.main_line_nome);
-            //tv_qtd = (TextView)itemView.findViewById(R.id.main_line_qtd);
-            //tv_valor = (TextView)itemView.findViewById(R.id.main_line_valor);
+            tv_qtdrebuy = (TextView)itemView.findViewById(R.id.main_line_valorrebuy);
+            tv_qtdaddon = (TextView)itemView.findViewById(R.id.main_line_valoraddon);
+            tv_valortotal = (TextView)itemView.findViewById(R.id.main_line_valortotal);
+
             img = (ImageButton) itemView.findViewById(R.id.addrebuy);
+            imgaddon = (ImageButton) itemView.findViewById(R.id.main_delete);
             //imgparce = (ImageButton) itemView.findViewById(R.id.addrebuy);
 
 
@@ -246,8 +328,8 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
 
                 List params = new ArrayList();
                 params.add(new BasicNameValuePair("idocorrencia",idocor));
-                params.add(new BasicNameValuePair("idvenda",idvenda));
-                params.add(new BasicNameValuePair("idproduto",idprod));
+                //params.add(new BasicNameValuePair("idvenda",idvenda));
+                //params.add(new BasicNameValuePair("idproduto",idprod));
 
                 JSONObject newjson = jsonParser.makeHttpRequest(urldelvenda,"POST",
                         params);
@@ -292,6 +374,78 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
             return new BigDecimal(0);
 
         }
+    }
+
+    class UpdatePlayer extends AsyncTask<String, String, String>  {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //pDialog = new ProgressDialog(Context.this);
+            //pDialog.setMessage("Atualizando Dados");
+            //pDialog.setIndeterminate(false);
+            //pDialog.setCancelable(true);
+            //pDialog.show();
+        }
+
+
+        @Override
+        protected String doInBackground(String... args) {
+
+
+
+            int success;
+            try {
+
+
+                // Building Parameters
+                List params = new ArrayList();
+
+                params.add(new BasicNameValuePair("id", idplayer));
+                params.add(new BasicNameValuePair("rebuy", rebuy));
+                params.add(new BasicNameValuePair("addon", addon));
+                params.add(new BasicNameValuePair("valor", valor));
+
+
+                Log.d("Debug!", "starting");
+
+                // getting product details by making HTTP request
+                JSONObject newjson = jsonParser.makeHttpRequest(URLUP, "POST",
+                        params);
+
+                //Id_Comp = "0";
+                // json success tag
+                success = newjson.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("Editar successo!", newjson.toString());
+                    //finish();
+                    return newjson.getString(TAG_MESSAGE);
+
+                } else {
+                    Log.d("Não Atualizada", newjson.getString(TAG_MESSAGE));
+                    //finish();
+                    return newjson.getString(TAG_MESSAGE);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog once product deleted
+
+            //if (pDialog.isShowing()) {
+              //  pDialog.dismiss();
+            //}
+            //if (file_url != null) {
+                //Toast.makeText(Poker.this,  file_url, Toast.LENGTH_LONG).show();
+            //}
+
+        }
+
     }
 
 }

@@ -1,6 +1,9 @@
 package com.example.luiseduardo.infrafacil;
 
+import static android.app.PendingIntent.getActivity;
 import static android.content.ContentValues.TAG;
+
+import static java.security.AccessController.getContext;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,15 +16,20 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,12 +37,22 @@ public class Poker extends AppCompatActivity implements AdapterView.OnItemClickL
 
     private AdapterListViewPlayers adapterListViewPlayers;
     private static String url = "http://futsexta.16mb.com/Poker/poker_get_jogo.php";
-    ArrayList<HashMap<String, String>> PlayersList;
-    public static ArrayList<PlayersListView> itens;
+
+
+    //ArrayList<HashMap<String, String>> PlayersList;
+    //public static ArrayList<PlayersListView> itens;
     public static List<PlayersListView> lsplayer;
-    ArrayList<HashMap<String, String>> newItemlist = new ArrayList<HashMap<String, String>>();
+    //ArrayList<HashMap<String, String>> newItemlist = new ArrayList<HashMap<String, String>>();
     private ListView lv;
     private ProgressDialog pDialog;
+    public static RecyclerView myrecyclerview;
+    static View v;
+
+    JSONParser jsonParser = new JSONParser();
+    private static final String TAG_SUCCESS = "success";
+    private static final String TAG_MESSAGE = "message";
+
+    public static String  idplayer, rebuy, addon;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -43,8 +61,18 @@ public class Poker extends AppCompatActivity implements AdapterView.OnItemClickL
 
         lsplayer = new ArrayList<>();
 
-        lv = (ListView) findViewById(R.id.listviwerplayers);
-        lv.setOnItemClickListener(this);
+       // lv = (ListView) findViewById(R.id.listviwerplayers);
+       // lv.setOnItemClickListener(this);
+
+
+
+        myrecyclerview = (RecyclerView) findViewById(R.id.listviwerplayers);
+
+        myrecyclerview.setLayoutManager(new LinearLayoutManager(this));
+
+        AdapterListViewPlayers adapterListViewPlayers  = new AdapterListViewPlayers(Poker.this,lsplayer);
+
+        myrecyclerview.setAdapter(adapterListViewPlayers);
 
     }
 
@@ -99,6 +127,7 @@ public class Poker extends AppCompatActivity implements AdapterView.OnItemClickL
                         String name = c.getString("Nome_Player");
                         String rebuy = c.getString("rebuy");
                         String addon = c.getString("addon");
+                        String valor = c.getString("Valor");
 
                         //HashMap<String, String> map = new HashMap<String, String>();
                         //map.put("numero", id);
@@ -106,7 +135,7 @@ public class Poker extends AppCompatActivity implements AdapterView.OnItemClickL
 
                         //Log.e(TAG, "Status = " + status);
 
-                        lsplayer.add(new PlayersListView(id, idjogo, name,  rebuy,  addon,1));
+                        lsplayer.add(new PlayersListView(id, idjogo, name,  rebuy,  addon, valor,1));
                         //PlayersListView item1 = new PlayersListView(id, idjogo, name, rebuy, addon, R.mipmap.trabalho100);
 
                         //itens.add(item1);
@@ -126,7 +155,7 @@ public class Poker extends AppCompatActivity implements AdapterView.OnItemClickL
                         //PlayersList.add(contact);
 
                     }
-                    Log.e(TAG, String.valueOf(lsplayer));
+                   // Log.e(TAG, String.valueOf(lsplayer));
                 } catch (final JSONException e) {
                     //Log.e(TAG, "Json parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
@@ -167,25 +196,17 @@ public class Poker extends AppCompatActivity implements AdapterView.OnItemClickL
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
+            //myrecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
+            myrecyclerview = (RecyclerView) findViewById(R.id.listviwerplayers);
+            AdapterListViewPlayers adapterListViewPlayers  = new AdapterListViewPlayers(Poker.this,lsplayer);
+            myrecyclerview.setAdapter(adapterListViewPlayers);
 
-            AdapterListViewPlayers adapterListViewPlayers = new AdapterListViewPlayers(Poker.this, lsplayer);
+            //AdapterListViewPlayers adapterListViewPlayers = new AdapterListViewPlayers(Poker.this, lsplayer);
             //adapterListViewPlayers = new AdapterListViewPlayers(Poker.this, lsplayer);
             //lv.setAdapter(adapterListViewPlayers);
-            lv.setCacheColorHint(Color.TRANSPARENT);
+            //lv.setCacheColorHint(Color.TRANSPARENT);
 
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-
-                    //Toast.makeText(Ordem.this, "You Clicked at "+newItemlist.get(+position).get("numero"), Toast.LENGTH_SHORT).show();
-                    //--Intent intent = new Intent(Poker.this, Status_Ordem.class);
-                    //--IDORDEM = newItemlist.get(+position).get("numero");
-                    //--intent.putExtra("key", IDORDEM);
-                    //--startActivity(intent);
-                }
-            });
         }
     }
 
@@ -195,5 +216,7 @@ public class Poker extends AppCompatActivity implements AdapterView.OnItemClickL
         super.onStart();
         new Poker.GetDados().execute();
     }
+
+
 }
 

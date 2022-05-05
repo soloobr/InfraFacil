@@ -13,8 +13,17 @@
         android:padding="5dp">
 
         <TextView
+            android:id="@+id/idplayer"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="#4CAF50" />
+
+        <TextView
             android:id="@+id/main_line_nome"
-            android:layout_width="155dp"
+            android:layout_width="120dp"
             android:layout_height="30dp"
             android:gravity="center"
             android:text="Descrição do Item"
@@ -22,15 +31,15 @@
 
         <TextView
             android:id="@+id/main_line_valor"
-            android:layout_width="wrap_content"
+            android:layout_width="42dp"
             android:layout_height="30dp"
             android:gravity="center"
-            android:text="Rebuy:"
+            android:text="Rebuy: "
             android:textColor="#4CAF50" />
 
         <TextView
             android:id="@+id/main_line_valorrebuy"
-            android:layout_width="79dp"
+            android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_weight="1"
             android:gravity="center"
@@ -39,15 +48,15 @@
 
         <TextView
             android:id="@+id/main_line_addon"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="30dp"
             android:gravity="center"
-            android:text="Addon:"
+            android:text=" Addon: "
             android:textColor="#4CAF50" />
 
         <TextView
             android:id="@+id/main_line_valoraddon"
-            android:layout_width="79dp"
+            android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_weight="1"
             android:gravity="center"
@@ -70,7 +79,7 @@
 
         <TextView
             android:id="@+id/main_line_valortotal"
-            android:layout_width="79dp"
+            android:layout_width="59dp"
             android:layout_height="30dp"
             android:layout_weight="1"
             android:gravity="center"
