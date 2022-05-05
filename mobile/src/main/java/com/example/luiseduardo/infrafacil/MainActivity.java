@@ -230,9 +230,9 @@ public class MainActivity extends AppCompatActivity
                     break;
             case R.id.statisticas:
 
-                //Intent it1 = new Intent(MainActivity.this, Ordem.class);
-                //startActivity(it1);
-                Toast.makeText(this, "Em Construção " , Toast.LENGTH_LONG).show();
+                Intent it2 = new Intent(MainActivity.this, Poker.class);
+                startActivity(it2);
+                //Toast.makeText(this, "Em Construção " , Toast.LENGTH_LONG).show();
 
                 break;
 
@@ -246,8 +246,8 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.financas:
 
-                Intent it2 = new Intent(MainActivity.this, Financas.class);
-                startActivity(it2);
+                Intent it4 = new Intent(MainActivity.this, Financas.class);
+                startActivity(it4);
                 //Toast.makeText(this, "Em Construção " , Toast.LENGTH_LONG).show();
 
                 break;

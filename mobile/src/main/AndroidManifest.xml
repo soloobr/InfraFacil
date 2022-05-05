@@ -15,6 +15,14 @@
         android:windowSoftInputMode="adjustPan">
         <activity android:name="com.example.luiseduardo.infrafacil.Produtos"></activity>
         <activity
+            android:name="com.example.luiseduardo.infrafacil.Poker"
+            android:label="Poker - Jogo."
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.example.luiseduardo.infrafacil.Financas"
             android:label="@string/title_activity_financas"
             android:theme="@style/AppTheme.NoActionBar" />
