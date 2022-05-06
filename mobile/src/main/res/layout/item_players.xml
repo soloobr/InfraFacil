@@ -71,7 +71,7 @@
             android:src="@mipmap/money100" />
 
         <ImageButton
-            android:id="@+id/main_delete"
+            android:id="@+id/bntaddon"
             android:layout_width="39dp"
             android:layout_height="30dp"
             android:background="@android:color/transparent"

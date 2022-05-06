@@ -2,6 +2,7 @@ package com.example.luiseduardo.infrafacil;
 
 //import static com.example.luiseduardo.infrafacil.Poker.itens;
 import static com.example.luiseduardo.infrafacil.Poker.lsplayer;
+import static com.example.luiseduardo.infrafacil.Poker.myrecyclerview;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -12,6 +13,7 @@ import android.database.DataSetObserver;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -102,7 +104,7 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
                     public void onClick(DialogInterface arg0, int arg1) {
                         //idvenda = (String) holder.idvenda;
                         rebuy = String.valueOf(holder.tv_qtdrebuy.getText());
-                        addon = String.valueOf(holder.tv_qtdaddon.getText());
+
                         valor = String.valueOf(holder.tv_valortotal.getText());
                         //addon = (String) holder.tv_qtdaddon.getText();
                         //String Vlr_venda = String.valueOf(holder.tv_valor.getText());
@@ -110,7 +112,7 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
                         //new ExcluiDadosVenda().execute();
                         //removeAt(position);
                         int number1 = (int)Double.parseDouble(rebuy);
-                        int number2 = (int)Double.parseDouble(addon);
+                        //int number2 = (int)Double.parseDouble(addon);
                         int number3 = (int)Double.parseDouble(valor);
 
                         int res = number1 + 1;
@@ -119,15 +121,17 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
                         // Status_Ordem.editValorpca.setText(String.valueOf(res));
                         // int res1 = res + number2;
 
-                        holder.tv_qtdrebuy.setText(String.valueOf(res));
-                        holder.tv_valortotal.setText(String.valueOf(restotal));
+                        //holder.tv_qtdrebuy.setText(String.valueOf(res));
+                        //holder.tv_valortotal.setText(String.valueOf(restotal));
+
 
                         idplayer = String.valueOf(holder.tv_idplayer.getText());
                         rebuy = String.valueOf(res);
-                        //addon = String.valueOf(res);
-                        valor = String.valueOf(holder.tv_valortotal.getText());
+                        addon = String.valueOf(holder.tv_qtdaddon.getText());
+                        valor = String.valueOf(restotal);
 
-                       new UpdatePlayer().execute();
+                        new UpdatePlayer().execute();
+                        notifyDataSetChanged();
                     }
                 });
                 builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -209,7 +213,10 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
 
     }
 
-
+    public void updateList(List<PlayersListView> data) {
+        mData = data;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {
@@ -443,8 +450,15 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
             //if (file_url != null) {
                 //Toast.makeText(Poker.this,  file_url, Toast.LENGTH_LONG).show();
             //}
+            //Poker.Atu;
+
+
 
         }
+
+    }
+
+    class Soma{
 
     }
 

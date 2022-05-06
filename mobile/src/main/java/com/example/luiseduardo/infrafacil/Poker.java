@@ -5,12 +5,16 @@ import static android.content.ContentValues.TAG;
 
 import static java.security.AccessController.getContext;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +22,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -33,7 +38,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-public class Poker extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class Poker extends Activity implements ItemClickListener{
 
     private AdapterListViewPlayers adapterListViewPlayers;
     private static String url = "http://futsexta.16mb.com/Poker/poker_get_jogo.php";
@@ -46,6 +51,14 @@ public class Poker extends AppCompatActivity implements AdapterView.OnItemClickL
     private ListView lv;
     private ProgressDialog pDialog;
     public static RecyclerView myrecyclerview;
+
+    private RecyclerView recyclerView;
+    private customAdapter  mAdapter;
+    //ArrayList<PlayersListView> list = new ArrayList<>();
+    private List<PlayersListView> cities;
+
+    ImageButton btnRebuy;
+
     static View v;
 
     JSONParser jsonParser = new JSONParser();
@@ -59,27 +72,89 @@ public class Poker extends AppCompatActivity implements AdapterView.OnItemClickL
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_poker);
 
-        lsplayer = new ArrayList<>();
+        //lsplayer = new ArrayList<>();
 
        // lv = (ListView) findViewById(R.id.listviwerplayers);
        // lv.setOnItemClickListener(this);
 
+        //new GetDados().execute();
+
+        //lsplayer.add(new PlayersListView("20", "1", "Luis Eduardo", "0",  "0", "200",1));
 
 
-        myrecyclerview = (RecyclerView) findViewById(R.id.listviwerplayers);
+        //recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        //list.add("Luis Eduardo");
 
-        myrecyclerview.setLayoutManager(new LinearLayoutManager(this));
+        btnRebuy = (ImageButton) findViewById(R.id.bntaddon);
+        //btnRebuy.setOnClickListener(new View.OnClickListener() {
+          //  @Override
+            //public void onClick(View v) {
+                //list.add("Mammahe");
+              //  mAdapter.notifyDataSetChanged();
 
-        AdapterListViewPlayers adapterListViewPlayers  = new AdapterListViewPlayers(Poker.this,lsplayer);
+            //}
+        //});
 
-        myrecyclerview.setAdapter(adapterListViewPlayers);
+
+
+       // myrecyclerview = (RecyclerView) findViewById(R.id.listviwerplayers);
+
+       // myrecyclerview.setLayoutManager(new LinearLayoutManager(this));
+
+       // AdapterListViewPlayers adapterListViewPlayers  = new AdapterListViewPlayers(Poker.this,lsplayer);
+
+       // myrecyclerview.setAdapter(adapterListViewPlayers);
 
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onClick(View view, int position) {
+        //mAdapter.notifyDataSetChanged();
+        final PlayersListView city = lsplayer.get(position);
+        btnRebuy = (ImageButton) findViewById(R.id.bntaddon);
+        btnRebuy.setOnClickListener(new View.OnClickListener() {
+          @Override
+        public void onClick(View v) {
+        //list.add("Mammahe");
+          mAdapter.notifyDataSetChanged();
+              Toast.makeText(getApplicationContext(),
+                      "Atualizou " + city.getNome(),
+                      Toast.LENGTH_LONG)
+                      .show();
+        }
+        });
 
+        btnRebuy = (ImageButton) findViewById(R.id.bntaddon);
+        Toast.makeText(getApplicationContext(),
+                "Atualizou " + view.getId(),
+                Toast.LENGTH_LONG)
+                .show();
+        if (view.getId() == R.id.bntaddon) {
+
+        }
+        view.btnRebuy.setOnClickListener(new View.OnClickListener() {
+                                         }
+        /*btnRebuy.setOnClickListener(new View.OnClickListener() {
+
+
+
+          @Override
+        public void onClick(View view) {
+        //list.add("Mammahe");
+          //mAdapter.notifyDataSetChanged();
+              Toast.makeText(getApplicationContext(),
+                      "Atualizou " + city.getNome(),
+                      Toast.LENGTH_LONG)
+                      .show();
+        }
+        });
+*/
     }
+
+    //@Override
+    //public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+    //}
     class GetDados extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -100,25 +175,15 @@ public class Poker extends AppCompatActivity implements AdapterView.OnItemClickL
             // Making a request to url and getting response
             String jsonStr = sh.makeServiceCall(url);
 
-
-            // Log.e(TAG, "Response from url: " + jsonStr);
-
             if (jsonStr != null) {
                 try {
-                    //Log.e(TAG, "Não nulo");
                     JSONObject jsonObj = new JSONObject(jsonStr);
 
                     // Getting JSON Array node
                     JSONArray contacts = jsonObj.getJSONArray("jogo");
 
-                    //Log.e(TAG, "Count : " + contacts.length());
-
-                    //contador = String.valueOf(contacts.length()+1);
-                    //PlayersList.clear();
-
                     lsplayer = new ArrayList<PlayersListView>();
-                    //newItemlist.clear();
-                    // looping through All Contacts
+
                     for (int i = 0; i < contacts.length(); i++) {
                         JSONObject c = contacts.getJSONObject(i);
 
@@ -129,33 +194,10 @@ public class Poker extends AppCompatActivity implements AdapterView.OnItemClickL
                         String addon = c.getString("addon");
                         String valor = c.getString("Valor");
 
-                        //HashMap<String, String> map = new HashMap<String, String>();
-                        //map.put("numero", id);
-                        //newItemlist.add(map);
-
-                        //Log.e(TAG, "Status = " + status);
-
                         lsplayer.add(new PlayersListView(id, idjogo, name,  rebuy,  addon, valor,1));
-                        //PlayersListView item1 = new PlayersListView(id, idjogo, name, rebuy, addon, R.mipmap.trabalho100);
-
-                        //itens.add(item1);
-
-
-                        // tmp hash map for single contact
-                        //HashMap<String, String> contact = new HashMap<>();
-
-                        // adding each child node to HashMap key => value
-                        //contact.put("id", id);
-                        //contact.put("idjogo", idjogo);
-                        //c/ontact.put("nome", name);
-                        //contact.put("rebuy", rebuy);
-                        //contact.put("addon", addon);
-
-                        // adding contact to contact list
-                        //PlayersList.add(contact);
 
                     }
-                   // Log.e(TAG, String.valueOf(lsplayer));
+
                 } catch (final JSONException e) {
                     //Log.e(TAG, "Json parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
@@ -198,14 +240,24 @@ public class Poker extends AppCompatActivity implements AdapterView.OnItemClickL
             }
             //myrecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
-            myrecyclerview = (RecyclerView) findViewById(R.id.listviwerplayers);
-            AdapterListViewPlayers adapterListViewPlayers  = new AdapterListViewPlayers(Poker.this,lsplayer);
-            myrecyclerview.setAdapter(adapterListViewPlayers);
+            //myrecyclerview = (RecyclerView) findViewById(R.id.listviwerplayers);
+            //AdapterListViewPlayers adapterListViewPlayers  = new AdapterListViewPlayers(Poker.this,lsplayer);
+            //myrecyclerview.setAdapter(adapterListViewPlayers);
 
-            //AdapterListViewPlayers adapterListViewPlayers = new AdapterListViewPlayers(Poker.this, lsplayer);
-            //adapterListViewPlayers = new AdapterListViewPlayers(Poker.this, lsplayer);
-            //lv.setAdapter(adapterListViewPlayers);
-            //lv.setCacheColorHint(Color.TRANSPARENT);
+             //myrecyclerview = (RecyclerView) findViewById(R.id.listviwerplayers);
+
+             //myrecyclerview.setLayoutManager(new LinearLayoutManager(Poker.this));
+
+             //AdapterListViewPlayers adapterListViewPlayers  = new AdapterListViewPlayers(Poker.this,lsplayer);
+
+             //myrecyclerview.setAdapter(adapterListViewPlayers);
+            recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            mAdapter = new customAdapter (lsplayer, R.layout.item_players, Poker.this);
+            recyclerView.setAdapter(mAdapter);
+            mAdapter.setClickListener(Poker.this);
 
         }
     }
@@ -215,6 +267,7 @@ public class Poker extends AppCompatActivity implements AdapterView.OnItemClickL
     {
         super.onStart();
         new Poker.GetDados().execute();
+
     }
 
 
