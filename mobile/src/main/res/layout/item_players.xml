@@ -64,7 +64,7 @@
             android:textColor="#4CAF50" />
 
         <ImageButton
-            android:id="@+id/addrebuy"
+            android:id="@+id/btnrebuy"
             android:layout_width="39dp"
             android:layout_height="30dp"
             android:background="@android:color/transparent"

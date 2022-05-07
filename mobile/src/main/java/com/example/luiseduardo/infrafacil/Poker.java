@@ -52,7 +52,7 @@ public class Poker extends Activity implements ItemClickListener{
     private ProgressDialog pDialog;
     public static RecyclerView myrecyclerview;
 
-    private RecyclerView recyclerView;
+    private static RecyclerView recyclerView;
     private customAdapter  mAdapter;
     //ArrayList<PlayersListView> list = new ArrayList<>();
     private List<PlayersListView> cities;
@@ -114,7 +114,7 @@ public class Poker extends Activity implements ItemClickListener{
         btnRebuy = (ImageButton) findViewById(R.id.bntaddon);
         btnRebuy.setOnClickListener(new View.OnClickListener() {
           @Override
-        public void onClick(View v) {
+        public void onClick(View view) {
         //list.add("Mammahe");
           mAdapter.notifyDataSetChanged();
               Toast.makeText(getApplicationContext(),
@@ -132,8 +132,7 @@ public class Poker extends Activity implements ItemClickListener{
         if (view.getId() == R.id.bntaddon) {
 
         }
-        view.btnRebuy.setOnClickListener(new View.OnClickListener() {
-                                         }
+
         /*btnRebuy.setOnClickListener(new View.OnClickListener() {
 
 
@@ -155,6 +154,12 @@ public class Poker extends Activity implements ItemClickListener{
     //public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
     //}
+    public static void methodOnBtnClick(int position)
+    {
+        //lsplayer.remove(position);
+        //recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
+        recyclerView.getAdapter().notifyDataSetChanged();
+    }
     class GetDados extends AsyncTask<Void, Void, Void> {
 
         @Override
