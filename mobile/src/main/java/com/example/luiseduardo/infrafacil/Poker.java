@@ -53,7 +53,7 @@ public class Poker extends Activity implements ItemClickListener{
     public static RecyclerView myrecyclerview;
 
     private static RecyclerView recyclerView;
-    private customAdapter  mAdapter;
+    private static customAdapter  mAdapter;
     //ArrayList<PlayersListView> list = new ArrayList<>();
     private List<PlayersListView> cities;
 
@@ -156,9 +156,10 @@ public class Poker extends Activity implements ItemClickListener{
     //}
     public static void methodOnBtnClick(int position)
     {
-        //lsplayer.remove(position);
-        //recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
-        recyclerView.getAdapter().notifyDataSetChanged();
+        //recyclerView.removeViewAt(position);
+        //mAdapter.notifyDataSetChanged();
+        recyclerView.removeAllViews();
+        //recyclerView.invalidate();
     }
     class GetDados extends AsyncTask<Void, Void, Void> {
 
@@ -258,6 +259,7 @@ public class Poker extends Activity implements ItemClickListener{
              //myrecyclerview.setAdapter(adapterListViewPlayers);
             recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             mAdapter = new customAdapter (lsplayer, R.layout.item_players, Poker.this);
@@ -272,6 +274,7 @@ public class Poker extends Activity implements ItemClickListener{
     {
         super.onStart();
         new Poker.GetDados().execute();
+
 
     }
 

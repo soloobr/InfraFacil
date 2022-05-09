@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -139,6 +141,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
                             new UpdatePlayer().execute();
                             //notifyDataSetChanged();
+
                             Poker.methodOnBtnClick(position);
                         }
                     });
@@ -186,7 +189,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                             // Status_Ordem.editValorpca.setText(String.valueOf(res));
                             // int res1 = res + number2;
 
-                            //holder.tv_qtdrebuy.setText(String.valueOf(res));
+                            tv_qtdrebuy.setText(String.valueOf(res));
                             //holder.tv_valortotal.setText(String.valueOf(restotal));
                             title.setText(String.valueOf(300));
 
@@ -199,7 +202,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
                             new UpdatePlayer().execute();
                             //notifyDataSetChanged();
-                            Poker.methodOnBtnClick(position);
+                            //Poker.methodOnBtnClick(position);
                         }
                     });
                     builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -223,7 +226,6 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
         }
     }
-
     class UpdatePlayer extends AsyncTask<String, String, String> {
 
 
@@ -250,10 +252,18 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                 // Building Parameters
                 List params = new ArrayList();
 
-                params.add(new BasicNameValuePair("id", idplayer));
-                params.add(new BasicNameValuePair("rebuy", rebuy));
-                params.add(new BasicNameValuePair("addon", addon));
-                params.add(new BasicNameValuePair("valor", valor));
+                if (action == "rebuy" ){
+                    params.add(new BasicNameValuePair("id", idplayer));
+                    params.add(new BasicNameValuePair("rebuy", rebuy));
+                    params.add(new BasicNameValuePair("action", action));
+
+                }
+                if (action == "addon" ){
+                    params.add(new BasicNameValuePair("id", idplayer));
+                    params.add(new BasicNameValuePair("addon", addon));
+                    params.add(new BasicNameValuePair("action", action));
+                }
+
 
 
                 Log.d("Debug!", "starting");
@@ -283,7 +293,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         }
 
         protected void onPostExecute(String file_url) {
-
+            //new Poker.GetDados().execute();
         }
 
     }
