@@ -30,7 +30,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
     private int rowLayout;
     private Context mContext;
     private ItemClickListener clickListener;
-    public static String  idplayer,rebuy, addon, valor;
+    public static String  idplayer,rebuy, addon, valor, action;
     JSONParser jsonParser = new JSONParser();
     private static String URLUP = "http://futsexta.16mb.com/Poker/Poker_Edit_Players.php";
     private static final String TAG_SUCCESS = "success";
@@ -101,9 +101,59 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             btnaddon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition(); //Clicked entry in your List
+                    int position = getAdapterPosition();
 
-                    //Method from your activity
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle("Adicionar  Addon:");
+                    builder.setMessage(title.getText());
+                    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            //idvenda = (String) holder.idvenda;
+                            //rebuy = String.valueOf(tv_qtdrebuy.getText());
+
+                            //valor = String.valueOf(tv_valortotal.getText());
+                            //addon = (String) tv_qtdaddon.getText();
+                            //String Vlr_venda = String.valueOf(holder.tv_valor.getText());
+                            //String Vlr_venda = String.valueOf(holder.tv_valor.getText());
+                            //new ExcluiDadosVenda().execute();
+                            //removeAt(position);
+                            //int number1 = (int)Double.parseDouble(rebuy);
+                            //int number2 = (int)Double.parseDouble(addon);
+                            //int number3 = (int)Double.parseDouble(valor);
+
+                            //int res = number2 + 1;
+                            //int restota = res * 20;
+                            //int restotal = restota + number3;
+                            // Status_Ordem.editValorpca.setText(String.valueOf(res));
+                            // int res1 = res + number2;
+
+                            //holder.tv_qtdrebuy.setText(String.valueOf(res));
+                            //holder.tv_valortotal.setText(String.valueOf(restotal));
+                            //title.setText(String.valueOf(300));
+
+
+                            idplayer = String.valueOf(tv_idplayer.getText());
+                            action = "addon";
+                            //addon = String.valueOf(tv_qtdaddon.getText());
+                            //valor = String.valueOf(restotal);
+
+                            new UpdatePlayer().execute();
+                            //notifyDataSetChanged();
+                            Poker.methodOnBtnClick(position);
+                        }
+                    });
+                    builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+
+                        }
+                    });
+                    //cria o AlertDialog
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+
+
+
                     Poker.methodOnBtnClick(position);
                 }
             });
@@ -145,6 +195,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                             rebuy = String.valueOf(res);
                             addon = String.valueOf(tv_qtdaddon.getText());
                             valor = String.valueOf(restotal);
+                            action = "rebuy";
 
                             new UpdatePlayer().execute();
                             //notifyDataSetChanged();
