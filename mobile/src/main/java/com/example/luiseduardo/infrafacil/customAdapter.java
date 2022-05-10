@@ -15,8 +15,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -89,8 +95,8 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         public ViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.main_line_nome);
-            btnaddon = (ImageButton) view.findViewById(R.id.bntaddon);
-            btnrebuy = (ImageButton) view.findViewById(R.id.btnrebuy);
+            //btnaddon = (ImageButton) view.findViewById(R.id.bntaddon);
+            //btnrebuy = (ImageButton) view.findViewById(R.id.btnrebuy);
 
             tv_idplayer = (TextView) itemView.findViewById(R.id.idplayer);
             tv_nome = (TextView) itemView.findViewById(R.id.main_line_nome);
@@ -99,50 +105,119 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             tv_valortotal = (TextView)itemView.findViewById(R.id.main_line_valortotal);
 
             view.setTag(view);
+
             //view.setOnClickListener(this);
-            btnaddon.setOnClickListener(new View.OnClickListener() {
+
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+                    LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+                    View promptView = layoutInflater.inflate(R.layout.custom_alertplayers, null);
 
+                    //LayoutInflater inflater = this.getLayoutInflater();
+                    //LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    //View alertLayout = inflater.inflate(R.layout.custom_alertplayers, null);
+                    //--View alertLayout = .getLayoutInflater().inflate(R.layout.custom_alertplayers, null);
+                    //final View alertLayoutparce = inflater.inflate(R.layout.custom_alertparcelamento, null);
+                    //final View alertLayoutitemparce = inflater.inflate(R.layout.custom_alertatualizaitem, null);
+                    //final EditText qtd = alertLayout.findViewById(R.id.edtquantidade);
+                    //final EditText idfornecedor = alertLayout.findViewById(R.id.edtidforne);
+                    //final ImageButton spinnerfornecedor = findViewById(R.id.spinnerfornecedor);
+
+
+                    //final EditText valordevenda = alertLayout.findViewById(R.id.editvalorvendido);
+                    //valordevenda.addTextChangedListener(new Status_Ordem.MoneyTextWatcher(valordevenda));
+
+                    //final EditText valordecompra = alertLayout.findViewById(R.id.editvalorpago);
+                    //valordecompra.addTextChangedListener(new Status_Ordem.MoneyTextWatcher(valordecompra));
+
+                    //final TextView tvdescriproduto = alertLayout.findViewById(R.id.tvdescriproduto);
+                    //final TextView txnumeroid = alertLayout.findViewById(R.id.txnumeroid);
+                    //final RadioButton buttonavista = alertLayout.findViewById(R.id.radioButtonAvista);
+
+                    //idfornecedor.setText("1");
+
+
+                    //AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+                    //alert.setTitle("Adicionar item");
+                    alert.setView(promptView);
+                    alert.setCancelable(false);
+                    ImageButton btn_1= (ImageButton) promptView.findViewById(R.id.btndeleterebuy);
+                    btn_1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            //do required function
+                            // don't forget to call alertD.dismiss()
+                            Toast.makeText(mContext, "DELETE", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    alert.setCancelable(false);
+
+                    alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(mContext, "Adição cancelada", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    alert.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    alert.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+
+                        }
+                    });
+                    final AlertDialog dialog = alert.create();
+                    dialog.show();
+                }
+                            /*
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle("Adicionar  Addon:");
-                    builder.setMessage(title.getText());
+                    builder.setTitle(title.getText());
+                    //builder.setTitle("Adicionar  Addon:");
+                    builder.setMessage("Rebuy:");
                     builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface arg0, int arg1) {
                             //idvenda = (String) holder.idvenda;
-                            //rebuy = String.valueOf(tv_qtdrebuy.getText());
+                            rebuy = String.valueOf(tv_qtdrebuy.getText());
 
-                            //valor = String.valueOf(tv_valortotal.getText());
-                            //addon = (String) tv_qtdaddon.getText();
+                            valor = String.valueOf(tv_valortotal.getText());
+                            addon = (String) tv_qtdaddon.getText();
                             //String Vlr_venda = String.valueOf(holder.tv_valor.getText());
                             //String Vlr_venda = String.valueOf(holder.tv_valor.getText());
                             //new ExcluiDadosVenda().execute();
                             //removeAt(position);
-                            //int number1 = (int)Double.parseDouble(rebuy);
+                            int number1 = (int)Double.parseDouble(rebuy);
                             //int number2 = (int)Double.parseDouble(addon);
-                            //int number3 = (int)Double.parseDouble(valor);
+                            int number3 = (int)Double.parseDouble(valor);
 
-                            //int res = number2 + 1;
-                            //int restota = res * 20;
-                            //int restotal = restota + number3;
+                            int res = number1 + 1;
+                            int restota = res * 20;
+                            int restotal = restota + number3;
                             // Status_Ordem.editValorpca.setText(String.valueOf(res));
                             // int res1 = res + number2;
 
-                            //holder.tv_qtdrebuy.setText(String.valueOf(res));
+                            tv_qtdrebuy.setText(String.valueOf(res));
                             //holder.tv_valortotal.setText(String.valueOf(restotal));
-                            //title.setText(String.valueOf(300));
-
 
                             idplayer = String.valueOf(tv_idplayer.getText());
-                            action = "addon";
-                            //addon = String.valueOf(tv_qtdaddon.getText());
-                            //valor = String.valueOf(restotal);
+                            rebuy = String.valueOf(res);
+                            addon = String.valueOf(tv_qtdaddon.getText());
+                            valor = String.valueOf(restotal);
+                            action = "rebuy";
 
                             new UpdatePlayer().execute();
                             //notifyDataSetChanged();
-
-                            Poker.methodOnBtnClick(position);
+                            //Poker.methodOnBtnClick(position);
                         }
                     });
                     builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -157,9 +232,9 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
 
 
-                    Poker.methodOnBtnClick(position);
+                    //Poker.methodOnBtnClick(position);
                 }
-            });
+            });*//*
             btnrebuy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -216,13 +291,13 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
 
 
-                }
+                }*/
             });
-        }
+
+       }
+
         @Override
-        public void onClick(View v) {
-            //clickListener.onClick(view, getPosition());
-            //if (clickListener != null) clickListener.onClick(v, getAdapterPosition());
+        public void onClick(View view) {
 
         }
     }

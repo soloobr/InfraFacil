@@ -301,8 +301,8 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
             tv_qtdaddon = (TextView)itemView.findViewById(R.id.main_line_valoraddon);
             tv_valortotal = (TextView)itemView.findViewById(R.id.main_line_valortotal);
 
-            img = (ImageButton) itemView.findViewById(R.id.btnrebuy);
-            imgaddon = (ImageButton) itemView.findViewById(R.id.main_delete);
+            //img = (ImageButton) itemView.findViewById(R.id.btnrebuy);
+            //imgaddon = (ImageButton) itemView.findViewById(R.id.main_delete);
             //imgparce = (ImageButton) itemView.findViewById(R.id.addrebuy);
 
 

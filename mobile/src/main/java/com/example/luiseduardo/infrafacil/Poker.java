@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -85,7 +86,7 @@ public class Poker extends Activity implements ItemClickListener{
         //recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         //list.add("Luis Eduardo");
 
-        btnRebuy = (ImageButton) findViewById(R.id.bntaddon);
+        //btnRebuy = (ImageButton) findViewById(R.id.bntaddon);
         //btnRebuy.setOnClickListener(new View.OnClickListener() {
           //  @Override
             //public void onClick(View v) {
@@ -95,15 +96,17 @@ public class Poker extends Activity implements ItemClickListener{
             //}
         //});
 
+        new GetDados().execute();
 
-
-       // myrecyclerview = (RecyclerView) findViewById(R.id.listviwerplayers);
-
-       // myrecyclerview.setLayoutManager(new LinearLayoutManager(this));
-
-       // AdapterListViewPlayers adapterListViewPlayers  = new AdapterListViewPlayers(Poker.this,lsplayer);
-
-       // myrecyclerview.setAdapter(adapterListViewPlayers);
+        int spanCount = 2;
+        recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
+        GridLayoutManager gridLayoutManager  = new GridLayoutManager(this,spanCount);
+        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAdapter = new customAdapter (lsplayer, R.layout.item_players, Poker.this);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.setClickListener(Poker.this);
 
     }
 
@@ -111,7 +114,7 @@ public class Poker extends Activity implements ItemClickListener{
     public void onClick(View view, int position) {
         //mAdapter.notifyDataSetChanged();
         final PlayersListView city = lsplayer.get(position);
-        btnRebuy = (ImageButton) findViewById(R.id.bntaddon);
+        //btnRebuy = (ImageButton) findViewById(R.id.bntaddon);
         btnRebuy.setOnClickListener(new View.OnClickListener() {
           @Override
         public void onClick(View view) {
@@ -124,14 +127,11 @@ public class Poker extends Activity implements ItemClickListener{
         }
         });
 
-        btnRebuy = (ImageButton) findViewById(R.id.bntaddon);
+        //btnRebuy = (ImageButton) findViewById(R.id.bntaddon);
         Toast.makeText(getApplicationContext(),
                 "Atualizou " + view.getId(),
                 Toast.LENGTH_LONG)
                 .show();
-        if (view.getId() == R.id.bntaddon) {
-
-        }
 
         /*btnRebuy.setOnClickListener(new View.OnClickListener() {
 
@@ -158,9 +158,15 @@ public class Poker extends Activity implements ItemClickListener{
     {
         //recyclerView.removeViewAt(position);
         //mAdapter.notifyDataSetChanged();
-        recyclerView.removeAllViews();
+        //recyclerView.removeAllViews();
         //recyclerView.invalidate();
+        //mAdapter.notifyDataSetChanged();
+        //mAdapter = new customAdapter (lsplayer, R.layout.item_players, Poker.this);
+        //recyclerView.setAdapter(mAdapter);
     }
+
+
+
     class GetDados extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -257,14 +263,7 @@ public class Poker extends Activity implements ItemClickListener{
              //AdapterListViewPlayers adapterListViewPlayers  = new AdapterListViewPlayers(Poker.this,lsplayer);
 
              //myrecyclerview.setAdapter(adapterListViewPlayers);
-            recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-            //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-            recyclerView.setLayoutManager(mLayoutManager);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            mAdapter = new customAdapter (lsplayer, R.layout.item_players, Poker.this);
-            recyclerView.setAdapter(mAdapter);
-            mAdapter.setClickListener(Poker.this);
+
 
         }
     }
@@ -273,7 +272,7 @@ public class Poker extends Activity implements ItemClickListener{
     protected void onStart()
     {
         super.onStart();
-        new Poker.GetDados().execute();
+        //new Poker.GetDados().execute();
 
 
     }
