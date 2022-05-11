@@ -132,8 +132,9 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
                     //final EditText valordecompra = alertLayout.findViewById(R.id.editvalorpago);
                     //valordecompra.addTextChangedListener(new Status_Ordem.MoneyTextWatcher(valordecompra));
-
-                    //final TextView tvdescriproduto = alertLayout.findViewById(R.id.tvdescriproduto);
+                    //((TextView) promptView.findViewById(R.id.alnomeplayer)).setText((CharSequence) tv_nome);
+                    final TextView tvnome = promptView.findViewById(R.id.alnomeplayer);
+                    tvnome.setText("teste");
                     //final TextView txnumeroid = alertLayout.findViewById(R.id.txnumeroid);
                     //final RadioButton buttonavista = alertLayout.findViewById(R.id.radioButtonAvista);
 

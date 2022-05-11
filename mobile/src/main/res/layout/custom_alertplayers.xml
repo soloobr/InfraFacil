@@ -14,61 +14,50 @@
         android:layout_height="match_parent"
         android:padding="10dp">
 
-        <TableLayout
-            android:layout_width="344dp"
-            android:layout_height="wrap_content">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/tvdescriprod"
-                    android:layout_width="332dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:inputType="number"
-                    android:text="Movimentação"
-                    android:textSize="34sp"
-                    android:textStyle="bold" />
-
-            </TableRow>
-
-        </TableLayout>
+        <TextView
+            android:id="@+id/tvdescriprod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:text="Movimentação"
+            android:textSize="35sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
         android:dividerPadding="7dp"
         android:orientation="horizontal">
 
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <TableRow
+            <TextView
+                android:id="@+id/alidplayer"
+                android:layout_width="49dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="ID"
+                android:textColor="@color/white2"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/alnomeplayer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Nome do Player"
+                android:textColor="@color/white2"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/txnumeroid"
-                    android:layout_width="49dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="ID" />
-
-                <TextView
-                    android:id="@+id/tvdescriproduto"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Nome do Player"
-                    android:textSize="24sp" />
-            </TableRow>
-
-        </TableLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -93,7 +82,7 @@
 
             <TextView
                 android:id="@+id/qtdrebuy"
-                android:layout_width="100dp"
+                android:layout_width="223dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="0"
@@ -134,9 +123,21 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
+            <CheckBox
+                android:id="@+id/checkBox"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Não"
+                android:textColor="@color/background_light"
+                android:textIsSelectable="false"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/qtdaddon"
-                android:layout_width="100dp"
+                android:layout_width="206dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
@@ -144,21 +145,6 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/imageButton5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="@string/nome"
-                app:srcCompat="@android:drawable/ic_menu_delete" />
-
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:contentDescription="@string/nome"
-                app:srcCompat="@android:drawable/ic_input_add" />
         </LinearLayout>
 
         <LinearLayout
