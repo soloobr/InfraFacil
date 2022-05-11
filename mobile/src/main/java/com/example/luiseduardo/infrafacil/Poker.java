@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.message.BasicNameValuePair;
@@ -68,45 +69,18 @@ public class Poker extends Activity implements ItemClickListener{
 
     public static String  idplayer, rebuy, addon;
 
+    public static TextView vltotaljogo;
+
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_poker);
 
-        //lsplayer = new ArrayList<>();
-
-       // lv = (ListView) findViewById(R.id.listviwerplayers);
-       // lv.setOnItemClickListener(this);
-
-        //new GetDados().execute();
-
-        //lsplayer.add(new PlayersListView("20", "1", "Luis Eduardo", "0",  "0", "200",1));
-
-
-        //recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-        //list.add("Luis Eduardo");
-
-        //btnRebuy = (ImageButton) findViewById(R.id.bntaddon);
-        //btnRebuy.setOnClickListener(new View.OnClickListener() {
-          //  @Override
-            //public void onClick(View v) {
-                //list.add("Mammahe");
-              //  mAdapter.notifyDataSetChanged();
-
-            //}
-        //});
+        lsplayer = new ArrayList<>();
 
         new GetDados().execute();
 
-        int spanCount = 2;
-        recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
-        GridLayoutManager gridLayoutManager  = new GridLayoutManager(this,spanCount);
-        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new customAdapter (lsplayer, R.layout.item_players, Poker.this);
-        recyclerView.setAdapter(mAdapter);
-        mAdapter.setClickListener(Poker.this);
+        vltotaljogo = (TextView) findViewById(R.id.tvvalortotaljogo);
 
     }
 
@@ -175,7 +149,7 @@ public class Poker extends Activity implements ItemClickListener{
             // Showing progress dialog
             pDialog = new ProgressDialog(Poker.this);
             pDialog.setMessage("Buscando Jogadores...");
-            pDialog.setCancelable(false);
+            //pDialog.setCancelable(false);
             pDialog.show();
 
         }
@@ -205,8 +179,11 @@ public class Poker extends Activity implements ItemClickListener{
                         String rebuy = c.getString("rebuy");
                         String addon = c.getString("addon");
                         String valor = c.getString("Valor");
+                        String vlentrada = c.getString("vlentrada");
+                        String vlrebuy = c.getString("vlrebuy");
+                        String vladdon = c.getString("vladdon");
 
-                        lsplayer.add(new PlayersListView(id, idjogo, name,  rebuy,  addon, valor,1));
+                        lsplayer.add(new PlayersListView(id, idjogo, name,  rebuy,  addon, valor,vlentrada,vlrebuy,vladdon,1));
 
                     }
 
@@ -250,19 +227,16 @@ public class Poker extends Activity implements ItemClickListener{
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
-            //myrecyclerview.setLayoutManager(new LinearLayoutManager(this));
 
-            //myrecyclerview = (RecyclerView) findViewById(R.id.listviwerplayers);
-            //AdapterListViewPlayers adapterListViewPlayers  = new AdapterListViewPlayers(Poker.this,lsplayer);
-            //myrecyclerview.setAdapter(adapterListViewPlayers);
-
-             //myrecyclerview = (RecyclerView) findViewById(R.id.listviwerplayers);
-
-             //myrecyclerview.setLayoutManager(new LinearLayoutManager(Poker.this));
-
-             //AdapterListViewPlayers adapterListViewPlayers  = new AdapterListViewPlayers(Poker.this,lsplayer);
-
-             //myrecyclerview.setAdapter(adapterListViewPlayers);
+            int spanCount = 2;
+            recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
+            GridLayoutManager gridLayoutManager  = new GridLayoutManager(Poker.this,spanCount);
+            //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(gridLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            mAdapter = new customAdapter (lsplayer, R.layout.item_players, Poker.this);
+            recyclerView.setAdapter(mAdapter);
+            mAdapter.setClickListener(Poker.this);
 
 
         }
@@ -276,7 +250,27 @@ public class Poker extends Activity implements ItemClickListener{
 
 
     }
+    @Override
+    protected void onStop() {
+        super.onStop();  // Always call the superclass method first
+        //mAdapter.notifyDataSetChanged();
+        //Toast.makeText(getApplicationContext(), "onStop called", Toast.LENGTH_LONG).show();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        /*new GetDados().execute();
 
-
+        int spanCount = 2;
+        recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
+        GridLayoutManager gridLayoutManager  = new GridLayoutManager(this,spanCount);
+        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(gridLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAdapter = new customAdapter (lsplayer, R.layout.item_players, Poker.this);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.setClickListener(Poker.this);
+        //Toast.makeText(getApplicationContext(), "onResumed called", Toast.LENGTH_LONG).show();*/
+    }
 }
 

@@ -45,7 +45,8 @@
                 android:gravity="center"
                 android:text="ID"
                 android:textColor="@color/white2"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/alnomeplayer"
@@ -69,7 +70,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingRight="2dp">
 
             <TextView
                 android:id="@+id/tvqtd"
@@ -81,8 +83,8 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/qtdrebuy"
-                android:layout_width="223dp"
+                android:id="@+id/alqtdrebuy"
+                android:layout_width="88dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="0"
@@ -102,9 +104,10 @@
                 app:srcCompat="@android:drawable/ic_menu_delete" />
 
             <ImageButton
-                android:id="@+id/imageButton4"
+                android:id="@+id/btnaddrebuy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:layout_weight="0"
                 android:background="@android:drawable/ic_input_add"
                 android:contentDescription="@string/nome" />
@@ -124,11 +127,10 @@
                 android:textStyle="bold" />
 
             <CheckBox
-                android:id="@+id/checkBox"
+                android:id="@+id/aladdontrue"
                 style="@style/Widget.AppCompat.CompoundButton.CheckBox"
-                android:layout_width="match_parent"
+                android:layout_width="145dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:text="Não"
                 android:textColor="@color/background_light"
                 android:textIsSelectable="false"
@@ -136,14 +138,15 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/qtdaddon"
+                android:id="@+id/alqtdaddon"
                 android:layout_width="206dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="0"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="invisible" />
 
         </LinearLayout>
 
