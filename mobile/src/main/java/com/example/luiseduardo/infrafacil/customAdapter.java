@@ -4,8 +4,10 @@ import static com.example.luiseduardo.infrafacil.MoneyTextWatcher.getCurrencySym
 import static com.example.luiseduardo.infrafacil.Poker.lsplayer;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -27,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,13 +44,14 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
     private int rowLayout;
     private Context mContext;
     private ItemClickListener clickListener;
-    public static String  idplayer,rebuy, addon, valor, vlrebuy,vladdon,vlentrada;
+    public static String  idplayer,idjogo,rebuy, addon, valor, vlrebuy,vladdon,vlentrada,total,totalrebuy,totaladdon,totalplayers;
     JSONParser jsonParser = new JSONParser();
     private static String URLUP = "http://futsexta.16mb.com/Poker/Poker_Edit_Players.php";
     private static String URTOTAIS = "http://futsexta.16mb.com/Poker/Poker_Get_Totais.php";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
     private final Locale locale = Locale.getDefault();
+    JSONObject object =null;
 
     public customAdapter( List<PlayersListView> list,int rowLayout,Context context) {
         this.list = list;
@@ -72,6 +76,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         myViewHolder.tv_qtdrebuy.setText(city.getRebuy());
         myViewHolder.tv_qtdaddon.setText(city.getAddon());
 
+        idjogo = "1";
         vlentrada = city.getVlentrada();
         vlrebuy = city.getVlrebuy();
         vladdon = city.getVladdon();
@@ -399,11 +404,6 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //pDialog = new ProgressDialog(Context.this);
-            //pDialog.setMessage("Atualizando Dados");
-            //pDialog.setIndeterminate(false);
-            //pDialog.setCancelable(true);
-            //pDialog.show();
         }
 
 
@@ -454,11 +454,11 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
         protected void onPostExecute(String file_url) {
             //new Poker.GetDados().execute();
+            new GetTotais().execute();
         }
 
     }
     class GetTotais extends AsyncTask<String, String, String> {
-
 
         @Override
         protected void onPreExecute() {
@@ -466,49 +466,57 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
         }
 
-
         @Override
-        protected String doInBackground(String... args) {
-
-            int success;
-            try {
-                // Building Parameters
-                List params = new ArrayList();
-
-                params.add(new BasicNameValuePair("id", idplayer));
-                params.add(new BasicNameValuePair("rebuy", rebuy));
-                params.add(new BasicNameValuePair("addon", addon));
-                params.add(new BasicNameValuePair("valor", valor));
+        protected String  doInBackground(String... args) {
 
 
+            List params = new ArrayList();
+            params.add(new BasicNameValuePair("id",idjogo));
 
-                JSONObject newjson = jsonParser.makeHttpRequest(URTOTAIS, "POST",
-                        params);
+            JSONObject json = jsonParser.makeHttpRequest(URTOTAIS,"POST",
+                    params);
 
-                //Id_Comp = "0";
-                // json success tag
-                success = newjson.getInt(TAG_SUCCESS);
-                if (success == 1) {
-                    Log.d("Editar successo!", newjson.toString());
-                    //finish();
-                    return newjson.getString(TAG_MESSAGE);
+            Log.i("Profile JSON: ", json.toString());
 
-                } else {
-                    Log.d("Não Atualizada", newjson.getString(TAG_MESSAGE));
-                    //finish();
-                    return newjson.getString(TAG_MESSAGE);
+            if (json != null) {
+                try {
+                    JSONObject parent = new JSONObject(String.valueOf(json));
+                    JSONArray eventDetails = parent.getJSONArray("jogo");
+
+                    for (int i = 0; i < eventDetails.length(); i++)
+                    {
+                        object = eventDetails.getJSONObject(i);
+                        String tt = object.getString("total");
+                        String ttr = object.getString("totalrebuy");
+                        String tta = object.getString("totaladdon");
+                        String ttp = object.getString("totalplayers");
+
+
+                        total = tt;
+                        totalplayers = ttp;
+                        totalrebuy = ttr;
+                        totaladdon = tta;
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
 
             return null;
+
         }
 
+        @Override
         protected void onPostExecute(String file_url) {
-            //new Poker.GetDados().execute();
-        }
+            //super.onPostExecute(result);
+            BigDecimal parsed = parseToBigDecimal(total);
+            String formatted;
+            formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
 
+            Poker.vltotaljogo.setText(formatted);
+        }
     }
 
     private BigDecimal parseToBigDecimal(String value) {
