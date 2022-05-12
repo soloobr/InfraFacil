@@ -250,7 +250,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                             tv_qtdaddon.setText(addon);
                             new UpdatePlayer().execute();
 
-                            Poker.vltotaljogo.setText(formatted);
+                            //Poker.vltotaljogo.setText(formatted);
                         }
                     });
 
@@ -516,6 +516,9 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
 
             Poker.vltotaljogo.setText(formatted);
+            Poker.ttplayers.setText(totalplayers);
+            Poker.ttrebuy.setText(totalrebuy);
+            Poker.ttaddon.setText(totaladdon);
         }
     }
 
