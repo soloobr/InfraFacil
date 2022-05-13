@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity
                     break;
             case R.id.statisticas:
 
-                Intent it2 = new Intent(MainActivity.this, Poker.class);
+                Intent it2 = new Intent(MainActivity.this, Poker_main.class);
                 startActivity(it2);
                 //Toast.makeText(this, "Em Construção " , Toast.LENGTH_LONG).show();
 

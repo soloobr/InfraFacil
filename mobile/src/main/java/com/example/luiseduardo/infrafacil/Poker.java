@@ -47,7 +47,7 @@ import java.util.Locale;
 public class Poker extends Activity implements ItemClickListener{
 
     private AdapterListViewPlayers adapterListViewPlayers;
-    private static String url = "http://futsexta.16mb.com/Poker/poker_get_jogo.php";
+    private static String url = "http://futsexta.16mb.com/Poker/poker_get_playersjogo.php";
     private static String URTOTAIS = "http://futsexta.16mb.com/Poker/Poker_Get_Totais.php";
 
 
