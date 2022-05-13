@@ -174,15 +174,24 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                         @Override
                         public void onClick(View view) {
 
+
                             //do required function
                             // don't forget to call alertD.dismiss()
                             //Toast.makeText(mContext, "DELETE Rebuy", Toast.LENGTH_SHORT).show();
-                            rebuy = String.valueOf(tvqtdreb.getText());
 
-                            int reb = (int)Double.parseDouble(rebuy);
 
-                            reb = reb - 1;
-                            tvqtdreb.setText(String.valueOf(reb));
+                            if (tvqtdreb.getText().equals("0")){
+                                Toast.makeText(mContext, "Rebuy não pode ser negativo!", Toast.LENGTH_SHORT).show();
+                            }else{
+                                rebuy = String.valueOf(tvqtdreb.getText());
+
+                                int reb = (int)Double.parseDouble(rebuy);
+
+                                reb = reb - 1;
+                                tvqtdreb.setText(String.valueOf(reb));
+                            }
+
+
                             //tv_qtdrebuy.setText(String.valueOf(reb));
 
                         }
@@ -277,118 +286,6 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                     final AlertDialog dialog = alert.create();
                     dialog.show();
                 }
-                            /*
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle(title.getText());
-                    //builder.setTitle("Adicionar  Addon:");
-                    builder.setMessage("Rebuy:");
-                    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            //idvenda = (String) holder.idvenda;
-                            rebuy = String.valueOf(tv_qtdrebuy.getText());
-
-                            valor = String.valueOf(tv_valortotal.getText());
-                            addon = (String) tv_qtdaddon.getText();
-                            //String Vlr_venda = String.valueOf(holder.tv_valor.getText());
-                            //String Vlr_venda = String.valueOf(holder.tv_valor.getText());
-                            //new ExcluiDadosVenda().execute();
-                            //removeAt(position);
-                            int number1 = (int)Double.parseDouble(rebuy);
-                            //int number2 = (int)Double.parseDouble(addon);
-                            int number3 = (int)Double.parseDouble(valor);
-
-                            int res = number1 + 1;
-                            int restota = res * 20;
-                            int restotal = restota + number3;
-                            // Status_Ordem.editValorpca.setText(String.valueOf(res));
-                            // int res1 = res + number2;
-
-                            tv_qtdrebuy.setText(String.valueOf(res));
-                            //holder.tv_valortotal.setText(String.valueOf(restotal));
-
-                            idplayer = String.valueOf(tv_idplayer.getText());
-                            rebuy = String.valueOf(res);
-                            addon = String.valueOf(tv_qtdaddon.getText());
-                            valor = String.valueOf(restotal);
-                            action = "rebuy";
-
-                            new UpdatePlayer().execute();
-                            //notifyDataSetChanged();
-                            //Poker.methodOnBtnClick(position);
-                        }
-                    });
-                    builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface arg0, int arg1) {
-
-                        }
-                    });
-                    //cria o AlertDialog
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-
-
-
-
-                    //Poker.methodOnBtnClick(position);
-                }
-            });*//*
-            btnrebuy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle("Adicionar  Rebuy:");
-                    builder.setMessage(title.getText());
-                    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            //idvenda = (String) holder.idvenda;
-                            rebuy = String.valueOf(tv_qtdrebuy.getText());
-
-                            valor = String.valueOf(tv_valortotal.getText());
-                            addon = (String) tv_qtdaddon.getText();
-                            //String Vlr_venda = String.valueOf(holder.tv_valor.getText());
-                            //String Vlr_venda = String.valueOf(holder.tv_valor.getText());
-                            //new ExcluiDadosVenda().execute();
-                            //removeAt(position);
-                            int number1 = (int)Double.parseDouble(rebuy);
-                            //int number2 = (int)Double.parseDouble(addon);
-                            int number3 = (int)Double.parseDouble(valor);
-
-                            int res = number1 + 1;
-                            int restota = res * 20;
-                            int restotal = restota + number3;
-                            // Status_Ordem.editValorpca.setText(String.valueOf(res));
-                            // int res1 = res + number2;
-
-                            tv_qtdrebuy.setText(String.valueOf(res));
-                            //holder.tv_valortotal.setText(String.valueOf(restotal));
-                            title.setText(String.valueOf(300));
-
-
-                            idplayer = String.valueOf(tv_idplayer.getText());
-                            rebuy = String.valueOf(res);
-                            addon = String.valueOf(tv_qtdaddon.getText());
-                            valor = String.valueOf(restotal);
-                            action = "rebuy";
-
-                            new UpdatePlayer().execute();
-                            //notifyDataSetChanged();
-                            //Poker.methodOnBtnClick(position);
-                        }
-                    });
-                    builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface arg0, int arg1) {
-
-                        }
-                    });
-                    //cria o AlertDialog
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-
-
-
-                }*/
             });
 
        }
@@ -519,6 +416,28 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             Poker.ttplayers.setText(totalplayers);
             Poker.ttrebuy.setText(totalrebuy);
             Poker.ttaddon.setText(totaladdon);
+
+            int vl = (int)Double.parseDouble(total);
+
+            int pri = (vl / 100) * 50;
+            int seg = (vl / 100) * 30;
+            int ter = (vl / 100) * 20;
+
+            BigDecimal prim = parseToBigDecimal(String.valueOf(pri));
+            String sprimeiro;
+            sprimeiro = NumberFormat.getCurrencyInstance(locale).format(prim);
+            Poker.primeiro.setText(sprimeiro);
+
+            BigDecimal segu = parseToBigDecimal(String.valueOf(seg));
+            String ssegundoo;
+            ssegundoo = NumberFormat.getCurrencyInstance(locale).format(segu);
+            Poker.segundo.setText(String.valueOf(ssegundoo));
+
+            BigDecimal terc = parseToBigDecimal(String.valueOf(ter));
+            String sterceiro;
+            sterceiro = NumberFormat.getCurrencyInstance(locale).format(terc);
+            Poker.terceiro.setText(String.valueOf(sterceiro));
+
         }
     }
 

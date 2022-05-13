@@ -22,7 +22,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
 
                 <TextView
                     android:id="@+id/tvtotalgeral"
@@ -52,8 +54,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:paddingLeft="2dp"
-                    android:paddingEnd="2dp"
+                    android:paddingLeft="4dp"
+                    android:paddingEnd="4dp"
                     android:text="0"
                     android:textStyle="bold" />
 
@@ -78,8 +80,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:paddingLeft="2dp"
-                    android:paddingEnd="2dp"
+                    android:paddingLeft="4dp"
+                    android:paddingEnd="4dp"
                     android:text="0"
                     android:textStyle="bold" />
 
@@ -104,8 +106,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:paddingLeft="2dp"
-                    android:paddingEnd="2dp"
+                    android:paddingLeft="4dp"
+                    android:paddingEnd="4dp"
                     android:text="0"
                     android:textStyle="bold" />
 
@@ -125,35 +127,80 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#fff"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:text="Premiação:" />
 
-                    <RelativeLayout
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView9"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent"
+                        android:layout_weight="0"
+                        android:paddingLeft="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="1º - "
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/txbuscaprod"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:gravity="center"
-                            android:text="Buscar Jogo"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/vlprimeiro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:paddingLeft="5dp"
+                        android:text="0"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
-                    </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                    <SearchView
-                        android:id="@+id/searchprod"
-                        style="@android:style/Widget.Material.SearchView"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0"
+                        android:paddingLeft="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="2º - "
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/vlsegundo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:paddingLeft="5dp"
+                        android:text="0"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0"
+                        android:paddingLeft="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="3º - "
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/vlterceiro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:paddingLeft="5dp"
+                        android:text="0"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>

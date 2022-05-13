@@ -77,7 +77,7 @@ public class Poker extends Activity implements ItemClickListener{
     public static String  idjogo,idplayer, rebuy, addon;
     public static String  valor, vlrebuy,vladdon,vlentrada,total,totalrebuy,totaladdon,totalplayers;
 
-    public static TextView vltotaljogo,ttrebuy,ttaddon,ttplayers;
+    public static TextView vltotaljogo,ttrebuy,ttaddon,ttplayers,primeiro,segundo,terceiro;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -92,6 +92,10 @@ public class Poker extends Activity implements ItemClickListener{
         ttplayers = (TextView) findViewById(R.id.tqtdent);
         ttrebuy = (TextView) findViewById(R.id.tqtdrebuys);
         ttaddon = (TextView) findViewById(R.id.tqtdaddon);
+
+        primeiro = (TextView) findViewById(R.id.vlprimeiro);
+        segundo = (TextView) findViewById(R.id.vlsegundo);
+        terceiro = (TextView) findViewById(R.id.vlterceiro);
 
 
         new GetTotais().execute();
@@ -215,9 +219,34 @@ public class Poker extends Activity implements ItemClickListener{
             ttrebuy.setText(totalrebuy);
             ttaddon.setText(totaladdon);
 
+             Premiacao();
+
+
         }
     }
+    public  void Premiacao() {
 
+        int vl = (int)Double.parseDouble(total);
+
+        int pri = (vl / 100) * 50;
+        int seg = (vl / 100) * 30;
+        int ter = (vl / 100) * 20;
+
+        BigDecimal prim = parseToBigDecimal(String.valueOf(pri));
+        String sprimeiro;
+        sprimeiro = NumberFormat.getCurrencyInstance(locale).format(prim);
+                primeiro.setText(sprimeiro);
+
+        BigDecimal segu = parseToBigDecimal(String.valueOf(seg));
+        String ssegundoo;
+        ssegundoo = NumberFormat.getCurrencyInstance(locale).format(segu);
+                segundo.setText(String.valueOf(ssegundoo));
+
+        BigDecimal terc = parseToBigDecimal(String.valueOf(ter));
+        String sterceiro;
+        sterceiro = NumberFormat.getCurrencyInstance(locale).format(terc);
+                terceiro.setText(String.valueOf(sterceiro));
+    }
     class GetDados extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -366,5 +395,7 @@ public class Poker extends Activity implements ItemClickListener{
 
         }
     }
+
+
 }
 
