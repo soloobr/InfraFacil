@@ -115,7 +115,7 @@
                         android:layout_height="match_parent"
                         android:focusableInTouchMode="false"
                         android:onClick="onClickDATA"
-                        app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+                        app:srcCompat="@mipmap/calendar32" />
 
                 </TableRow>
 

@@ -647,4 +647,9 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     public void onStop() {
         super.onStop();
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new Poker_main.GetDados_jogos().execute();
+    }
 }

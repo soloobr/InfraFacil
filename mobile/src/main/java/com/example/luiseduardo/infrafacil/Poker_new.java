@@ -5,14 +5,17 @@ import static com.example.luiseduardo.infrafacil.Poker_new.MoneyTextWatcher.getC
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -22,12 +25,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class Poker_new extends AppCompatActivity implements
@@ -39,6 +47,12 @@ public class Poker_new extends AppCompatActivity implements
     TextView dateEditText;
     private String datejogo ;
     private EditText editvalorentrada,editvalorrebuy,editvaloraddon;
+    private ProgressDialog pDialog;
+    JSONParser jsonParser = new JSONParser();
+    private static String GETINFO_URL = "http://futsexta.16mb.com/Poker/Poker_insert_Jogo.php";
+    private static final String TAG_SUCCESS = "success";
+    private static final String TAG_MESSAGE = "message";
+    String  sUsername, ssData, sVldentrada,sVldrebuy,sVldaddon,sQtdentrada,sQtdrebuy,sQtdaddon;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,11 +126,11 @@ public class Poker_new extends AppCompatActivity implements
     }
     @SuppressLint("ResourceAsColor")
     public void onClickSAVE(View v) {
-          String  sUsername, sData, sVldentrada,sVldrebuy,sVldaddon,sQtdentrada,sQtdrebuy,sQtdaddon;
+
 
         TextView dateEditText = (TextView) findViewById(R.id.editTextDate);
-        sData = dateEditText.getText().toString();
-        if (sData.matches("")) {
+        ssData = dateEditText.getText().toString();
+        if (ssData.matches("")) {
             Toast.makeText(this, "Favor Selecionar a data do Jogo", Toast.LENGTH_SHORT).show();
             btndata.performClick();
             return;
@@ -129,13 +143,16 @@ public class Poker_new extends AppCompatActivity implements
             usernameEditText.requestFocus();
             return;
         }
+
+
         TextView Vldentrada = (TextView) findViewById(R.id.edvalorentrada);
         sVldentrada = Vldentrada.getText().toString();
 
         String replaceable = String.format("[%s\\s]", getCurrencySymbol());
         sVldentrada = sVldentrada.replaceAll(replaceable, "");
+        sVldentrada = sVldentrada.replaceAll(",", "");
 
-        if ( (sVldentrada.matches("")) || (sVldentrada.matches("0,00") )) {
+        if ( (sVldentrada.matches("")) || (sVldentrada.matches("000") )) {
             Toast.makeText(this, "Favor preencher o valor da Entrada", Toast.LENGTH_SHORT).show();
             Vldentrada.requestFocus();
             return;
@@ -151,7 +168,8 @@ public class Poker_new extends AppCompatActivity implements
         TextView Vldrebuy = (TextView) findViewById(R.id.edvalorrebuy);
         sVldrebuy = Vldrebuy.getText().toString();
         sVldrebuy = sVldrebuy.replaceAll(replaceable, "");
-        if ((sVldrebuy.matches("")) || (sVldrebuy.matches("0,00")) ) {
+        sVldrebuy = sVldrebuy.replaceAll(",", "");
+        if ((sVldrebuy.matches("")) || (sVldrebuy.matches("000")) ) {
             Toast.makeText(this, "Favor preencher o valor da Rebuy", Toast.LENGTH_SHORT).show();
             Vldrebuy.requestFocus();
             return;
@@ -167,7 +185,8 @@ public class Poker_new extends AppCompatActivity implements
         TextView Vldaddon = (TextView) findViewById(R.id.edvaloraddon);
         sVldaddon = Vldaddon.getText().toString();
         sVldaddon = sVldaddon.replaceAll(replaceable, "");
-        if ((sVldaddon.matches("")) || (sVldaddon.matches("0,00")) ) {
+        sVldaddon = sVldaddon.replaceAll(",", "");
+        if ((sVldaddon.matches("")) || (sVldaddon.matches("000")) ) {
             Toast.makeText(this, "Favor preencher o valor da Addon", Toast.LENGTH_SHORT).show();
             Vldaddon.requestFocus();
             return;
@@ -181,7 +200,85 @@ public class Poker_new extends AppCompatActivity implements
             return;
         }
 
+        new InsertJogo().execute();
+
     }
+    class InsertJogo extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(Poker_new.this);
+            pDialog.setMessage("Criando Jogo");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+
+        @Override
+        protected String doInBackground(String... args) {
+
+
+
+
+            int success;
+            try {
+
+                // Building Parameters
+                List params = new ArrayList();
+
+                //params.add(new BasicNameValuePair("id", Data_Local));
+                params.add(new BasicNameValuePair("Descricao", sUsername));
+                params.add(new BasicNameValuePair("Data", sData));
+                params.add(new BasicNameValuePair("vlentrada", sVldentrada));
+                params.add(new BasicNameValuePair("qtdfichaentrada", sQtdentrada));
+                params.add(new BasicNameValuePair("vlrebuy", sVldrebuy));
+                params.add(new BasicNameValuePair("qtdficharebuy", sQtdrebuy));
+                params.add(new BasicNameValuePair("vladdon", sVldaddon));
+                params.add(new BasicNameValuePair("qtdfichaaddon", sQtdaddon));
+
+                //Log.d("Debug!", "starting");
+
+                // getting product details by making HTTP request
+                JSONObject json = jsonParser.makeHttpRequest(GETINFO_URL, "POST",
+                        params);
+
+
+                // json success tag
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("successo!", json.toString());
+                    finish();
+                    return json.getString(TAG_MESSAGE);
+
+                } else {
+                    Log.d("Jogo não Criado", json.getString(TAG_MESSAGE));
+                    finish();
+                    return json.getString(TAG_MESSAGE);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+
+        }
+
+
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog once product deleted
+            pDialog.dismiss();
+            if (file_url != null) {
+                Toast.makeText(Poker_new.this, file_url, Toast.LENGTH_LONG).show();
+            }
+            //new Poker_main.GetDados_jogos();
+        }
+
+
+    }
+
     public static class MoneyTextWatcher implements TextWatcher {
         private WeakReference<EditText> editTextWeakReference;
         private final Locale locale = Locale.getDefault();
