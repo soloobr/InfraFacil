@@ -47,7 +47,7 @@ import java.util.Locale;
 public class Poker extends Activity implements ItemClickListener{
 
     private AdapterListViewPlayers adapterListViewPlayers;
-    private static String url = "http://futsexta.16mb.com/Poker/poker_get_playersjogo.php";
+    private static String urlplayers = "http://futsexta.16mb.com/Poker/poker_get_playersjogo.php";
     private static String URTOTAIS = "http://futsexta.16mb.com/Poker/Poker_Get_Totais.php";
 
 
@@ -64,25 +64,41 @@ public class Poker extends Activity implements ItemClickListener{
     //ArrayList<PlayersListView> list = new ArrayList<>();
     private List<PlayersListView> cities;
 
+    private boolean PLAYERS = false;
+
     ImageButton btnRebuy;
 
     static View v;
 
-    JSONParser jsonParser = new JSONParser();
+    JSONParser jsonParserR = new JSONParser();
     JSONObject object =null;
     private final Locale locale = Locale.getDefault();
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
 
-    public static String  idjogo,idplayer, rebuy, addon;
+    public static String  idjogo,idplayer, rebuy, addon,descricao;
     public static String  valor, vlrebuy,vladdon,vlentrada,total,totalrebuy,totaladdon,totalplayers;
 
-    public static TextView vltotaljogo,ttrebuy,ttaddon,ttplayers,primeiro,segundo,terceiro;
+    public static TextView vltotaljogo,ttrebuy,ttaddon,ttplayers,primeiro,segundo,terceiro,noplayers,driscrijogo;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_poker);
+
+        Intent iin= getIntent();
+        Bundle b = iin.getExtras();
+
+        if(b!=null)
+        {
+            String j =(String) b.get("id");
+            String D = (String) b.get("Drisc");
+            idjogo = j;
+            descricao = D;
+        }else{
+            idjogo = "0";
+
+        }
 
         lsplayer = new ArrayList<>();
 
@@ -92,10 +108,14 @@ public class Poker extends Activity implements ItemClickListener{
         ttplayers = (TextView) findViewById(R.id.tqtdent);
         ttrebuy = (TextView) findViewById(R.id.tqtdrebuys);
         ttaddon = (TextView) findViewById(R.id.tqtdaddon);
+        noplayers = (TextView) findViewById(R.id.tvsemplayers);
 
         primeiro = (TextView) findViewById(R.id.vlprimeiro);
         segundo = (TextView) findViewById(R.id.vlsegundo);
         terceiro = (TextView) findViewById(R.id.vlterceiro);
+        driscrijogo = (TextView) findViewById(R.id.tvdescrijogo);
+        driscrijogo.setText(descricao);
+
 
 
         new GetTotais().execute();
@@ -148,13 +168,7 @@ public class Poker extends Activity implements ItemClickListener{
     //}
     public static void methodOnBtnClick(int position)
     {
-        //recyclerView.removeViewAt(position);
-        //mAdapter.notifyDataSetChanged();
-        //recyclerView.removeAllViews();
-        //recyclerView.invalidate();
-        //mAdapter.notifyDataSetChanged();
-        //mAdapter = new customAdapter (lsplayer, R.layout.item_players, Poker.this);
-        //recyclerView.setAdapter(mAdapter);
+
     }
 
     class GetTotais extends AsyncTask<String, String, String> {
@@ -172,7 +186,7 @@ public class Poker extends Activity implements ItemClickListener{
             List params = new ArrayList();
             params.add(new BasicNameValuePair("id",idjogo));
 
-            JSONObject json = jsonParser.makeHttpRequest(URTOTAIS,"POST",
+            JSONObject json = jsonParserR.makeHttpRequest(URTOTAIS,"POST",
                     params);
 
             Log.i("Profile JSON: ", json.toString());
@@ -210,17 +224,30 @@ public class Poker extends Activity implements ItemClickListener{
         @Override
         protected void onPostExecute(String file_url) {
             //super.onPostExecute(result);
-            BigDecimal parsed = parseToBigDecimal(total);
-            String formatted;
-            formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
+            if (PLAYERS) {
+                BigDecimal parsed = parseToBigDecimal(total);
+                String formatted;
+                formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
 
-            Poker.vltotaljogo.setText(formatted);
-            ttplayers.setText(totalplayers);
-            ttrebuy.setText(totalrebuy);
-            ttaddon.setText(totaladdon);
+                Poker.vltotaljogo.setText(formatted);
+                ttplayers.setText(totalplayers);
+                ttrebuy.setText(totalrebuy);
+                ttaddon.setText(totaladdon);
 
-             Premiacao();
+                Premiacao();
+            }else{
+                total ="0";
+                BigDecimal parsed = parseToBigDecimal(total);
+                String formatted;
+                formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
 
+                Poker.vltotaljogo.setText(formatted);
+                //ttplayers.setText(totalplayers);
+                //ttrebuy.setText(totalrebuy);
+                //ttaddon.setText(totaladdon);
+
+                Premiacao();
+            }
 
         }
     }
@@ -252,24 +279,33 @@ public class Poker extends Activity implements ItemClickListener{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Showing progress dialog
             pDialog = new ProgressDialog(Poker.this);
             pDialog.setMessage("Buscando Jogadores...");
-            //pDialog.setCancelable(false);
             pDialog.show();
 
         }
 
         @Override
         protected Void doInBackground(Void... arg0) {
-            HttpHandler sh = new HttpHandler();
+            //HttpHandler sh = new HttpHandler();
 
             // Making a request to url and getting response
-            String jsonStr = sh.makeServiceCall(url);
+            //String jsonStr = sh.makeServiceCall(url);
+            int success = 0;
+            List params = new ArrayList();
+            params.add(new BasicNameValuePair("id",idjogo));
 
-            if (jsonStr != null) {
+            JSONObject jsonStrT = jsonParserR.makeHttpRequest(urlplayers,"POST",
+                    params);
+
+            try {
+                success = jsonStrT.getInt(TAG_SUCCESS);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (success == 1) {
                 try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
+                    JSONObject jsonObj = new JSONObject(String.valueOf(jsonStrT));
 
                     // Getting JSON Array node
                     JSONArray contacts = jsonObj.getJSONArray("jogo");
@@ -289,8 +325,12 @@ public class Poker extends Activity implements ItemClickListener{
                         String vlrebuy = c.getString("vlrebuy");
                         String vladdon = c.getString("vladdon");
 
-                        lsplayer.add(new PlayersListView(id, idjogo, name,  rebuy,  addon, valor,vlentrada,vlrebuy,vladdon,1));
-                        idjogo = idjogo1;
+
+                        if (valor != null) {
+                            PLAYERS = true;
+                            lsplayer.add(new PlayersListView(id, idjogo1, name,  rebuy,  addon, valor,vlentrada,vlrebuy,vladdon,1));
+                        }
+
                     }
 
                 } catch (final JSONException e) {
@@ -299,26 +339,15 @@ public class Poker extends Activity implements ItemClickListener{
                         @Override
                         public void run() {
                             Toast.makeText(getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG)
+                                            "Json parsing error: " + e.getMessage(),
+                                            Toast.LENGTH_LONG)
                                     .show();
                         }
                     });
 
                 }
-            } else {
-                // Log.e(TAG, "Couldn't get json from server.");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
-                                Toast.LENGTH_LONG)
-                                .show();
-                    }
-                });
-
             }
+
 
             return null;
         }
@@ -334,16 +363,19 @@ public class Poker extends Activity implements ItemClickListener{
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
-
-            int spanCount = 2;
-            recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
-            GridLayoutManager gridLayoutManager  = new GridLayoutManager(Poker.this,spanCount);
-            //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-            recyclerView.setLayoutManager(gridLayoutManager);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            mAdapter = new customAdapter (lsplayer, R.layout.item_players, Poker.this);
-            recyclerView.setAdapter(mAdapter);
-            mAdapter.setClickListener(Poker.this);
+            if (PLAYERS) {
+                int spanCount = 2;
+                recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(Poker.this, spanCount);
+                //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                recyclerView.setLayoutManager(gridLayoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                mAdapter = new customAdapter(lsplayer, R.layout.item_players, Poker.this);
+                recyclerView.setAdapter(mAdapter);
+                mAdapter.setClickListener(Poker.this);
+            }else{
+                noplayers.setVisibility(View.VISIBLE);
+            }
 
 
         }

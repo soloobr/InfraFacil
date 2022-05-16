@@ -98,20 +98,23 @@
                         android:text="Data :"
                         android:textAppearance="@style/TextAppearance.Compat.Notification" />
 
-                    <EditText
-                        android:id="@+id/editEmailcli"
-                        android:layout_width="152dp"
-                        android:layout_span="2"
-                        android:layout_weight="0"
-                        android:focusable="false"
-                        android:imeOptions="actionNext"
-                        android:inputType="date" />
+                    <TextView
+                        android:id="@+id/editTextDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_span="6"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <requestFocus />
 
                     <ImageButton
                         android:id="@+id/btn_date"
                         android:layout_width="5dp"
                         android:layout_height="match_parent"
-                        android:onClick="onClick"
+                        android:focusableInTouchMode="false"
+                        android:onClick="onClickDATA"
                         app:srcCompat="@android:drawable/ic_menu_my_calendar" />
 
                 </TableRow>
@@ -134,7 +137,7 @@
                         android:textAppearance="@style/TextAppearance.Compat.Notification" />
 
                     <AutoCompleteTextView
-                        android:id="@+id/autoComplete"
+                        android:id="@+id/namejogo"
                         android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="false"
@@ -143,7 +146,6 @@
                         android:longClickable="false"
                         android:singleLine="true">
 
-                        <requestFocus />
                     </AutoCompleteTextView>
 
                 </TableRow>
@@ -169,13 +171,14 @@
                             android:text="Entrada.:"
                             android:textAppearance="@style/TextAppearance.Compat.Notification" />
 
-                        <AutoCompleteTextView
+                        <EditText
+                            android:id="@+id/edvalorentrada"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:imeOptions="actionNext"
-                            android:paddingLeft="5dp"
-                            android:paddingEnd="5dp"
-                            android:singleLine="true" />
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="numberDecimal"
+                            android:nextFocusDown="@+id/edqtdentrada"/>
 
                         <TextView
                             android:id="@+id/lfone"
@@ -184,13 +187,16 @@
                             android:text="Fichas.:"
                             android:textAppearance="@style/TextAppearance.Compat.Notification" />
 
-                        <AutoCompleteTextView
+                        <EditText
+                            android:id="@+id/edqtdentrada"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:imeOptions="actionNext"
-                            android:paddingLeft="5dp"
-                            android:paddingEnd="5dp"
-                            android:singleLine="true" />
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="numberDecimal"
+                            android:singleLine="true"
+                            android:nextFocusDown="@+id/edvalorrebuy"/>
+
                     </LinearLayout>
 
                 </TableRow>
@@ -217,13 +223,14 @@
                             android:text="Rebuy.:"
                             android:textAppearance="@style/TextAppearance.Compat.Notification" />
 
-                        <AutoCompleteTextView
+                        <EditText
+                            android:id="@+id/edvalorrebuy"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:imeOptions="actionNext"
-                            android:paddingLeft="5dp"
-                            android:paddingEnd="5dp"
-                            android:singleLine="true" />
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="numberDecimal"
+                            android:nextFocusDown="@+id/edqtdrebuy"/>
 
                         <TextView
                             android:id="@+id/lfone"
@@ -232,13 +239,15 @@
                             android:text="Fichas.:"
                             android:textAppearance="@style/TextAppearance.Compat.Notification" />
 
-                        <AutoCompleteTextView
+                        <EditText
+                            android:id="@+id/edqtdrebuy"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:imeOptions="actionNext"
-                            android:paddingLeft="5dp"
-                            android:paddingEnd="5dp"
-                            android:singleLine="true" />
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="numberDecimal"
+                            android:nextFocusDown="@+id/edvaloraddon" />
+
                     </LinearLayout>
 
                 </TableRow>
@@ -265,13 +274,14 @@
                             android:text="Addon.:"
                             android:textAppearance="@style/TextAppearance.Compat.Notification" />
 
-                        <AutoCompleteTextView
+                        <EditText
+                            android:id="@+id/edvaloraddon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:imeOptions="actionNext"
-                            android:paddingLeft="5dp"
-                            android:paddingEnd="5dp"
-                            android:singleLine="true" />
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="numberDecimal"
+                            android:nextFocusDown="@+id/edqtdaddon"/>
 
                         <TextView
                             android:id="@+id/lfone"
@@ -280,13 +290,14 @@
                             android:text="Fichas.:"
                             android:textAppearance="@style/TextAppearance.Compat.Notification" />
 
-                        <AutoCompleteTextView
+                        <EditText
+                            android:id="@+id/edqtdaddon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:imeOptions="actionNext"
-                            android:paddingLeft="5dp"
-                            android:paddingEnd="5dp"
-                            android:singleLine="true" />
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:inputType="numberDecimal" />
+
                     </LinearLayout>
 
                 </TableRow>

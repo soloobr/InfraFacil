@@ -12,7 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -24,6 +29,7 @@ public class AdapterListViewPoker extends BaseAdapter {
     private LayoutInflater mInflater;
     private ArrayList<ItemListViewPoker> itens;
     private final Locale locale = Locale.getDefault();
+    private String datejogo;
 
     public AdapterListViewPoker(Context context, ArrayList<ItemListViewPoker> itens)
     {
@@ -70,13 +76,24 @@ public class AdapterListViewPoker extends BaseAdapter {
         //Pega o item de acordo com a posção.
         ItemListViewPoker item = itens.get(position);
         //infla o layout para podermos preencher os dados
-        view = mInflater.inflate(R.layout.list_item_pecas_pecas, null);
+        view = mInflater.inflate(R.layout.list_item_jogospoker, null);
 
         //atravez do layout pego pelo LayoutInflater, pegamos cada id relacionado
         //ao item e definimos as informações.
-        ((TextView) view.findViewById(R.id.tvnome)).setText(item.getDescricao());
-        ((TextView) view.findViewById(R.id.tvqtdpeca)).setText(item.getQtdfichaentrada());
-        ((TextView) view.findViewById(R.id.tvnumero)).setText(item.getQtdficharebuy());
+        ((TextView) view.findViewById(R.id.tvdescrijogo)).setText(item.getDescricao());
+        //((TextView) view.findViewById(R.id.tvdatajogo)).setText(item.getData());
+        ((TextView) view.findViewById(R.id.tvqtdplayers)).setText(item.getQtdplayers());
+
+        String ds1  = item.getData();
+
+        SimpleDateFormat sdf1  = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+             datejogo = sdf2.format(sdf1.parse(ds1));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        ((TextView) view.findViewById(R.id.tvdatajogo)).setText(datejogo);
 
         String valor = item.getVlentrada();
         BigDecimal parsed = parseToBigDecimal(valor);

@@ -5,6 +5,7 @@ import static com.example.luiseduardo.infrafacil.PecaFragment.Somavebdas;
 import static com.example.luiseduardo.infrafacil.PecaFragment.lsvendas;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,7 +18,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -43,6 +46,7 @@ import java.util.List;
 public class Poker_main extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private ProgressDialog pDialog;
     private static String urlAll = "http://futsexta.16mb.com/Poker/poker_get_jogo.php";
+    private static String urlGetJogoFordate = "http://futsexta.16mb.com/Poker/poker_get_jogo_date.php";
     private static String url = "http://futsexta.16mb.com/Poker/ordem_servicomobile.php";
     private static String urlvenda = "http://festabrinka.com.br/Infra_Get_produtosvendido.php";
     ArrayList<HashMap<String, String>> OcorList;
@@ -51,7 +55,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     //public static ArrayList itens = null;
     ArrayList<ItemListViewPoker> itens = new ArrayList<>();
     ArrayList<ItemListViewFornecedor> itensfornecedor = new ArrayList<>();
-    ArrayList<HashMap<String, String>> newItemlist = new ArrayList<HashMap<String, String>>();
+    //ArrayList<HashMap<String, String>> newItemlist = new ArrayList<HashMap<String, String>>();
     //List<ItemListViewFornecedor> rowItems;
     private ListView lv;
     List<ItemListViewFornecedor> rowItems;
@@ -59,8 +63,8 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
     private String TAG = Produtos.class.getSimpleName();
     private String qtdvendalaste, qtdvendanow, somaqtdnew,qtdprodvend, idvenda, idprod,  qtd,    idocor, datavenda,  idforne,  valoruni, valorpago,  valortotal,  formadepagamento,  status,  parcela, qtdparcel,  valorparcela,  name, descri;
-    public String DescriProd = "%",nome;
-    private  String Origem, idjogo;
+    public String DescriJodo, searchidata = "0";
+    private  String Origem, idjogo,descrijogo,qtdplayers;
     private RadioButton buttonavista, buttonparcelado;
 
     private  ArrayList<ItemListViewFornecedor> mFornecedorList;
@@ -70,6 +74,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     SearchView searchView;
     JSONParser jsonParser = new JSONParser();
     JSONObject object =null;
+    JSONObject objectP =null;
     ListView listView;
     ArrayList<String> list;
     ArrayList<String> listfornecedor;
@@ -78,6 +83,9 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
     private ImageView imgaddnew;
+    private ImageButton btnDatePicker;
+    private int mYear, mMonth, mDay, mHour, mMinute;
+    private static String Mes,Dia,Ano;
 
     private View v;
     public static String IDORDEM = Status_Ordem.IDORDEM;
@@ -94,6 +102,43 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         searchView = (SearchView) findViewById (R.id.searchjogo);
         imgaddnew = (ImageView) findViewById(R.id.imgaddnewjogo);
 
+        btnDatePicker = (ImageButton) findViewById (R.id.btn_searchedata);
+
+        btnDatePicker.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(Poker_main.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                                if(dayOfMonth < 10){
+                                    Dia = "0"+ (dayOfMonth);
+                                }else {
+                                    Dia = String.valueOf(dayOfMonth);
+                                }
+                                if(monthOfYear < 10){
+                                    Mes = "0"+ (monthOfYear + 1);
+                                }else{
+                                    Mes = String.valueOf(monthOfYear + 1);
+                                }
+                                //searchView.setQuery( year + "-" + Mes + "-" + Dia,false);
+                                searchidata = String.valueOf(year)+Mes+Dia;
+
+                                new GetDados_jogos_from_date().execute();
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+
+            }
+        });
 
         imgaddnew.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
@@ -128,30 +173,30 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
                 Intent intent = new Intent(Poker_main.this, Poker.class);
                 idjogo = itens.get(position).getId();
+                descrijogo = itens.get(position).getDescricao();
                 intent.putExtra("id", idjogo);
+                intent.putExtra("Drisc", descrijogo);
                 startActivity(intent);
             }
         });
 
-        newItemlist = new ArrayList<HashMap<String, String>>();
+        //newItemlist = new ArrayList<HashMap<String, String>>();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                OcorList.clear();
+                //OcorList.clear();
                 //adapterListView.notifyDataSetChanged();
-                DescriProd = searchView.getQuery().toString();
-
-                new Poker_main.GetDados_jogos().execute();
-
-
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //    adapter.getFilter().filter(newText);
+                DescriJodo = searchView.getQuery().toString();
+
+                new GetDados_jogos().execute();
+
                 return false;
             }
         });
@@ -204,21 +249,14 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         @Override
         protected Void doInBackground(Void... voids) {
 
-            if (DescriProd != null) {
-                DescriProd=DescriProd;
-                //Log.i("Profile : ", "Not Null  "+DescriProd);
-            } else{
-                //Log.i("Profile : ", "Iss Null  "+DescriProd);
-                DescriProd = "%";
-            }
-
             List params = new ArrayList();
             params.add(new BasicNameValuePair("idjogo",idjogo));
+            params.add(new BasicNameValuePair("descri",DescriJodo));
+            params.add(new BasicNameValuePair("searchedata",searchidata));
 
-            JSONObject json = jsonParser.makeHttpRequest(urlAll,"GET",
+            JSONObject json = new JSONObject();
+             json = jsonParser.makeHttpRequest(urlAll,"POST",
                     params);
-
-            //Log.i("Profile JSON: ", json.toString());
 
             if (json != null) {
                 try {
@@ -226,7 +264,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                     JSONArray eventDetails = parent.getJSONArray("jogo");
 
                     itens = new ArrayList<ItemListViewPoker>();
-                    newItemlist.clear();
+                    //newItemlist.clear();
 
                     for (int i = 0; i < eventDetails.length(); i++)
                     {
@@ -240,28 +278,13 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                         String qtdficharebuy = object.getString("qtdficharebuy");
                         String vladdon = object.getString("vladdon");
                         String qtdfichaaddon = object.getString("qtdfichaaddon");
+                        String ttplayers = object.getString("ttplayers");
 
-
-                        //idprod = id;
-                        //idforne =idforn;
-
-                        //HashMap<String, String> map = new HashMap<String, String>();
-                        //map.put("numero","1");
-                        //newItemlist.add(map);
-
-                        ItemListViewPoker item1 = new ItemListViewPoker(id,Descricao,id, Data, vlentrada,qtdfichaentrada,vlrebuy,qtdficharebuy,vladdon,qtdfichaaddon);
+                        ItemListViewPoker item1 = new ItemListViewPoker(id,Descricao, Data, vlentrada,qtdfichaentrada,vlrebuy,qtdficharebuy,vladdon,qtdfichaaddon,ttplayers);
                         itens.add(item1);
-
-                        //HashMap<String, String> contact = new HashMap<>();
-                        // adding each child node to HashMap key => value
-                        //contact.put("numero", "44");
-                        //contact.put("nome", "ok");
-                        //contact.put("descri", "ok");
-
-                        //Log.e(TAG, "Descri:" + contact);
-                        // adding contact to contact list
-                        //OcorList.add(contact);
+                        descrijogo = object.getString("Descricao");
                     }
+
 
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -298,7 +321,87 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         }
     }
 
+    class GetDados_jogos_from_date extends AsyncTask<Void, Void, Void> {
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            List params = new ArrayList();
+            params.add(new BasicNameValuePair("idjogo",idjogo));
+            //params.add(new BasicNameValuePair("descri",DescriJodo));
+            params.add(new BasicNameValuePair("searchedata",searchidata));
+
+            JSONObject jsonD = new JSONObject();
+            jsonD = jsonParser.makeHttpRequest(urlGetJogoFordate,"POST",
+                    params);
+
+            if (json != null) {
+                try {
+                    JSONObject parent = new JSONObject(String.valueOf(json));
+                    JSONArray eventDetails = parent.getJSONArray("jogo");
+
+                    itens = new ArrayList<ItemListViewPoker>();
+                    //newItemlist.clear();
+
+                    for (int i = 0; i < eventDetails.length(); i++)
+                    {
+                        object = eventDetails.getJSONObject(i);
+                        String id  = object.getString("id");
+                        String Descricao = object.getString("Descricao");
+                        String Data = object.getString("Data");
+                        String vlentrada = object.getString("vlentrada");
+                        String qtdfichaentrada = object.getString("qtdfichaentrada");
+                        String vlrebuy = object.getString("vlrebuy");
+                        String qtdficharebuy = object.getString("qtdficharebuy");
+                        String vladdon = object.getString("vladdon");
+                        String qtdfichaaddon = object.getString("qtdfichaaddon");
+                        String ttplayers = object.getString("ttplayers");
+
+                        ItemListViewPoker item1 = new ItemListViewPoker(id,Descricao, Data, vlentrada,qtdfichaentrada,vlrebuy,qtdficharebuy,vladdon,qtdfichaaddon,ttplayers);
+                        itens.add(item1);
+                        descrijogo = object.getString("Descricao");
+                    }
+
+
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                            "Jogos não encontrado nesta data." ,
+                                            Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+                }
+            } else{
+                Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG)
+                        .show();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            if (json.isEmpty()) {
+
+            }else {
+                adapterListView = new AdapterListViewPoker(Poker_main.this, itens);
+                lv.setAdapter(adapterListView);
+                lv.setCacheColorHint(Color.TRANSPARENT);
+            }
+
+        }
+    }
     class InserirPeca extends AsyncTask<String, String, String>  {
 
         @Override

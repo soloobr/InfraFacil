@@ -10,21 +10,14 @@ public class ItemListViewPoker {
     private String qtdficharebuy;
     private String vladdon;
     private String qtdfichaaddon;
+    private String qtdplayers;
 
+    public String getQtdplayers() {
+        return qtdplayers;
+    }
 
-    public ItemListViewPoker(String id, String Descricao, String Data, String vlentrada, String qtdfichaentrada, String vlrebuy, String qtdficharebuy, String vladdon, String qtdfichaaddon, String s)
-
-    {
-        this.id = id;
-        this.Descricao = Descricao;
-        this.Data = Data;
-        this.vlentrada = vlentrada;
-        this.qtdfichaentrada = qtdfichaentrada;
-        this.vlrebuy = vlrebuy;
-        this.qtdficharebuy = qtdficharebuy;
-        this.vladdon = vlrebuy;
-        this.qtdficharebuy = qtdfichaaddon;
-
+    public void setQtdplayers(String qtdplayers) {
+        this.qtdplayers = qtdplayers;
     }
 
     public String getId() {
@@ -98,4 +91,23 @@ public class ItemListViewPoker {
     public void setQtdfichaaddon(String qtdfichaaddon) {
         this.qtdfichaaddon = qtdfichaaddon;
     }
+
+    public ItemListViewPoker(String id, String Descricao, String Data, String vlentrada, String qtdfichaentrada, String vlrebuy, String qtdficharebuy, String vladdon, String qtdfichaaddon, String qtdplayers)
+
+    {
+        this.id = id;
+        this.Descricao = Descricao;
+        this.Data = Data;
+        this.vlentrada = vlentrada;
+        this.qtdfichaentrada = qtdfichaentrada;
+        this.vlrebuy = vlrebuy;
+        this.qtdficharebuy = qtdficharebuy;
+        this.vladdon = vladdon;
+        this.qtdficharebuy = qtdfichaaddon;
+        this.qtdplayers = qtdplayers;
+
+
+    }
+
+
 }

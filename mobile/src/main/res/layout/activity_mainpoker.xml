@@ -55,7 +55,7 @@
                         android:layout_height="match_parent"
                         android:clickable="true"
                         android:focusable="true"
-                        app:srcCompat="@mipmap/addprod96" />
+                        app:srcCompat="@mipmap/chip" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -73,27 +73,44 @@
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/txbuscaprod"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:text="Buscar Jogo"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <SearchView
+                            android:id="@+id/searchjogo"
+                            style="@android:style/Widget.Material.SearchView"
+                            android:layout_width="323dp"
+                            android:layout_height="55dp">
+
+                        </SearchView>
+
+                        <ImageButton
+                            android:id="@+id/btn_searchedata"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            app:srcCompat="@mipmap/calendar32" />
+
+                    </LinearLayout>
+
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@+id/txbuscaprod"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:gravity="center"
-                            android:text="Buscar Jogo"
-                            android:textSize="30sp"
-                            android:textStyle="bold" />
-
                     </RelativeLayout>
 
-                    <SearchView
-                        android:id="@+id/searchjogo"
-                        style="@android:style/Widget.Material.SearchView"
-                        android:layout_width="match_parent"
-                        android:layout_height="75dp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -126,7 +143,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#fff"
+                    android:background="@android:color/transparent"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
