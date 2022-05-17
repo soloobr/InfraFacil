@@ -5,15 +5,19 @@ import static com.example.luiseduardo.infrafacil.Poker.lsplayer;
 import static com.example.luiseduardo.infrafacil.Poker.myrecyclerview;
 import static com.example.luiseduardo.infrafacil.Poker.v;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -22,11 +26,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -40,6 +46,7 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -61,6 +68,10 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
     private final Locale locale = Locale.getDefault();
     JSONObject object =null;
     private  int Pozi;
+    static Boolean Delete = false;
+    static Boolean Edit = false;
+    private static RecyclerView recyclerView;
+    private static customAdapter  mAdapter;
 
     public customAdapter( List<PlayersListView> list,int rowLayout,Context context) {
         this.list = list;
@@ -90,6 +101,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         vlrebuy = city.getVlrebuy();
         vladdon = city.getVladdon();
         valor = city.getValor();
+        sUsername = city.getNome();
 
         //int ent = (int)Double.parseDouble(vlentrada);
         //int valorp = (int)Double.parseDouble(valor);
@@ -241,6 +253,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                             idplayer = String.valueOf(tv_idplayer.getText());
                             rebuy = String.valueOf(tvqtdreb.getText());
                             addon = String.valueOf(tvqtdaddon.getText());
+                            sUsername = String.valueOf(tv_nome.getText());
 
                             int ent = (int)Double.parseDouble(vlentrada);
                             int vlreb = (int)Double.parseDouble(vlrebuy);
@@ -305,6 +318,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                     Pozi = getAdapterPosition();
 
                     myPopupMenu(view);
+
                     return true;
                 }
 
@@ -317,11 +331,10 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         }
     }
     private void myPopupMenu(View v) {
-        //Defining PopupMenu objects
+
         PopupMenu popupMenu = new PopupMenu(mContext, v);
-        //Setting the layout of PopupMenu objects
         popupMenu.getMenuInflater().inflate(R.menu.menu, popupMenu.getMenu());
-        //Set PopupMenu click event
+
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -330,13 +343,12 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                 switch (item.getItemId()) {
                     case R.id.delete:
                         //Toast.makeText(mContext, "clicked delete" + idplayer + " "+idjogo, Toast.LENGTH_SHORT).show();
-
-                        new DeletePlayer().execute();
-                        list.remove(Pozi);
-                        notifyItemRemoved(Pozi);
-                        return true;
+                        showAlert(mContext, "Deletar", "Deletando Player");
+                        //new DeletePlayer().execute();
+                         return true;
                     case R.id.edite:
-                        Toast.makeText(mContext, "clicked edite" + idplayer, Toast.LENGTH_SHORT).show();
+                        showAlert(mContext, "Editar", "Editando Player");
+                        //Toast.makeText(mContext, "clicked edite" + idplayer, Toast.LENGTH_SHORT).show();
                         return true;
                     default:
                         return true;
@@ -346,7 +358,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         //Show menu
         popupMenu.show();
     }
-    class DeletePlayer extends AsyncTask<String, String, String> {
+    public class DeletePlayer extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -387,50 +399,36 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
     }
     class UpdatePlayer extends AsyncTask<String, String, String> {
-
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
-
         @Override
         protected String doInBackground(String... args) {
-
-
 
             int success;
             try {
 
-
-                // Building Parameters
                 List params = new ArrayList();
 
                     params.add(new BasicNameValuePair("id", idplayer));
                     params.add(new BasicNameValuePair("rebuy", rebuy));
                     params.add(new BasicNameValuePair("addon", addon));
                     params.add(new BasicNameValuePair("valor", valor));
+                    params.add(new BasicNameValuePair("nome", sUsername));
 
 
-
-                Log.d("Debug!", "starting");
-
-                // getting product details by making HTTP request
                 JSONObject newjson = jsonParser.makeHttpRequest(URLUP, "POST",
                         params);
 
-                //Id_Comp = "0";
-                // json success tag
                 success = newjson.getInt(TAG_SUCCESS);
                 if (success == 1) {
                     Log.d("Editar successo!", newjson.toString());
-                    //finish();
                     return newjson.getString(TAG_MESSAGE);
 
                 } else {
                     Log.d("Não Atualizada", newjson.getString(TAG_MESSAGE));
-                    //finish();
                     return newjson.getString(TAG_MESSAGE);
                 }
             } catch (JSONException e) {
@@ -548,4 +546,99 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         }
     }
 
+    public void showAlert(Context context, String title, String message){
+
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View promptView = layoutInflater.inflate(R.layout.custom_alertnewplayer, null);
+
+
+
+        if (title.equals("Deletar")){
+            final ImageView img = promptView.findViewById(R.id.imgaddplayers);
+            img.setImageResource(R.mipmap.usercircledelete);
+
+            final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
+            tvaction.setText("Excluir Player");
+
+            final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
+            ednome.setText(sUsername);
+            ednome.setEnabled(false);
+
+            Delete = true;
+        }
+
+        if (title.equals("Editar")){
+
+            final ImageView img = promptView.findViewById(R.id.imgaddplayers);
+            img.setImageResource(R.mipmap.usercirclegear128);
+
+            final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
+            tvaction.setText("Editando Player");
+
+            final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
+            ednome.setText(sUsername);
+            ednome.setSelection(ednome.getText().length());
+            ednome.setEnabled(true);
+
+            Edit = true;
+        }
+
+        alert.setView(promptView);
+        alert.setCancelable(false);
+        //Poker.this.setFinishOnTouchOutside(false);
+
+        alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(context, "Edição cancelada", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alert.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if (Delete){
+
+                    new DeletePlayer().execute();
+                    list.remove(Pozi);
+                    notifyItemRemoved(Pozi);
+                }
+                if (Edit){
+                    final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
+                    sUsername = String.valueOf(ednome.getText());
+
+                    new UpdatePlayer().execute();
+                    //new notifyDataSetChanged();;
+                    //updateList();
+                   Poker.mAdapter.notifyDataSetChanged();
+                    new Poker.Executt();
+
+
+                }
+               // Poker.sUsername = String.valueOf(ednome.getText());
+
+                //new Poker.InsertPlayer().execute();
+
+                //InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                //imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            }
+        });
+        final AlertDialog dialog = alert.create();
+        dialog.show();
+
+    }
+    public void updateList(){
+
+
+    }
+
+    private class notifyDataSetChanged {
+
+    }
 }

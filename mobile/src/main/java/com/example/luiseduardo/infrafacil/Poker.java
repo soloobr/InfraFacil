@@ -68,8 +68,8 @@ public class Poker extends Activity implements ItemClickListener{
     private ProgressDialog pDialog;
     public static RecyclerView myrecyclerview;
 
-    private static RecyclerView recyclerView;
-    private static customAdapter  mAdapter;
+    public static RecyclerView recyclerView;
+    public static customAdapter  mAdapter;
     //ArrayList<PlayersListView> list = new ArrayList<>();
     private List<PlayersListView> cities;
 
@@ -298,6 +298,10 @@ public class Poker extends Activity implements ItemClickListener{
 
         }
     }
+    public  void Executt() {
+        new GetDados().execute();
+    }
+
     public  void Premiacao() {
 
         int vl = (int)Double.parseDouble(total);
@@ -321,7 +325,7 @@ public class Poker extends Activity implements ItemClickListener{
         sterceiro = NumberFormat.getCurrencyInstance(locale).format(terc);
                 terceiro.setText(String.valueOf(sterceiro));
     }
-    class GetDados extends AsyncTask<Void, Void, Void> {
+    public class GetDados extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -507,6 +511,19 @@ public class Poker extends Activity implements ItemClickListener{
     @Override
     protected void onResume() {
         super.onResume();
+        if (PLAYERS) {
+            int spanCount = 2;
+            recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(Poker.this, spanCount);
+            //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(gridLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            mAdapter = new customAdapter(lsplayer, R.layout.item_players, Poker.this);
+            recyclerView.setAdapter(mAdapter);
+            mAdapter.setClickListener(Poker.this);
+        }else{
+            noplayers.setVisibility(View.VISIBLE);
+        }
     }
 
     private BigDecimal parseToBigDecimal(String value) {
@@ -526,5 +543,8 @@ public class Poker extends Activity implements ItemClickListener{
     }
 
 
+    public static class Executt {
+
+    }
 }
 
