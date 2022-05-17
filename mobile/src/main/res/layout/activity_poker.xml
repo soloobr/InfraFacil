@@ -147,7 +147,7 @@
                             android:layout_height="wrap_content">
 
                             <TextView
-                                android:id="@+id/textView9"
+                                android:id="@+id/tV9"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_weight="0"
@@ -216,9 +216,10 @@
                     </LinearLayout>
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/btnewplayers"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:onClick="onClickNewPlayer"
                         android:text="New Player" />
 
                 </LinearLayout>

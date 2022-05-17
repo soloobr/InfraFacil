@@ -389,24 +389,15 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //pDialog = new ProgressDialog(Context.this);
-            //pDialog.setMessage("Atualizando Dados");
-            //pDialog.setIndeterminate(false);
-            //pDialog.setCancelable(true);
-            //pDialog.show();
         }
 
 
         @Override
         protected String doInBackground(String... args) {
 
-
-
             int success;
             try {
 
-
-                // Building Parameters
                 List params = new ArrayList();
 
                 params.add(new BasicNameValuePair("id", idplayer));
@@ -417,12 +408,9 @@ public class AdapterListViewPlayers extends RecyclerView.Adapter<AdapterListView
 
                 Log.d("Debug!", "starting");
 
-                // getting product details by making HTTP request
                 JSONObject newjson = jsonParser.makeHttpRequest(URLUP, "POST",
                         params);
 
-                //Id_Comp = "0";
-                // json success tag
                 success = newjson.getInt(TAG_SUCCESS);
                 if (success == 1) {
                     Log.d("Editar successo!", newjson.toString());

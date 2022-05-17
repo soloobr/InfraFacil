@@ -6,12 +6,16 @@ import static android.content.ContentValues.TAG;
 import static com.example.luiseduardo.infrafacil.MoneyTextWatcher.getCurrencySymbol;
 import static java.security.AccessController.getContext;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.icu.text.NumberFormat;
+import android.inputmethodservice.Keyboard;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,11 +25,15 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -49,6 +57,7 @@ public class Poker extends Activity implements ItemClickListener{
     private AdapterListViewPlayers adapterListViewPlayers;
     private static String urlplayers = "http://futsexta.16mb.com/Poker/poker_get_playersjogo.php";
     private static String URTOTAIS = "http://futsexta.16mb.com/Poker/Poker_Get_Totais.php";
+    private static String urladdplayers = "http://futsexta.16mb.com/Poker/Poker_insert_Players_Jogo.php";
 
 
     //ArrayList<HashMap<String, String>> PlayersList;
@@ -71,12 +80,13 @@ public class Poker extends Activity implements ItemClickListener{
     static View v;
 
     JSONParser jsonParserR = new JSONParser();
+    JSONParser jsonParser = new JSONParser();
     JSONObject object =null;
     private final Locale locale = Locale.getDefault();
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
 
-    public static String  idjogo,idplayer, rebuy, addon,descricao;
+    public static String  idjogo,idplayer, rebuy, addon,descricao,sUsername;
     public static String  valor, vlrebuy,vladdon,vlentrada,total,totalrebuy,totaladdon,totalplayers;
 
     public static TextView vltotaljogo,ttrebuy,ttaddon,ttplayers,primeiro,segundo,terceiro,noplayers,driscrijogo;
@@ -145,6 +155,7 @@ public class Poker extends Activity implements ItemClickListener{
                 Toast.LENGTH_LONG)
                 .show();
 
+
         /*btnRebuy.setOnClickListener(new View.OnClickListener() {
 
 
@@ -161,11 +172,47 @@ public class Poker extends Activity implements ItemClickListener{
         });
 */
     }
+    @SuppressLint("ResourceAsColor")
+    public void onClickNewPlayer(View v) {
 
-    //@Override
-    //public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(Poker.this);
+        LayoutInflater layoutInflater = LayoutInflater.from(Poker.this);
+        View promptView = layoutInflater.inflate(R.layout.custom_alertnewplayer, null);
 
-    //}
+        final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
+
+        final ImageView img = promptView.findViewById(R.id.imgaddplayers);
+        img.setImageResource(R.mipmap.usercircle128);
+
+        alert.setView(promptView);
+        alert.setCancelable(false);
+        //Poker.this.setFinishOnTouchOutside(false);
+
+        alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                 Toast.makeText(Poker.this, "Adição cancelada", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alert.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                Poker.sUsername = String.valueOf(ednome.getText());
+
+                new InsertPlayer().execute();
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            }
+        });
+        final AlertDialog dialog = alert.create();
+        dialog.show();
+    }
+
     public static void methodOnBtnClick(int position)
     {
 
@@ -380,7 +427,69 @@ public class Poker extends Activity implements ItemClickListener{
 
         }
     }
+    class InsertPlayer extends AsyncTask<String, String, String> {
 
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(Poker.this);
+            pDialog.setMessage("Adicionando Jogador");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+
+        @Override
+        protected String doInBackground(String... args) {
+
+            int success;
+            try {
+                List params = new ArrayList();
+
+                //params.add(new BasicNameValuePair("id", Data_Local));
+                params.add(new BasicNameValuePair("idjogo", idjogo));
+                params.add(new BasicNameValuePair("nomeplayer", sUsername));
+
+                JSONObject json = jsonParser.makeHttpRequest(urladdplayers, "POST",
+                        params);
+
+
+                // json success tag
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("successo!", json.toString());
+                    //finish();
+                    return json.getString(TAG_MESSAGE);
+
+                } else {
+                    Log.d("Jogador não  adicionado", json.getString(TAG_MESSAGE));
+                    //finish();
+                    return json.getString(TAG_MESSAGE);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+
+        }
+
+
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog once product deleted
+            pDialog.dismiss();
+            if (file_url != null) {
+                new GetDados().execute();
+                new GetTotais().execute();
+                Toast.makeText(Poker.this, file_url, Toast.LENGTH_LONG).show();
+            }
+            //new Poker_main.GetDados_jogos();
+        }
+
+
+    }
     @Override
     protected void onStart()
     {
@@ -398,18 +507,6 @@ public class Poker extends Activity implements ItemClickListener{
     @Override
     protected void onResume() {
         super.onResume();
-        /*new GetDados().execute();
-
-        int spanCount = 2;
-        recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
-        GridLayoutManager gridLayoutManager  = new GridLayoutManager(this,spanCount);
-        //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        mAdapter = new customAdapter (lsplayer, R.layout.item_players, Poker.this);
-        recyclerView.setAdapter(mAdapter);
-        mAdapter.setClickListener(Poker.this);
-        //Toast.makeText(getApplicationContext(), "onResumed called", Toast.LENGTH_LONG).show();*/
     }
 
     private BigDecimal parseToBigDecimal(String value) {

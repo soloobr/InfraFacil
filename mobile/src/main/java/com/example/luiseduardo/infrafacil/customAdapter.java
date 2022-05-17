@@ -2,6 +2,8 @@ package com.example.luiseduardo.infrafacil;
 
 import static com.example.luiseduardo.infrafacil.MoneyTextWatcher.getCurrencySymbol;
 import static com.example.luiseduardo.infrafacil.Poker.lsplayer;
+import static com.example.luiseduardo.infrafacil.Poker.myrecyclerview;
+import static com.example.luiseduardo.infrafacil.Poker.v;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -14,8 +16,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,6 +27,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -44,14 +49,18 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
     private int rowLayout;
     private Context mContext;
     private ItemClickListener clickListener;
-    public static String  idplayer,idjogo,rebuy, addon, valor, vlrebuy,vladdon,vlentrada,total,totalrebuy,totaladdon,totalplayers;
+    public static String  sUsername,idplayer,idjogo,rebuy, addon, valor, vlrebuy,vladdon,vlentrada,totalrebuy,totaladdon,totalplayers;
+    private static String total = "0";
     JSONParser jsonParser = new JSONParser();
+    private static String URLDELETE = "http://futsexta.16mb.com/Poker/Poker_Delete_Players.php";
     private static String URLUP = "http://futsexta.16mb.com/Poker/Poker_Edit_Players.php";
     private static String URTOTAIS = "http://futsexta.16mb.com/Poker/Poker_Get_Totais.php";
+    private static String urladdplayers = "http://futsexta.16mb.com/Poker/Poker_insert_Players_Jogo.php";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
     private final Locale locale = Locale.getDefault();
     JSONObject object =null;
+    private  int Pozi;
 
     public customAdapter( List<PlayersListView> list,int rowLayout,Context context) {
         this.list = list;
@@ -76,7 +85,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         myViewHolder.tv_qtdrebuy.setText(city.getRebuy());
         myViewHolder.tv_qtdaddon.setText(city.getAddon());
 
-        idjogo = "1";
+        idjogo = city.getIdjogo();
         vlentrada = city.getVlentrada();
         vlrebuy = city.getVlrebuy();
         vladdon = city.getVladdon();
@@ -113,6 +122,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         private TextView tv_qtdrebuy;
         private TextView tv_qtdaddon;
         private TextView tv_valortotal;
+        //private Button btn_addplayers;
         //private String tv_vlrebuy;
 
         public ViewHolder(View view) {
@@ -126,11 +136,9 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             tv_qtdrebuy = (TextView)itemView.findViewById(R.id.main_line_valorrebuy);
             tv_qtdaddon = (TextView)itemView.findViewById(R.id.main_line_valoraddon);
             tv_valortotal = (TextView)itemView.findViewById(R.id.main_line_valortotal);
+            //btn_addplayers = (Button)itemView.findViewById(R.id.btnewplayers);
 
             view.setTag(view);
-
-            //view.setOnClickListener(this);
-
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -288,12 +296,95 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                 }
             });
 
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    idplayer = String.valueOf(tv_idplayer.getText());
+                    //Toast.makeText(mContext, "Long! " + idplayer, Toast.LENGTH_SHORT).show();
+
+                    Pozi = getAdapterPosition();
+
+                    myPopupMenu(view);
+                    return true;
+                }
+
+            });
        }
 
         @Override
         public void onClick(View view) {
 
         }
+    }
+    private void myPopupMenu(View v) {
+        //Defining PopupMenu objects
+        PopupMenu popupMenu = new PopupMenu(mContext, v);
+        //Setting the layout of PopupMenu objects
+        popupMenu.getMenuInflater().inflate(R.menu.menu, popupMenu.getMenu());
+        //Set PopupMenu click event
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                //Toast. Maketext (mainactivity. This, "clicked" + item. Gettitle(), toast. Length_short). Show();
+
+                switch (item.getItemId()) {
+                    case R.id.delete:
+                        //Toast.makeText(mContext, "clicked delete" + idplayer + " "+idjogo, Toast.LENGTH_SHORT).show();
+
+                        new DeletePlayer().execute();
+                        list.remove(Pozi);
+                        notifyItemRemoved(Pozi);
+                        return true;
+                    case R.id.edite:
+                        Toast.makeText(mContext, "clicked edite" + idplayer, Toast.LENGTH_SHORT).show();
+                        return true;
+                    default:
+                        return true;
+                }
+            }
+        });
+        //Show menu
+        popupMenu.show();
+    }
+    class DeletePlayer extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected String doInBackground(String... args) {
+
+           int success;
+            try {
+
+                List params = new ArrayList();
+
+                params.add(new BasicNameValuePair("id", idplayer));
+                params.add(new BasicNameValuePair("idjogo", idjogo));
+
+                JSONObject newjson = jsonParser.makeHttpRequest(URLDELETE, "POST",
+                        params);
+
+                success = newjson.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("Deletado com successo!", newjson.toString());
+                    return newjson.getString(TAG_MESSAGE);
+
+                } else {
+                    Log.d("Não Deletado", newjson.getString(TAG_MESSAGE));
+                    return newjson.getString(TAG_MESSAGE);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(String file_url) {
+            new GetTotais().execute();
+        }
+
     }
     class UpdatePlayer extends AsyncTask<String, String, String> {
 
@@ -417,6 +508,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             Poker.ttrebuy.setText(totalrebuy);
             Poker.ttaddon.setText(totaladdon);
 
+
             int vl = (int)Double.parseDouble(total);
 
             int pri = (vl / 100) * 50;
@@ -440,7 +532,6 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
         }
     }
-
     private BigDecimal parseToBigDecimal(String value) {
         String replaceable = String.format("[%s,.\\s]", getCurrencySymbol());
 
