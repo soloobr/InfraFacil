@@ -124,6 +124,7 @@ public class Poker_new extends AppCompatActivity implements
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
     }
+
     @SuppressLint("ResourceAsColor")
     public void onClickSAVE(View v) {
 
@@ -203,6 +204,7 @@ public class Poker_new extends AppCompatActivity implements
         new InsertJogo().execute();
 
     }
+
     class InsertJogo extends AsyncTask<String, String, String> {
 
 

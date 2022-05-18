@@ -9,7 +9,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="675dp"
+        android:layout_height="wrap_content"
         android:paddingLeft="5dp"
         android:paddingRight="5dp">
 
@@ -178,7 +178,7 @@
                             android:layout_weight="1"
                             android:ems="10"
                             android:inputType="numberDecimal"
-                            android:nextFocusDown="@+id/edqtdentrada"/>
+                            android:nextFocusDown="@+id/edqtdentrada" />
 
                         <TextView
                             android:id="@+id/lfone"
@@ -194,8 +194,8 @@
                             android:layout_weight="1"
                             android:ems="10"
                             android:inputType="numberDecimal"
-                            android:singleLine="true"
-                            android:nextFocusDown="@+id/edvalorrebuy"/>
+                            android:nextFocusDown="@+id/edvalorrebuy"
+                            android:singleLine="true" />
 
                     </LinearLayout>
 
@@ -230,7 +230,7 @@
                             android:layout_weight="1"
                             android:ems="10"
                             android:inputType="numberDecimal"
-                            android:nextFocusDown="@+id/edqtdrebuy"/>
+                            android:nextFocusDown="@+id/edqtdrebuy" />
 
                         <TextView
                             android:id="@+id/lfone"
@@ -281,7 +281,7 @@
                             android:layout_weight="1"
                             android:ems="10"
                             android:inputType="numberDecimal"
-                            android:nextFocusDown="@+id/edqtdaddon"/>
+                            android:nextFocusDown="@+id/edqtdaddon" />
 
                         <TextView
                             android:id="@+id/lfone"
