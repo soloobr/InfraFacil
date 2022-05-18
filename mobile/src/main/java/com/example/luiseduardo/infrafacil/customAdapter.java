@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,6 +45,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,6 +75,11 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
     static Boolean Edit = false;
     private static RecyclerView recyclerView;
     private static customAdapter  mAdapter;
+    private ProgressDialog pDialog;
+    private boolean PLAYERS = false;
+
+    JSONParser jsonParserR = new JSONParser();
+    private static String urlplayers = "http://futsexta.16mb.com/Poker/poker_get_playersjogo.php";
 
     public customAdapter( List<PlayersListView> list,int rowLayout,Context context) {
         this.list = list;
@@ -314,7 +322,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                 public boolean onLongClick(View view) {
                     idplayer = String.valueOf(tv_idplayer.getText());
                     //Toast.makeText(mContext, "Long! " + idplayer, Toast.LENGTH_SHORT).show();
-
+                    sUsername = String.valueOf(tv_nome.getText());
                     Pozi = getAdapterPosition();
 
                     myPopupMenu(view);
@@ -333,7 +341,27 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
     private void myPopupMenu(View v) {
 
         PopupMenu popupMenu = new PopupMenu(mContext, v);
+
+        /*  The below code in try catch is responsible to display icons*/
+        try {
+            Field[] fields = popupMenu.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popupMenu);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         popupMenu.getMenuInflater().inflate(R.menu.menu, popupMenu.getMenu());
+
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -348,6 +376,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                          return true;
                     case R.id.edite:
                         showAlert(mContext, "Editar", "Editando Player");
+
                         //Toast.makeText(mContext, "clicked edite" + idplayer, Toast.LENGTH_SHORT).show();
                         return true;
                     default:
@@ -441,6 +470,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         protected void onPostExecute(String file_url) {
             //new Poker.GetDados().execute();
             new GetTotais().execute();
+            new GetDados().execute();
         }
 
     }
@@ -564,8 +594,8 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
             final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
             ednome.setText(sUsername);
-            ednome.setEnabled(false);
-
+            //ednome.setEnabled(false);
+            ednome.setFocusable(false);
             Delete = true;
         }
 
@@ -576,6 +606,8 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
             final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
             tvaction.setText("Editando Player");
+
+
 
             final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
             ednome.setText(sUsername);
@@ -593,7 +625,9 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(context, "Edição cancelada", Toast.LENGTH_SHORT).show();
+                Delete = false;
+                Edit = false;
+                //Toast.makeText(context, "Edição cancelada", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -608,37 +642,118 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                     new DeletePlayer().execute();
                     list.remove(Pozi);
                     notifyItemRemoved(Pozi);
+                    Delete = false;
                 }
                 if (Edit){
                     final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
                     sUsername = String.valueOf(ednome.getText());
 
                     new UpdatePlayer().execute();
-                    //new notifyDataSetChanged();;
-                    //updateList();
-                   Poker.mAdapter.notifyDataSetChanged();
-                    new Poker.Executt();
 
-
+                    ((InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE))
+                            .hideSoftInputFromWindow(ednome.getWindowToken(), 0);
+                    Edit = false;
                 }
-               // Poker.sUsername = String.valueOf(ednome.getText());
 
-                //new Poker.InsertPlayer().execute();
 
-                //InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-                //imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             }
         });
         final AlertDialog dialog = alert.create();
         dialog.show();
 
     }
-    public void updateList(){
+
+    public class GetDados extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(mContext);
+            pDialog.setMessage("Atualizando Dados...");
+            pDialog.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+
+            int success = 0;
+            List params = new ArrayList();
+            params.add(new BasicNameValuePair("id",idjogo));
+
+            JSONObject jsonStrT = jsonParserR.makeHttpRequest(urlplayers,"POST",
+                    params);
+
+            try {
+                success = jsonStrT.getInt(TAG_SUCCESS);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (success == 1) {
+                try {
+                    JSONObject jsonObj = new JSONObject(String.valueOf(jsonStrT));
+
+                    // Getting JSON Array node
+                    JSONArray contacts = jsonObj.getJSONArray("jogo");
+
+                    lsplayer = new ArrayList<PlayersListView>();
+
+                    for (int i = 0; i < contacts.length(); i++) {
+                        JSONObject c = contacts.getJSONObject(i);
+
+                        String idjogo1 = c.getString("idjogo");
+                        String id = c.getString("id");
+                        String name = c.getString("Nome_Player");
+                        String rebuy = c.getString("rebuy");
+                        String addon = c.getString("addon");
+                        String valor = c.getString("Valor");
+                        String vlentrada = c.getString("vlentrada");
+                        String vlrebuy = c.getString("vlrebuy");
+                        String vladdon = c.getString("vladdon");
 
 
-    }
+                        if (valor != null) {
+                            PLAYERS = true;
+                            Poker.lsplayer.add(new PlayersListView(id, idjogo1, name,  rebuy,  addon, valor,vlentrada,vlrebuy,vladdon,1));
+                        }
 
-    private class notifyDataSetChanged {
+                    }
 
+                } catch (final JSONException e) {
+
+                }
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            // Dismiss the progress dialog
+
+
+            //tx.setText(contador);
+
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+            if (PLAYERS) {
+                int spanCount = 2;
+                //Poker.recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, spanCount);
+                //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                Poker.recyclerView.setLayoutManager(gridLayoutManager);
+                Poker.recyclerView.setItemAnimator(new DefaultItemAnimator());
+                Poker.mAdapter = new customAdapter(lsplayer, R.layout.item_players, mContext);
+                Poker.recyclerView.setAdapter(Poker.mAdapter);
+                //mAdapter.setClickListener(mContext);
+            }else{
+                Poker.noplayers.setVisibility(View.VISIBLE);
+            }
+
+
+        }
     }
 }

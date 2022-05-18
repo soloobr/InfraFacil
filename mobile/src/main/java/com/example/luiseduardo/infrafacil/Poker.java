@@ -60,8 +60,7 @@ public class Poker extends Activity implements ItemClickListener{
     private static String urladdplayers = "http://futsexta.16mb.com/Poker/Poker_insert_Players_Jogo.php";
 
 
-    //ArrayList<HashMap<String, String>> PlayersList;
-    //public static ArrayList<PlayersListView> itens;
+
     public static List<PlayersListView> lsplayer;
     //ArrayList<HashMap<String, String>> newItemlist = new ArrayList<HashMap<String, String>>();
     private ListView lv;
@@ -126,8 +125,6 @@ public class Poker extends Activity implements ItemClickListener{
         driscrijogo = (TextView) findViewById(R.id.tvdescrijogo);
         driscrijogo.setText(descricao);
 
-
-
         new GetTotais().execute();
 
     }
@@ -154,23 +151,6 @@ public class Poker extends Activity implements ItemClickListener{
                 "Atualizou " + view.getId(),
                 Toast.LENGTH_LONG)
                 .show();
-
-
-        /*btnRebuy.setOnClickListener(new View.OnClickListener() {
-
-
-
-          @Override
-        public void onClick(View view) {
-        //list.add("Mammahe");
-          //mAdapter.notifyDataSetChanged();
-              Toast.makeText(getApplicationContext(),
-                      "Atualizou " + city.getNome(),
-                      Toast.LENGTH_LONG)
-                      .show();
-        }
-        });
-*/
     }
     @SuppressLint("ResourceAsColor")
     public void onClickNewPlayer(View v) {
@@ -298,9 +278,6 @@ public class Poker extends Activity implements ItemClickListener{
 
         }
     }
-    public  void Executt() {
-        new GetDados().execute();
-    }
 
     public  void Premiacao() {
 
@@ -406,10 +383,6 @@ public class Poker extends Activity implements ItemClickListener{
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            // Dismiss the progress dialog
-
-
-            //tx.setText(contador);
 
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
@@ -498,32 +471,15 @@ public class Poker extends Activity implements ItemClickListener{
     protected void onStart()
     {
         super.onStart();
-        //new Poker.GetDados().execute();
-
-
     }
     @Override
     protected void onStop() {
         super.onStop();  // Always call the superclass method first
-        //mAdapter.notifyDataSetChanged();
-        //Toast.makeText(getApplicationContext(), "onStop called", Toast.LENGTH_LONG).show();
     }
     @Override
     protected void onResume() {
         super.onResume();
-        if (PLAYERS) {
-            int spanCount = 2;
-            recyclerView = (RecyclerView) findViewById(R.id.listviwerplayers);
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(Poker.this, spanCount);
-            //RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-            recyclerView.setLayoutManager(gridLayoutManager);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            mAdapter = new customAdapter(lsplayer, R.layout.item_players, Poker.this);
-            recyclerView.setAdapter(mAdapter);
-            mAdapter.setClickListener(Poker.this);
-        }else{
-            noplayers.setVisibility(View.VISIBLE);
-        }
+
     }
 
     private BigDecimal parseToBigDecimal(String value) {
@@ -542,9 +498,5 @@ public class Poker extends Activity implements ItemClickListener{
         }
     }
 
-
-    public static class Executt {
-
-    }
 }
 
