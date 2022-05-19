@@ -103,7 +103,7 @@ public class ItemListViewPoker {
         this.vlrebuy = vlrebuy;
         this.qtdficharebuy = qtdficharebuy;
         this.vladdon = vladdon;
-        this.qtdficharebuy = qtdfichaaddon;
+        this.qtdfichaaddon = qtdfichaaddon;
         this.qtdplayers = qtdplayers;
 
 

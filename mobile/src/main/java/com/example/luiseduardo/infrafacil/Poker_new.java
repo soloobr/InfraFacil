@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +69,9 @@ public class Poker_new extends AppCompatActivity implements
         editvalorentrada.addTextChangedListener(new Poker_new.MoneyTextWatcher(editvalorentrada));
         editvalorrebuy.addTextChangedListener(new Poker_new.MoneyTextWatcher(editvalorrebuy));
         editvaloraddon.addTextChangedListener(new Poker_new.MoneyTextWatcher(editvaloraddon));
+
+        LinearLayout LButtons = (LinearLayout) findViewById(R.id.LayoutButtons);
+        LButtons.setVisibility(View.VISIBLE);
 
 
         btncanceljogo.setOnClickListener(new View.OnClickListener() {
