@@ -101,6 +101,8 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     ArrayAdapter<String > adapter;
     private static String IsertItem = "http://futsexta.16mb.com/Poker/IsertItem_OrdemMobile.php";
     private static String GETINFO_URL = "http://futsexta.16mb.com/Poker/Poker_insert_Jogo.php";
+    private static String URLDELETE = "http://futsexta.16mb.com/Poker/Poker_Delete_Jogo.php";
+    private static String URLUPJOGO = "http://futsexta.16mb.com/Poker/Poker_Edit_Jogo.php";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
     private ImageView imgaddnew;
@@ -124,11 +126,13 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     //TextView dateEditText;
     //private EditText editvalorentrada,editvalorrebuy,editvaloraddon;
     private String datejogo ;
+    private  Runnable run;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainpoker);
+
 
 
         searchView = (SearchView) findViewById (R.id.searchjogo);
@@ -224,8 +228,9 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 sQtdentrada = itens.get(i).getQtdfichaentrada();
                 sQtdrebuy = itens.get(i).getQtdficharebuy();
                 sQtdaddon = itens.get(i).getQtdfichaaddon();
+                sData = itens.get(i).getData();
 
-                //Pozi = getAdapterPosition();
+               // Pozi = itens.get(i).getId();
                 myPopupMenu(view);
 
                 return true;
@@ -329,7 +334,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 switch (item.getItemId()) {
                     case R.id.delete:
                         //Toast.makeText(mContext, "clicked delete" + idplayer + " "+idjogo, Toast.LENGTH_SHORT).show();
-                        showAlert(Poker_main.this, "Deletar", "Deletando Jogo");
+                        showAlertDelete(Poker_main.this, "Deletar", "Deletando Jogo");
                         //new DeletePlayer().execute();
                         return true;
                     case R.id.edite:
@@ -389,30 +394,15 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         tvTitle.setText("Editar Jogo");
 
         if (title.equals("Deletar")){
-            final ImageView img = promptView.findViewById(R.id.imgaddplayers);
-            img.setImageResource(R.mipmap.usercircledelete);
 
-            final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
-            tvaction.setText("Excluir Jogo");
-
-            final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
-            ednome.setText(descrijogo);
-            //ednome.setEnabled(false);
-            ednome.setFocusable(false);
-            Delete = true;
         }
 
         if (title.equals("Editar")){
-
-
 
             final ImageView img = promptView.findViewById(R.id.imgNewCliente);
             img.setImageResource(R.mipmap.usercirclegear128);
 
             final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
-            //tvaction.setText("Editando Jogo");
-
-
 
             final EditText ednome = promptView.findViewById(R.id.namejogo);
             ednome.setText(descrijogo);
@@ -704,6 +694,8 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 }
 
                 if((dt) && (nm) && (vle)&& (vlr)&& (vla)&& (qtde)&& (qtdr)&& (qtda)){
+                    new UpdatetJogo().execute();
+                    adapterListView.notifyDataSetChanged();
                     dialog.dismiss();
 
                     //View vieww = this.getCurrentFocus();
@@ -732,6 +724,95 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             }
         });
     }
+    public void showAlertDelete(Context context, String title, String message){
+
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View promptView = layoutInflater.inflate(R.layout.custom_alertnewplayer, null);
+
+
+
+        if (title.equals("Deletar")){
+            final ImageView img = promptView.findViewById(R.id.imgaddplayers);
+            img.setImageResource(R.mipmap.usercircledelete);
+
+            final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
+            tvaction.setText("Excluir Jogo");
+
+            final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
+            ednome.setText(descrijogo);
+            //ednome.setEnabled(false);
+            ednome.setFocusable(false);
+            Delete = true;
+
+
+        }
+
+        if (title.equals("Editar")){
+
+            final ImageView img = promptView.findViewById(R.id.imgaddplayers);
+            img.setImageResource(R.mipmap.usercirclegear128);
+
+            final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
+            tvaction.setText("Editando Player");
+
+
+
+            final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
+            ednome.setText(sUsername);
+            ednome.setSelection(ednome.getText().length());
+            ednome.setEnabled(true);
+
+            Edit = true;
+        }
+
+        alert.setView(promptView);
+        alert.setCancelable(false);
+        //Poker.this.setFinishOnTouchOutside(false);
+
+        alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Delete = false;
+                Edit = false;
+                Toast.makeText(context, "Exclusão cancelada", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alert.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if (Delete){
+
+                    new DeleteJogo().execute();
+                    //itens.remove(Pozi);
+                    //notifyItemRemoved(Pozi);
+                    Toast.makeText(context, "Jogo Excluido", Toast.LENGTH_SHORT).show();
+                    Delete = false;
+                }
+                if (Edit){
+                    final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
+                    sUsername = String.valueOf(ednome.getText());
+
+                    //new customAdapter.UpdatePlayer().execute();
+
+                    ((InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE))
+                            .hideSoftInputFromWindow(ednome.getWindowToken(), 0);
+                    Edit = false;
+                }
+
+
+            }
+        });
+        final AlertDialog dialog = alert.create();
+        dialog.show();
+
+    }
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -757,7 +838,6 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         }
 
     }
-
     //@Override
     public void onDateSet(DatePicker view, int year, int monthOfYear,
                           int dayOfMonth) {
@@ -1052,13 +1132,11 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         }
     }
     class UpdatetJogo extends AsyncTask<String, String, String> {
-
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(Poker_main.this);
-            pDialog.setMessage("Criando Jogo");
+            pDialog.setMessage("Atualizando Jogo");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();
@@ -1067,9 +1145,6 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
         @Override
         protected String doInBackground(String... args) {
-
-
-
 
             int success;
             try {
@@ -1090,7 +1165,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 //Log.d("Debug!", "starting");
 
                 // getting product details by making HTTP request
-                JSONObject json = jsonParser.makeHttpRequest(GETINFO_URL, "POST",
+                JSONObject json = jsonParser.makeHttpRequest(URLUPJOGO, "POST",
                         params);
 
 
@@ -1098,12 +1173,10 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 success = json.getInt(TAG_SUCCESS);
                 if (success == 1) {
                     Log.d("successo!", json.toString());
-                    finish();
                     return json.getString(TAG_MESSAGE);
 
                 } else {
                     Log.d("Jogo não Atualizado", json.getString(TAG_MESSAGE));
-                    finish();
                     return json.getString(TAG_MESSAGE);
                 }
             } catch (JSONException e) {
@@ -1121,9 +1194,50 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             if (file_url != null) {
                 Toast.makeText(Poker_main.this, file_url, Toast.LENGTH_LONG).show();
             }
-            //new Poker_main.GetDados_jogos();
+
+            new Poker_main.GetDados_jogos().execute();
         }
 
+
+    }
+    public class DeleteJogo extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected String doInBackground(String... args) {
+
+            int success;
+            try {
+
+                List params = new ArrayList();
+
+                //params.add(new BasicNameValuePair("id", idplayer));
+                params.add(new BasicNameValuePair("idjogo", idjogo));
+
+                JSONObject newjson = jsonParser.makeHttpRequest(URLDELETE, "POST",
+                        params);
+
+                success = newjson.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    Log.d("Jogo Deletado com successo!", newjson.toString());
+                    return newjson.getString(TAG_MESSAGE);
+
+                } else {
+                    Log.d("Jogo Não Deletado", newjson.getString(TAG_MESSAGE));
+                    return newjson.getString(TAG_MESSAGE);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(String file_url) {
+            new Poker_main.GetDados_jogos().execute();
+        }
 
     }
 
@@ -1259,12 +1373,30 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     public void onStop() {
         super.onStop();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        //boolean isInFront;
+        //if (isInFront == true) {
+            if (adapterListView != null) {
+                adapterListView.notifyDataSetChanged();
+            }
+
+            lv.setAdapter(adapterListView);
+            
+            //lv.setAdapter(adapterListView);
+            //lv.setCacheColorHint(Color.TRANSPARENT);
+        ///}
+    }
     @Override
     protected void onResume() {
         super.onResume();
         //new Poker_main.GetDados_jogos().execute();
         //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         //imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
 
     }
 }
