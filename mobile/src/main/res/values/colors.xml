@@ -20,5 +20,8 @@
     <color name="light_black">#504f4f</color>
     <color name="black">#000000</color>
     <color name="blue">#0737d4</color>
+    <color name="button_pressed">#33ff8a00</color>
+    <color name="button_focused">#80ff8a00</color>
+    <color name="button_default">#801c76bb</color>
 
 </resources>

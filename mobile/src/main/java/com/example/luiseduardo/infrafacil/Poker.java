@@ -192,12 +192,10 @@ public class Poker extends Activity implements ItemClickListener{
         final AlertDialog dialog = alert.create();
         dialog.show();
     }
-
     public static void methodOnBtnClick(int position)
     {
 
     }
-
     class GetTotais extends AsyncTask<String, String, String> {
 
         @Override
@@ -474,7 +472,10 @@ public class Poker extends Activity implements ItemClickListener{
     }
     @Override
     protected void onStop() {
-        super.onStop();  // Always call the superclass method first
+        super.onStop();
+        Intent intent=new Intent();
+        //intent.putExtra("MESSAGE",message);
+        setResult(2,intent);
     }
     @Override
     protected void onResume() {

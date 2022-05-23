@@ -16,16 +16,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -36,6 +39,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
@@ -105,7 +109,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     private static String URLUPJOGO = "http://futsexta.16mb.com/Poker/Poker_Edit_Jogo.php";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
-    private ImageView imgaddnew;
+    private ImageView imgaddnew, btnRefresh;
     private ImageButton btnDatePicker;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private static String Mes,Dia,Ano,sData;
@@ -128,24 +132,16 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     private String datejogo ;
     private  Runnable run;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainpoker);
-
-
-
         searchView = (SearchView) findViewById (R.id.searchjogo);
         imgaddnew = (ImageView) findViewById(R.id.imgaddnewjogo);
+        btnRefresh = (ImageView) findViewById(R.id.btnrefresh);
 
         btnDatePicker = (ImageButton) findViewById (R.id.btn_searchedata);
-        /*btncanceljogo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });*/
-
         btnDatePicker.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -178,18 +174,50 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
+                closeKeyboard();
 
             }
         });
-
         imgaddnew.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Log.v(TAG, " click");
                 Intent it5 = new Intent(Poker_main.this, Poker_new.class);
-                startActivity(it5);
+                startActivityForResult(it5,2);
             }
         });
+        btnRefresh.setOnClickListener(new View.OnClickListener(){
 
+            @SuppressLint("ResourceAsColor")
+            @Override
+
+            public void onClick(View view) {
+                idjogo = "0";
+                new GetDados_jogos().execute();
+            }
+        });
+        /*btnRefresh.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN: {
+                        ImageButton view = (ImageButton) v;
+                        view.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                        v.invalidate();
+                        break;
+                    }
+                    case MotionEvent.ACTION_UP:
+                        // Your action here on button click
+                    case MotionEvent.ACTION_CANCEL: {
+                        ImageButton view = (ImageButton) v;
+                        view.getBackground().clearColorFilter();
+                        view.invalidate();
+                        break;
+                    }
+                }
+                return true;
+            }
+        });*/
         Intent iin= getIntent();
         Bundle b = iin.getExtras();
 
@@ -213,7 +241,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 descrijogo = itens.get(position).getDescricao();
                 intent.putExtra("id", idjogo);
                 intent.putExtra("Drisc", descrijogo);
-                startActivity(intent);
+                startActivityForResult(intent,2);
             }
         });
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -256,8 +284,18 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             }
         });
 
+        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.layoutlistjogos);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                idjogo = "0";
+                new GetDados_jogos().execute();
+                pullToRefresh.setRefreshing(false);
+            }
+        });
 
     }
+
     @SuppressLint("ResourceAsColor")
     public void onClickDATA(View v) {
         //Toast.makeText(this, "Date", Toast.LENGTH_SHORT).show();
@@ -383,6 +421,14 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         editvalorrebuy.addTextChangedListener(new Poker_main.MoneyTextWatcher(editvalorrebuy));
         editvaloraddon.addTextChangedListener(new Poker_main.MoneyTextWatcher(editvaloraddon));
 
+        //editqtdentrada.addTextChangedListener(new Poker_main.MilharTextWatcher(editqtdentrada));
+        editqtdentrada.addTextChangedListener(MaskEditUtil.mask(editqtdentrada, MaskEditUtil.FORMAT_MILHAR));
+        //editqtdrebuy.addTextChangedListener(new Poker_main.MilharTextWatcher(editqtdrebuy));
+        editqtdrebuy.addTextChangedListener(MaskEditUtil.mask(editqtdrebuy, MaskEditUtil.FORMAT_MILHAR));
+        //editqtdaddon.addTextChangedListener(new Poker_main.MilharTextWatcher(editqtdaddon));
+        editqtdaddon.addTextChangedListener(MaskEditUtil.mask(editqtdaddon, MaskEditUtil.FORMAT_MILHAR));
+
+
         editvalorentrada.setText(sVldentrada);
         editvalorrebuy.setText(sVldrebuy);
         editvaloraddon.setText(sVldaddon);
@@ -482,123 +528,13 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
-/*
-                switch (0) {
-                    case 0:
-                        break;
-                   }
-                if (Delete){
-
-                    //new customAdapter.DeletePlayer().execute();
-                    //list.remove(Pozi);
-                    //notifyItemRemoved(Pozi);
-                    Delete = false;
-
-                }
-                if (Edit){
-                    final ImageButton btndata =  (ImageButton) promptView.findViewById(R.id.btn_date);
-                    final Button btncanceljogo = (Button) promptView.findViewById(R.id.btnCancelarnjogo);
-                    //final TextView dateEditText = (TextView) promptView.findViewById(R.id.editTextDate);
-                    final EditText editvalorentrada = (EditText) promptView.findViewById(R.id.edvalorentrada);
-                    final EditText editvalorrebuy = (EditText) promptView.findViewById(R.id.edvalorrebuy);
-                    final EditText editvaloraddon = (EditText) promptView.findViewById(R.id.edvaloraddon);
-
-                    //editvalorentrada.addTextChangedListener(new Poker_main.MoneyTextWatcher(editvalorentrada));
-                    //editvalorrebuy.addTextChangedListener(new Poker_main.MoneyTextWatcher(editvalorrebuy));
-                    //editvaloraddon.addTextChangedListener(new Poker_main.MoneyTextWatcher(editvaloraddon));
-
-
-                    final TextView dateEditText = (TextView) promptView.findViewById(R.id.editTextDate);
-
-                    ssData = dateEditText.getText().toString();
-                    if (ssData.matches("")) {
-                        Toast.makeText(Poker_main.this, "Favor Selecionar a data do Jogo", Toast.LENGTH_SHORT).show();
-                        btndata.performClick();
-                        return;
-                    }
-
-                    final AutoCompleteTextView usernameEditText = (AutoCompleteTextView) promptView.findViewById(R.id.namejogo);
-                    sUsername = usernameEditText.getText().toString();
-                    if (sUsername.matches("")) {
-                        Toast.makeText(Poker_main.this, "Favor Preencher o nome do Jogo", Toast.LENGTH_SHORT).show();
-                        usernameEditText.requestFocus();
-                        return;
-                    }
-
-
-                    final TextView Vldentrada = (TextView) promptView.findViewById(R.id.edvalorentrada);
-                    sVldentrada = Vldentrada.getText().toString();
-
-                    String replaceable = String.format("[%s\\s]", getCurrencySymbol());
-                    sVldentrada = sVldentrada.replaceAll(replaceable, "");
-                    sVldentrada = sVldentrada.replaceAll(",", "");
-
-                    if ( (sVldentrada.matches("")) || (sVldentrada.matches("000") )) {
-                        Toast.makeText(Poker_main.this, "Favor preencher o valor da Entrada", Toast.LENGTH_SHORT).show();
-                        Vldentrada.requestFocus();
-                        return;
-                    }
-                    final TextView Qtdentrada = (TextView) promptView.findViewById(R.id.edqtdentrada);
-                    sQtdentrada = Qtdentrada.getText().toString();
-                    if ( (sQtdentrada.matches("")) || (sQtdentrada.matches("0") )) {
-                        Toast.makeText(Poker_main.this, "Favor preencher a quantidade de ficha da Entrada", Toast.LENGTH_SHORT).show();
-                        Qtdentrada.requestFocus();
-                        return;
-                    }
-
-                    final TextView Vldrebuy = (TextView) promptView.findViewById(R.id.edvalorrebuy);
-                    sVldrebuy = Vldrebuy.getText().toString();
-                    sVldrebuy = sVldrebuy.replaceAll(replaceable, "");
-                    sVldrebuy = sVldrebuy.replaceAll(",", "");
-                    if ((sVldrebuy.matches("")) || (sVldrebuy.matches("000")) ) {
-                        Toast.makeText(Poker_main.this, "Favor preencher o valor da Rebuy", Toast.LENGTH_SHORT).show();
-                        Vldrebuy.requestFocus();
-                        return;
-                    }
-                    final TextView Qtdrebuy = (TextView) promptView.findViewById(R.id.edqtdrebuy);
-                    sQtdrebuy = Qtdrebuy.getText().toString();
-                    if ( (sQtdrebuy.matches("")) || (sQtdrebuy.matches("0") )) {
-                        Toast.makeText(Poker_main.this, "Favor preencher a quantidade de ficha do Rebuy", Toast.LENGTH_SHORT).show();
-                        Qtdrebuy.requestFocus();
-                        return;
-                    }
-
-                    final TextView Vldaddon = (TextView) promptView.findViewById(R.id.edvaloraddon);
-                    sVldaddon = Vldaddon.getText().toString();
-                    sVldaddon = sVldaddon.replaceAll(replaceable, "");
-                    sVldaddon = sVldaddon.replaceAll(",", "");
-                    if ((sVldaddon.matches("")) || (sVldaddon.matches("000")) ) {
-                        Toast.makeText(Poker_main.this, "Favor preencher o valor da Addon", Toast.LENGTH_SHORT).show();
-                        Vldaddon.requestFocus();
-                        return;
-                    }
-
-                    final TextView Qtdaddon = (TextView) promptView.findViewById(R.id.edqtdaddon);
-                    sQtdaddon = Qtdaddon.getText().toString();
-                    if ( (sQtdaddon.matches("")) || (sQtdaddon.matches("0") )) {
-                        Toast.makeText(Poker_main.this, "Favor preencher a quantidade de ficha do Addon", Toast.LENGTH_SHORT).show();
-                        Qtdaddon.requestFocus();
-                        return;
-                    }
-
-                    //--new Poker_main.UpdatetJogo().execute();
-
-                    final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
-                    //sUsername = String.valueOf(ednome.getText());
-
-                    //new customAdapter.UpdatePlayer().execute();
-
-                    ((InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE))
-                            .hideSoftInputFromWindow(ednome.getWindowToken(), 0);
-                    Edit = false;
-                }
-
-*/
+                closeKeyboard();
             }
+
         });
         final AlertDialog dialog = alert.create();
         dialog.show();
+
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -639,8 +575,9 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 }else{
                     vle = true;
                 }
-                final TextView Qtdentrada = (TextView) promptView.findViewById(R.id.edqtdentrada);
+                final EditText Qtdentrada = (EditText) promptView.findViewById(R.id.edqtdentrada);
                 sQtdentrada = Qtdentrada.getText().toString();
+                sQtdentrada = MaskEditUtil.unmask(Qtdentrada.getText().toString());
                 if ( (sQtdentrada.matches("")) || (sQtdentrada.matches("0") )) {
                     //dialog.dismiss();
                     Toast.makeText(Poker_main.this, "Favor preencher a quantidade de ficha da Entrada", Toast.LENGTH_SHORT).show();
@@ -663,6 +600,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 }
                 final TextView Qtdrebuy = (TextView) promptView.findViewById(R.id.edqtdrebuy);
                 sQtdrebuy = Qtdrebuy.getText().toString();
+                sQtdrebuy = MaskEditUtil.unmask(Qtdrebuy.getText().toString());
                 if ( (sQtdrebuy.matches("")) || (sQtdrebuy.matches("0") )) {
                     Toast.makeText(Poker_main.this, "Favor preencher a quantidade de ficha do Rebuy", Toast.LENGTH_SHORT).show();
                     Qtdrebuy.requestFocus();
@@ -685,6 +623,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
                 final TextView Qtdaddon = (TextView) promptView.findViewById(R.id.edqtdaddon);
                 sQtdaddon = Qtdaddon.getText().toString();
+                sQtdaddon = MaskEditUtil.unmask(Qtdaddon.getText().toString());
                 if ( (sQtdaddon.matches("")) || (sQtdaddon.matches("0") )) {
                     Toast.makeText(Poker_main.this, "Favor preencher a quantidade de ficha do Addon", Toast.LENGTH_SHORT).show();
                     Qtdaddon.requestFocus();
@@ -705,22 +644,17 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                         //inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     }
                 }
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(dialog.getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+                //closeKeyboard();
+                //InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                //imm.hideSoftInputFromWindow(dialog.getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
             }
         });
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                /*View view = this.getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    //inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }*/
-                //hideKeyboard(dialog.this);
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                closeKeyboard();
+                //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                //imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             }
         });
     }
@@ -844,8 +778,6 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         // TODO Auto-generated method stub
 
     }
-
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -877,8 +809,6 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         return -1;
 
     }
-
-
     class GetDados_jogos extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -963,7 +893,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 lv.setAdapter(adapterListView);
                 lv.setCacheColorHint(Color.TRANSPARENT);
             }
-
+            closeKeyboard();
         }
     }
     class GetDados_jogos_from_search extends AsyncTask<Void, Void, Void> {
@@ -1366,6 +1296,195 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             return NumberFormat.getCurrencyInstance(Locale.getDefault()).getCurrency().getSymbol();
         }
     }
+    public static class MilharTextWatcher implements TextWatcher {
+        private WeakReference<EditText> editTextWeakReference;
+        private final Locale locale = Locale.getDefault();
+
+        public MilharTextWatcher(EditText editText) {
+            this.editTextWeakReference = new WeakReference<>(editText);
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            EditText editText = editTextWeakReference.get();
+            if (editText == null) return;
+            editText.removeTextChangedListener(this);
+
+            String formatted = editable.toString();
+            DecimalFormat df = new DecimalFormat("0.000");
+            String dx = df.format(formatted);
+
+            //DecimalFormat  parsed = new DecimalFormat(editable.toString());
+            //String formatted;
+            //formatted = NumberFormat.getIntegerInstance(dx);
+
+            //Remove o símbolo da moeda e espaçamento pra evitar bug
+            //String replaceable = String.format("[%s\\s]", getCurrencySymbol());
+            //String cleanString = formatted.replaceAll(replaceable, "");
+
+            //editText.setText(cleanString);
+            editText.setText(dx);
+            //editText.setSelection(cleanString.length());
+            editText.setSelection(formatted.length());
+            editText.addTextChangedListener(this);
+        }
+
+
+        public void afterTextChangeBanco(Editable editable) {
+            EditText editText = editTextWeakReference.get();
+            if (editText == null) return;
+            editText.removeTextChangedListener(this);
+
+            BigDecimal parsed = parseToBigDecimal(editable.toString());
+            String formatted;
+            formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
+
+            //Remove o símbolo da moeda e espaçamento pra evitar bug
+            String replaceable = String.format("[%s\\s]", getCurrencySymbol());
+            String cleanString = formatted.replaceAll(replaceable, "");
+
+            editText.setText(cleanString);
+            //editText.setText(formatted);
+            editText.setSelection(cleanString.length());
+            //editText.setSelection(formatted.length());
+            editText.addTextChangedListener(this);
+        }
+
+        private BigDecimal parseToBigDecimal(String value) {
+            String replaceable = String.format("[%s,.\\s]", getCurrencySymbol());
+
+            String cleanString = value.replaceAll(replaceable, "");
+
+            try {
+                return new BigDecimal(cleanString).setScale(
+                        2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR);
+            } catch (NumberFormatException e) {
+                //ao apagar todos valores de uma só vez dava erro
+                //Com a exception o valor retornado é 0.00
+                return new BigDecimal(0);
+
+            }
+        }
+
+        public static String formatPrice(String price) {
+            //Ex - price = 2222
+            //retorno = 2222.00
+            DecimalFormat df = new DecimalFormat("0.###");
+            return String.valueOf(df.format(Double.valueOf(price)));
+
+        }
+
+        public static String formatTextPrice(String price) {
+            //Ex - price = 3333.30
+            //retorna formato monetário em Br = 3.333,30
+            //retorna formato monetário EUA: 3,333.30
+            //retornar formato monetário de alguns países europeu: 3 333,30
+            BigDecimal bD = new BigDecimal(formatPriceSave(formatPrice(price)));
+            String newFormat = null;
+            newFormat = String.valueOf(NumberFormat.getCurrencyInstance(Locale.getDefault()).format(bD));
+            String replaceable = String.format("[%s]", getCurrencySymbol());
+            return newFormat.replaceAll(replaceable, "");
+
+        }
+
+        static String formatPriceSave(String price) {
+            //Ex - price = $ 5555555
+            //return = 55555.55 para salvar no banco de dados
+            String replaceable = String.format("[%s,.\\s]", getCurrencySymbol());
+            String cleanString = price.replaceAll(replaceable, "");
+            StringBuilder stringBuilder = new StringBuilder(cleanString.replaceAll(" ", ""));
+
+            return String.valueOf(stringBuilder.insert(cleanString.length() - 2, '.'));
+
+        }
+
+        static String formatPriceSaveBanco(String price) {
+            //Ex - price = $ 5555555
+            //return = 55555.55 para salvar no banco de dados
+            String replaceable = String.format("[%s,.\\s]", getCurrencySymbol());
+            String cleanString = price.replaceAll(replaceable, "");
+            StringBuilder stringBuilder = new StringBuilder(cleanString.replaceAll(" ", ""));
+
+            return String.valueOf(stringBuilder.insert(cleanString.length() - 2, '.'));
+
+
+
+        }
+
+        public static String getCurrencySymbol() {
+            return NumberFormat.getCurrencyInstance(Locale.getDefault()).getCurrency().getSymbol();
+        }
+    }
+    public static class MaskEditUtil {
+
+        public static final String FORMAT_CPF = "###.###.###-##";
+        public static final String FORMAT_FONE = "(###)####-#####";
+        public static final String FORMAT_CEP = "#####-###";
+        public static final String FORMAT_DATE = "##/##/####";
+        public static final String FORMAT_HOUR = "##:##";
+        public static final String FORMAT_MILHAR = "##.###";
+
+        /**
+         * Método que deve ser chamado para realizar a formatação
+         *
+         * @param ediTxt
+         * @param mask
+         * @return
+         */
+        public static TextWatcher mask(final EditText ediTxt, final String mask) {
+            return new TextWatcher() {
+                boolean isUpdating;
+                String old = "";
+
+                @Override
+                public void afterTextChanged(final Editable s) {}
+
+                @Override
+                public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {}
+
+                @Override
+                public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+                    final String str = MaskEditUtil.unmask(s.toString());
+                    String mascara = "";
+                    if (isUpdating) {
+                        old = str;
+                        isUpdating = false;
+                        return;
+                    }
+                    int i = 0;
+                    for (final char m : mask.toCharArray()) {
+                        if (m != '#' && str.length() > old.length()) {
+                            mascara += m;
+                            continue;
+                        }
+                        try {
+                            mascara += str.charAt(i);
+                        } catch (final Exception e) {
+                            break;
+                        }
+                        i++;
+                    }
+                    isUpdating = true;
+                    ediTxt.setText(mascara);
+                    ediTxt.setSelection(mascara.length());
+                }
+            };
+        }
+
+        public static String unmask(final String s) {
+            return s.replaceAll("[.]", "").replaceAll("[-]", "").replaceAll("[/]", "").replaceAll("[(]", "").replaceAll("[ ]","").replaceAll("[:]", "").replaceAll("[)]", "");
+        }
+    }
     public void onStart(){
         super.onStart();
         //new Poker_main.GetDados_jogos().execute();
@@ -1373,7 +1492,6 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     public void onStop() {
         super.onStop();
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -1396,7 +1514,34 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         //new Poker_main.GetDados_jogos().execute();
         //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         //imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        closeKeyboard();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == 2) {
+            //if(resultCode == Activity.RESULT_OK){
+                // Faça algo
+                new GetDados_jogos().execute();
 
+            //}
+        }
+    }
+    private void closeKeyboard()
+    {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+
+            // now assign the system
+            // service to InputMethodManager
+            InputMethodManager manager
+                    = (InputMethodManager)
+                    getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+            manager
+                    .hideSoftInputFromWindow(
+                            view.getWindowToken(), 0);
+        }
     }
 }

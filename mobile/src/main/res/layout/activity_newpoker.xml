@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:elevation="0dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -33,9 +34,10 @@
 
                     <ImageView
                         android:id="@+id/imgNewCliente"
-                        android:layout_width="81dp"
+                        android:layout_width="69dp"
                         android:layout_height="match_parent"
-                        app:srcCompat="@drawable/information" />
+                        android:padding="10dp"
+                        app:srcCompat="@drawable/aj96" />
 
                     <TextView
                         android:id="@+id/tvTitle"
@@ -44,8 +46,9 @@
                         android:gravity="center_vertical|center_horizontal"
                         android:padding="18dip"
                         android:text="NOVO JOGO"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@android:color/holo_green_light" />
+                        android:textColor="@android:color/holo_green_light"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
                 </TableRow>
                 <!-- Linha 2 com 2 colunas -->
                 <TableRow
@@ -61,7 +64,6 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="Jogo Nº"
-                        android:textAppearance="@style/TextAppearance.Compat.Notification"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -71,7 +73,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical|center_horizontal"
                         android:text="000"
-                        android:textAppearance="@style/TextAppearance.Compat.Notification"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -96,7 +97,7 @@
                         android:layout_width="1dp"
                         android:layout_span="1"
                         android:text="Data :"
-                        android:textAppearance="@style/TextAppearance.Compat.Notification" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/editTextDate"
@@ -113,7 +114,9 @@
                         android:id="@+id/btn_date"
                         android:layout_width="5dp"
                         android:layout_height="match_parent"
+                        android:background="@drawable/round_button"
                         android:focusableInTouchMode="false"
+                        android:foreground="?android:attr/selectableItemBackground"
                         android:onClick="onClickDATA"
                         app:srcCompat="@mipmap/calendar32" />
 
@@ -134,7 +137,7 @@
 
                         android:layout_width="78dp"
                         android:text="Descrição:"
-                        android:textAppearance="@style/TextAppearance.Compat.Notification" />
+                        android:textStyle="bold" />
 
                     <AutoCompleteTextView
                         android:id="@+id/namejogo"
@@ -169,7 +172,7 @@
                             android:layout_width="71dp"
                             android:layout_height="wrap_content"
                             android:text="Entrada.:"
-                            android:textAppearance="@style/TextAppearance.Compat.Notification" />
+                            android:textStyle="bold" />
 
                         <EditText
                             android:id="@+id/edvalorentrada"
@@ -185,7 +188,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Fichas.:"
-                            android:textAppearance="@style/TextAppearance.Compat.Notification" />
+                            android:textStyle="bold" />
 
                         <EditText
                             android:id="@+id/edqtdentrada"
@@ -221,7 +224,7 @@
                             android:layout_width="71dp"
                             android:layout_height="wrap_content"
                             android:text="Rebuy.:"
-                            android:textAppearance="@style/TextAppearance.Compat.Notification" />
+                            android:textStyle="bold" />
 
                         <EditText
                             android:id="@+id/edvalorrebuy"
@@ -237,7 +240,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Fichas.:"
-                            android:textAppearance="@style/TextAppearance.Compat.Notification" />
+                            android:textStyle="bold" />
 
                         <EditText
                             android:id="@+id/edqtdrebuy"
@@ -272,7 +275,7 @@
                             android:layout_width="71dp"
                             android:layout_height="wrap_content"
                             android:text="Addon.:"
-                            android:textAppearance="@style/TextAppearance.Compat.Notification" />
+                            android:textStyle="bold" />
 
                         <EditText
                             android:id="@+id/edvaloraddon"
@@ -288,7 +291,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Fichas.:"
-                            android:textAppearance="@style/TextAppearance.Compat.Notification" />
+                            android:textStyle="bold" />
 
                         <EditText
                             android:id="@+id/edqtdaddon"
@@ -309,45 +312,45 @@
 
     <LinearLayout
         android:id="@+id/LayoutButtons"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="5dp"
         android:visibility="gone">
 
-        <TableLayout
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:background="#ffffff"
-            android:orientation="vertical"
-            android:shrinkColumns="*"
-            android:stretchColumns="*">
+            android:orientation="horizontal"
+            android:padding="5dp">
 
-            <TableRow
-                android:id="@+id/Tbutons"
+            <Button
+                android:id="@+id/btnSalvar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal">
+                android:layout_height="wrap_content"
+                android:background="@drawable/custombutton"
+                android:elevation="1dp"
+                android:onClick="onClickSAVE"
+                android:padding="5dp"
+                android:text="SALVAR" />
+        </LinearLayout>
 
-                <Button
-                    android:id="@+id/btnSalvar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/custombutton"
-                    android:elevation="1dp"
-                    android:onClick="onClickSAVE"
-                    android:text="SALVAR" />
+        <LinearLayout
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
 
-                <Button
-                    android:id="@+id/btnCancelarnjogo"
-                    android:layout_width="50dp"
-                    android:background="@drawable/custombutton_cancel"
-                    android:elevation="1dp"
-                    android:text="Cancelar" />
+            <Button
+                android:id="@+id/btnCancelarnjogo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custombutton_cancel"
+                android:elevation="1dp"
+                android:text="Cancelar" />
+        </LinearLayout>
 
-            </TableRow>
-
-
-        </TableLayout>
     </LinearLayout>
 
 </LinearLayout>

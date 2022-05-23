@@ -6,7 +6,9 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
@@ -17,6 +19,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -47,7 +50,7 @@ public class Poker_new extends AppCompatActivity implements
     private static String Mes,Dia,Ano,sData,sSdata;
     TextView dateEditText;
     private String datejogo ;
-    private EditText editvalorentrada,editvalorrebuy,editvaloraddon;
+    private EditText editvalorentrada,editvalorrebuy,editvaloraddon, editqtdentrada,editqtdrebuy,editqtdaddon;
     private ProgressDialog pDialog;
     JSONParser jsonParser = new JSONParser();
     private static String GETINFO_URL = "http://futsexta.16mb.com/Poker/Poker_insert_Jogo.php";
@@ -65,10 +68,17 @@ public class Poker_new extends AppCompatActivity implements
         editvalorentrada = (EditText) findViewById(R.id.edvalorentrada);
         editvalorrebuy = (EditText) findViewById(R.id.edvalorrebuy);
         editvaloraddon = (EditText) findViewById(R.id.edvaloraddon);
+        editqtdentrada = (EditText) findViewById(R.id.edqtdentrada);
+        editqtdrebuy = (EditText) findViewById(R.id.edqtdrebuy);
+        editqtdaddon = (EditText) findViewById(R.id.edqtdaddon);
 
         editvalorentrada.addTextChangedListener(new Poker_new.MoneyTextWatcher(editvalorentrada));
         editvalorrebuy.addTextChangedListener(new Poker_new.MoneyTextWatcher(editvalorrebuy));
         editvaloraddon.addTextChangedListener(new Poker_new.MoneyTextWatcher(editvaloraddon));
+
+        editqtdentrada.addTextChangedListener(new Poker_new.MilharTextWatcher(editqtdentrada));
+        editqtdrebuy.addTextChangedListener(new Poker_new.MilharTextWatcher(editqtdrebuy));
+        editqtdaddon.addTextChangedListener(new Poker_new.MilharTextWatcher(editqtdaddon));
 
         LinearLayout LButtons = (LinearLayout) findViewById(R.id.LayoutButtons);
         LButtons.setVisibility(View.VISIBLE);
@@ -206,6 +216,7 @@ public class Poker_new extends AppCompatActivity implements
         }
 
         new InsertJogo().execute();
+        closeKeyboard();
 
     }
 
@@ -280,6 +291,12 @@ public class Poker_new extends AppCompatActivity implements
                 Toast.makeText(Poker_new.this, file_url, Toast.LENGTH_LONG).show();
             }
             //new Poker_main.GetDados_jogos();
+            Intent intent=new Intent();
+            //intent.putExtra("MESSAGE",message);
+            setResult(2,intent);
+            finish();
+
+
         }
 
 
@@ -408,6 +425,154 @@ public class Poker_new extends AppCompatActivity implements
 
         public static String getCurrencySymbol() {
             return NumberFormat.getCurrencyInstance(Locale.getDefault()).getCurrency().getSymbol();
+        }
+    }
+    public static class MilharTextWatcher implements TextWatcher {
+        private WeakReference<EditText> editTextWeakReference;
+        private final Locale locale = Locale.getDefault();
+
+        public MilharTextWatcher(EditText editText) {
+            this.editTextWeakReference = new WeakReference<>(editText);
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            EditText editText = editTextWeakReference.get();
+            if (editText == null) return;
+            editText.removeTextChangedListener(this);
+
+            BigDecimal parsed = parseToBigDecimal(editable.toString());
+            String formatted;
+            formatted = NumberFormat.getCurrencyInstance().format(parsed);
+
+            //Remove o símbolo da moeda e espaçamento pra evitar bug
+            //String replaceable = String.format("[%s\\s]", getCurrencySymbol());
+            //String cleanString = formatted.replaceAll(replaceable, "");
+
+            //editText.setText(cleanString);
+            //editText.setText(formatted);
+            //editText.setSelection(cleanString.length());
+            editText.setSelection(formatted.length());
+            editText.addTextChangedListener(this);
+        }
+
+
+        public void afterTextChangeBanco(Editable editable) {
+            EditText editText = editTextWeakReference.get();
+            if (editText == null) return;
+            editText.removeTextChangedListener(this);
+
+            BigDecimal parsed = parseToBigDecimal(editable.toString());
+            String formatted;
+            formatted = NumberFormat.getCurrencyInstance().format(parsed);
+
+            //Remove o símbolo da moeda e espaçamento pra evitar bug
+            String replaceable = String.format("[%s\\s]", getCurrencySymbol());
+            String cleanString = formatted.replaceAll(replaceable, "");
+
+            editText.setText(cleanString);
+            //editText.setText(formatted);
+            editText.setSelection(cleanString.length());
+            //editText.setSelection(formatted.length());
+            editText.addTextChangedListener(this);
+        }
+
+        private BigDecimal parseToBigDecimal(String value) {
+            String replaceable = String.format("[%s,.\\s]", getCurrencySymbol());
+
+            String cleanString = value.replaceAll(replaceable, "");
+
+            try {
+                return new BigDecimal(cleanString).setScale(
+                        2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR);
+            } catch (NumberFormatException e) {
+                //ao apagar todos valores de uma só vez dava erro
+                //Com a exception o valor retornado é 0.00
+                return new BigDecimal(0);
+
+            }
+        }
+
+        public static String formatPrice(String price) {
+            //Ex - price = 2222
+            //retorno = 2222.00
+            DecimalFormat df = new DecimalFormat("0.00");
+            return String.valueOf(df.format(Double.valueOf(price)));
+
+        }
+
+        public static String formatTextPrice(String price) {
+            //Ex - price = 3333.30
+            //retorna formato monetário em Br = 3.333,30
+            //retorna formato monetário EUA: 3,333.30
+            //retornar formato monetário de alguns países europeu: 3 333,30
+            BigDecimal bD = new BigDecimal(formatPriceSave(formatPrice(price)));
+            String newFormat = null;
+            newFormat = String.valueOf(NumberFormat.getCurrencyInstance(Locale.getDefault()).format(bD));
+            String replaceable = String.format("[%s]", getCurrencySymbol());
+            return newFormat.replaceAll(replaceable, "");
+
+        }
+
+        static String formatPriceSave(String price) {
+            //Ex - price = $ 5555555
+            //return = 55555.55 para salvar no banco de dados
+            String replaceable = String.format("[%s,.\\s]", getCurrencySymbol());
+            String cleanString = price.replaceAll(replaceable, "");
+            StringBuilder stringBuilder = new StringBuilder(cleanString.replaceAll(" ", ""));
+
+            return String.valueOf(stringBuilder.insert(cleanString.length() - 2, '.'));
+
+        }
+
+        static String formatPriceSaveBanco(String price) {
+            //Ex - price = $ 5555555
+            //return = 55555.55 para salvar no banco de dados
+            String replaceable = String.format("[%s,.\\s]", getCurrencySymbol());
+            String cleanString = price.replaceAll(replaceable, "");
+            StringBuilder stringBuilder = new StringBuilder(cleanString.replaceAll(" ", ""));
+
+            return String.valueOf(stringBuilder.insert(cleanString.length() - 2, '.'));
+
+
+
+        }
+
+        public static String getCurrencySymbol() {
+            return NumberFormat.getCurrencyInstance(Locale.getDefault()).getCurrency().getSymbol();
+        }
+    }
+    private void closeKeyboard()
+    {
+        // this will give us the view
+        // which is currently focus
+        // in this layout
+        View view = this.getCurrentFocus();
+
+        // if nothing is currently
+        // focus then this will protect
+        // the app from crash
+        if (view != null) {
+
+            // now assign the system
+            // service to InputMethodManager
+            InputMethodManager manager
+                    = (InputMethodManager)
+                    getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+            manager
+                    .hideSoftInputFromWindow(
+                            view.getWindowToken(), 0);
         }
     }
 }

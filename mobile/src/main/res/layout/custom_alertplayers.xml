@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_Container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -67,16 +68,20 @@
         android:orientation="vertical"
         android:paddingTop="15dp">
 
-        <LinearLayout
+        <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingRight="2dp">
+            android:padding="3dp">
 
             <TextView
                 android:id="@+id/tvqtd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_gravity="center|left"
+                android:gravity="center_horizontal|center_vertical"
                 android:inputType="number"
                 android:text="Rebuy:"
                 android:textSize="24sp"
@@ -84,37 +89,53 @@
 
             <TextView
                 android:id="@+id/alqtdrebuy"
-                android:layout_width="88dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_row="0"
+                android:layout_gravity="center|left"
                 android:layout_weight="0"
-                android:gravity="center_horizontal"
+                android:gravity="center_horizontal|center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="5dp"
                 android:text="0"
                 android:textAlignment="gravity"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/btndeleterebuy"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@android:drawable/ic_delete"
-                android:contentDescription="@string/nome" />
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/btnaddrebuy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_weight="0"
-                android:background="@android:drawable/ic_input_add"
-                android:contentDescription="@string/nome" />
-        </LinearLayout>
+                <ImageButton
+                    android:id="@+id/btndeleterebuy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="@drawable/round_button"
+                    android:contentDescription="@string/nome"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:paddingRight="3dp"
+                    android:src="@drawable/down48" />
+
+                <ImageButton
+                    android:id="@+id/btnaddrebuy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_weight="0"
+                    android:background="@drawable/round_button"
+                    android:contentDescription="@string/nome"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:paddingRight="3dp"
+                    android:src="@drawable/up48" />
+            </LinearLayout>
+
+        </GridLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:orientation="horizontal">
 
             <TextView
@@ -148,11 +169,6 @@
                 android:visibility="invisible" />
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"/>
 
     </LinearLayout>
 
