@@ -713,6 +713,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 Delete = false;
                 Edit = false;
                 Toast.makeText(context, "Exclusão cancelada", Toast.LENGTH_SHORT).show();
+                new GetDados_jogos().execute();
             }
         });
 
