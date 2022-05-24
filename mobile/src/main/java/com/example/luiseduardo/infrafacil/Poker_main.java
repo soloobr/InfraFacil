@@ -519,6 +519,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             public void onClick(DialogInterface dialog, int which) {
                 Delete = false;
                 Edit = false;
+                closeKeyboard();
                 //Toast.makeText(context, "Edição cancelada", Toast.LENGTH_SHORT).show();
             }
         });
