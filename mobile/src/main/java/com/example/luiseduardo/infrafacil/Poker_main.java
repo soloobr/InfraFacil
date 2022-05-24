@@ -515,12 +515,12 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
         alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
 
+            @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 Delete = false;
                 Edit = false;
                 closeKeyboard();
-                //Toast.makeText(context, "Edição cancelada", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -650,6 +650,20 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 //imm.hideSoftInputFromWindow(dialog.getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
             }
         });
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                closeKeyboard();
+                dialog.dismiss();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    //inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+            }
+        });
+
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -709,11 +723,12 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int i) {
                 Delete = false;
                 Edit = false;
                 Toast.makeText(context, "Exclusão cancelada", Toast.LENGTH_SHORT).show();
                 new GetDados_jogos().execute();
+
             }
         });
 
@@ -1530,8 +1545,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             //}
         }
     }
-    private void closeKeyboard()
-    {
+    private void closeKeyboard(){
         View view = this.getCurrentFocus();
         if (view != null) {
 
