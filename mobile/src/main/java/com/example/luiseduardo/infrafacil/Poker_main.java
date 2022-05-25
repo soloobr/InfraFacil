@@ -336,7 +336,6 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
     }
-
     private void myPopupMenu(View v) {
 
         PopupMenu popupMenu = new PopupMenu(Poker_main.this, v);
@@ -439,16 +438,16 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         textViewNumJogo.setText(idjogo);
         tvTitle.setText("Editar Jogo");
 
-        if (title.equals("Deletar")){
+       /* if (title.equals("Deletar")){
 
-        }
+        }*/
 
-        if (title.equals("Editar")){
+        //if (title.equals("Editar")){
 
             final ImageView img = promptView.findViewById(R.id.imgNewCliente);
             img.setImageResource(R.mipmap.usercirclegear128);
 
-            final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
+            //final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
 
             final EditText ednome = promptView.findViewById(R.id.namejogo);
             ednome.setText(descrijogo);
@@ -506,7 +505,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             });
 
             Edit = true;
-        }
+        //}
 
 
 
@@ -518,7 +517,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Delete = false;
+                //Delete = false;
                 Edit = false;
                 closeKeyboard();
             }
@@ -654,13 +653,9 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
             @Override
             public void onClick(View view) {
-                closeKeyboard();
+
                 dialog.dismiss();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    //inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
+                new GetDados_jogos().execute();
             }
         });
 
@@ -682,7 +677,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
 
 
-        if (title.equals("Deletar")){
+        //if (title.equals("Deletar")){
             final ImageView img = promptView.findViewById(R.id.imgaddplayers);
             img.setImageResource(R.mipmap.usercircledelete);
 
@@ -696,9 +691,9 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             Delete = true;
 
 
-        }
+       // }
 
-        if (title.equals("Editar")){
+       /* if (title.equals("Editar")){
 
             final ImageView img = promptView.findViewById(R.id.imgaddplayers);
             img.setImageResource(R.mipmap.usercirclegear128);
@@ -714,7 +709,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             ednome.setEnabled(true);
 
             Edit = true;
-        }
+        }*/
 
         alert.setView(promptView);
         alert.setCancelable(false);
@@ -725,7 +720,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 Delete = false;
-                Edit = false;
+                //Edit = false;
                 Toast.makeText(context, "Exclusão cancelada", Toast.LENGTH_SHORT).show();
                 new GetDados_jogos().execute();
 
@@ -789,9 +784,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         }
 
     }
-    //@Override
-    public void onDateSet(DatePicker view, int year, int monthOfYear,
-                          int dayOfMonth) {
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         // TODO Auto-generated method stub
 
     }
@@ -800,15 +793,13 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
 
     }
-    public int getAdapterItemPosition(long id)
-    {
+    public int getAdapterItemPosition(long id){
 
         for (int position = 0; position < PecaFragment.lsvendas.size(); position++)
             if (Integer.parseInt(PecaFragment.lsvendas.get(position).getIdprod()) == id)
                 return position;
         return -1;
     }
-
     public int getAdapterItemPositiondel(int id) {
 
         for (int position = 0; position < PecaFragment.lsvendas.size(); position++){
@@ -1088,15 +1079,10 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             pDialog.setCancelable(true);
             pDialog.show();
         }
-
-
         @Override
         protected String doInBackground(String... args) {
-
             int success;
             try {
-
-                // Building Parameters
                 List params = new ArrayList();
 
                 params.add(new BasicNameValuePair("id", idjogo));
@@ -1109,14 +1095,8 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 params.add(new BasicNameValuePair("vladdon", sVldaddon));
                 params.add(new BasicNameValuePair("qtdfichaaddon", sQtdaddon));
 
-                //Log.d("Debug!", "starting");
-
-                // getting product details by making HTTP request
                 JSONObject json = jsonParser.makeHttpRequest(URLUPJOGO, "POST",
                         params);
-
-
-                // json success tag
                 success = json.getInt(TAG_SUCCESS);
                 if (success == 1) {
                     Log.d("successo!", json.toString());
@@ -1129,19 +1109,15 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             return null;
-
         }
 
-
         protected void onPostExecute(String file_url) {
-            // dismiss the dialog once product deleted
+
             pDialog.dismiss();
             if (file_url != null) {
                 Toast.makeText(Poker_main.this, file_url, Toast.LENGTH_LONG).show();
             }
-
             new Poker_main.GetDados_jogos().execute();
         }
 
@@ -1187,7 +1163,6 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         }
 
     }
-
     public static class MoneyTextWatcher implements TextWatcher {
         private WeakReference<EditText> editTextWeakReference;
         private final Locale locale = Locale.getDefault();
@@ -1513,17 +1488,12 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     public void onDestroy() {
         super.onDestroy();
 
-        //boolean isInFront;
-        //if (isInFront == true) {
             if (adapterListView != null) {
                 adapterListView.notifyDataSetChanged();
             }
 
             lv.setAdapter(adapterListView);
-            
-            //lv.setAdapter(adapterListView);
-            //lv.setCacheColorHint(Color.TRANSPARENT);
-        ///}
+
     }
     @Override
     protected void onResume() {
@@ -1531,7 +1501,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         //new Poker_main.GetDados_jogos().execute();
         //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         //imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-        closeKeyboard();
+        //closeKeyboard();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1547,10 +1517,10 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     }
     private void closeKeyboard(){
         View view = this.getCurrentFocus();
-        if (view != null) {
+        //if (view != null) {
 
             // now assign the system
-            // service to InputMethodManager
+            // service to InputMethodManagerapp:srcCompat="@mipmap/usercircle128"
             InputMethodManager manager
                     = (InputMethodManager)
                     getSystemService(
@@ -1558,6 +1528,6 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             manager
                     .hideSoftInputFromWindow(
                             view.getWindowToken(), 0);
-        }
+       // }
     }
 }

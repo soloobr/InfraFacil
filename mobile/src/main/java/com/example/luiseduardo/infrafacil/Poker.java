@@ -395,6 +395,7 @@ public class Poker extends Activity implements ItemClickListener{
                 mAdapter = new customAdapter(lsplayer, R.layout.item_players, Poker.this);
                 recyclerView.setAdapter(mAdapter);
                 mAdapter.setClickListener(Poker.this);
+                noplayers.setVisibility(View.GONE);
             }else{
                 noplayers.setVisibility(View.VISIBLE);
             }

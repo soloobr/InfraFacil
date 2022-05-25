@@ -4,11 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/drawable/button_background.xml" value="0.1335" />
+        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/drawable/circle.xml" value="0.1615" />
+        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/drawable/img.xml" value="0.1615" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/drawable/round_button.xml" value="0.1335" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_clientes.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_financas.xml" value="0.33" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
-        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_mainpoker.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_mainpoker.xml" value="0.1" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_newordem.xml" value="0.17760416666666667" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_newpoker.xml" value="0.25" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_ordemserv.xml" value="0.17760416666666667" />

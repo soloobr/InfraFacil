@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -39,6 +40,8 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -602,7 +605,12 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         if (title.equals("Editar")){
 
             final ImageView img = promptView.findViewById(R.id.imgaddplayers);
-            img.setImageResource(R.mipmap.usercirclegear128);
+            //img.setImageResource(R.mipmap.usercirclegear128);
+            //img.setImageResource(R.mipmap.boxout128);
+            //Picasso.with(mContext).load("https://lh3.googleusercontent.com/-RYaeIsr3gxQ/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclMBGUWtlvkOi5n-9B_ltzdNbJzvQ/photo.jpg?sz=46").into(img);
+            Picasso.with(mContext).load("http://futsexta.16mb.com/Poker/imgplayer/luis.jpeg").into(img);
+
+            //img.setBackground(ContextCompat.getDrawable(context,R.drawable.img));
 
             final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
             tvaction.setText("Editando Player");
@@ -643,6 +651,11 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                     list.remove(Pozi);
                     notifyItemRemoved(Pozi);
                     Delete = false;
+                    //TextView noplayers = (TextView) findViewById(R.id.tvsemplayers);
+                    if (list.isEmpty()){
+                        Poker.noplayers.setVisibility(View.VISIBLE);
+                    }
+
                 }
                 if (Edit){
                     final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
