@@ -1,5 +1,6 @@
 package com.example.luiseduardo.infrafacil;
 
+import static android.support.v4.app.ActivityCompat.startActivityForResult;
 import static com.example.luiseduardo.infrafacil.MoneyTextWatcher.getCurrencySymbol;
 import static com.example.luiseduardo.infrafacil.Poker.lsplayer;
 import static com.example.luiseduardo.infrafacil.Poker.myrecyclerview;
@@ -12,9 +13,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.icu.text.NumberFormat;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.view.menu.MenuBuilder;
@@ -62,7 +66,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
     private int rowLayout;
     private Context mContext;
     private ItemClickListener clickListener;
-    public static String  sUsername,idplayer,idjogo,rebuy, addon, valor, vlrebuy,vladdon,vlentrada,totalrebuy,totaladdon,totalplayers;
+    public static String  sUsername,idplayer,idjogo,rebuy, addon, valor, vlrebuy,vladdon,vlentrada,totalrebuy,totaladdon,totalplayers,imageuser;
     private static String total = "0";
     JSONParser jsonParser = new JSONParser();
     private static String URLDELETE = "http://futsexta.16mb.com/Poker/Poker_Delete_Players.php";
@@ -80,6 +84,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
     private static customAdapter  mAdapter;
     private ProgressDialog pDialog;
     private boolean PLAYERS = false;
+    private Uri fileUri;
 
     JSONParser jsonParserR = new JSONParser();
     private static String urlplayers = "http://futsexta.16mb.com/Poker/poker_get_playersjogo.php";
@@ -106,6 +111,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         myViewHolder.tv_nome.setText(city.getNome());
         myViewHolder.tv_qtdrebuy.setText(city.getRebuy());
         myViewHolder.tv_qtdaddon.setText(city.getAddon());
+        myViewHolder.tv_imgpatch = city.getImgpatch();
 
         idjogo = city.getIdjogo();
         vlentrada = city.getVlentrada();
@@ -113,6 +119,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         vladdon = city.getVladdon();
         valor = city.getValor();
         sUsername = city.getNome();
+        imageuser = city.getImgpatch();
 
         //int ent = (int)Double.parseDouble(vlentrada);
         //int valorp = (int)Double.parseDouble(valor);
@@ -145,6 +152,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         private TextView tv_qtdrebuy;
         private TextView tv_qtdaddon;
         private TextView tv_valortotal;
+        private String tv_imgpatch;
         //private Button btn_addplayers;
         //private String tv_vlrebuy;
 
@@ -159,7 +167,8 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             tv_qtdrebuy = (TextView)itemView.findViewById(R.id.main_line_valorrebuy);
             tv_qtdaddon = (TextView)itemView.findViewById(R.id.main_line_valoraddon);
             tv_valortotal = (TextView)itemView.findViewById(R.id.main_line_valortotal);
-            //btn_addplayers = (Button)itemView.findViewById(R.id.btnewplayers);
+            //tv_imgpatch =
+        //btn_addplayers = (Button)itemView.findViewById(R.id.btnewplayers);
 
             view.setTag(view);
             view.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +183,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                     rebuy = String.valueOf(tv_qtdrebuy.getText());
                     addon = String.valueOf(tv_qtdaddon.getText());
                     //valor = String.valueOf(restotal);
+                    imageuser = tv_imgpatch;
 
                     final TextView tvnome = promptView.findViewById(R.id.alnomeplayer);
                     tvnome.setText(String.valueOf(tv_nome.getText()));
@@ -265,6 +275,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                             rebuy = String.valueOf(tvqtdreb.getText());
                             addon = String.valueOf(tvqtdaddon.getText());
                             sUsername = String.valueOf(tv_nome.getText());
+
 
                             int ent = (int)Double.parseDouble(vlentrada);
                             int vlreb = (int)Double.parseDouble(vlrebuy);
@@ -608,9 +619,33 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             //img.setImageResource(R.mipmap.usercirclegear128);
             //img.setImageResource(R.mipmap.boxout128);
             //Picasso.with(mContext).load("https://lh3.googleusercontent.com/-RYaeIsr3gxQ/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclMBGUWtlvkOi5n-9B_ltzdNbJzvQ/photo.jpg?sz=46").into(img);
-            Picasso.with(mContext).load("http://futsexta.16mb.com/Poker/imgplayer/luis.jpeg").into(img);
+
+            if(imageuser.equals("0")){
+                Picasso.with(mContext).load("https://lh3.googleusercontent.com/-RYaeIsr3gxQ/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclMBGUWtlvkOi5n-9B_ltzdNbJzvQ/photo.jpg?sz=46").into(img);
+            }else{
+                Picasso.with(mContext).load(imageuser).into(img);
+            }
+
 
             //img.setBackground(ContextCompat.getDrawable(context,R.drawable.img));
+            img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Toast.makeText(mContext, "FOTO", Toast.LENGTH_SHORT).show();
+                    if (mContext.getPackageManager().hasSystemFeature(
+                            PackageManager.FEATURE_CAMERA)) {
+                        // Open default camera
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+                        // start the image capture Intent
+                        ((Activity)context).startActivityForResult(intent, 100);
+
+                    } else {
+                        Toast.makeText(mContext, "Camera not supported", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
 
             final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
             tvaction.setText("Editando Player");
@@ -723,11 +758,12 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                         String vlentrada = c.getString("vlentrada");
                         String vlrebuy = c.getString("vlrebuy");
                         String vladdon = c.getString("vladdon");
+                        String img = c.getString("image_path");
 
 
                         if (valor != null) {
                             PLAYERS = true;
-                            Poker.lsplayer.add(new PlayersListView(id, idjogo1, name,  rebuy,  addon, valor,vlentrada,vlrebuy,vladdon,1));
+                            Poker.lsplayer.add(new PlayersListView(id, idjogo1, name,  rebuy,  addon, valor,vlentrada,vlrebuy,vladdon,1,img));
                         }
 
                     }

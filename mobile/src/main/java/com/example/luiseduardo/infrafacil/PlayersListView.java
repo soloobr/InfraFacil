@@ -11,8 +11,9 @@ public class PlayersListView {
         private String vlentrada;
         private String vlrebuy;
         private String vladdon;
-
+        private String imgpatch;
         private int iconeRid;
+
 
 
 
@@ -21,8 +22,15 @@ public class PlayersListView {
         }
 
 
+    public String getImgpatch() {
+        return imgpatch;
+    }
 
-    public PlayersListView(String id, String idjogo, String nome, String rebuy, String addon, String valor, String vlentrada, String vlrebuy, String vladdon, int iconeRid)
+    public void setImgpatch(String imgpatch) {
+        this.imgpatch = imgpatch;
+    }
+
+    public PlayersListView(String id, String idjogo, String nome, String rebuy, String addon, String valor, String vlentrada, String vlrebuy, String vladdon, int iconeRid, String imgpatch)
 
         {
             this.id = id;
@@ -35,6 +43,7 @@ public class PlayersListView {
             this.vlrebuy = vlrebuy;
             this.vladdon = vladdon;
             this.iconeRid = iconeRid;
+            this.imgpatch = imgpatch;
         }
         public String getVlentrada() {
             return vlentrada;

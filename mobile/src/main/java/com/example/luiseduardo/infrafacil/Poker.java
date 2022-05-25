@@ -350,11 +350,12 @@ public class Poker extends Activity implements ItemClickListener{
                         String vlentrada = c.getString("vlentrada");
                         String vlrebuy = c.getString("vlrebuy");
                         String vladdon = c.getString("vladdon");
+                        String img = c.getString("image_path");
 
 
                         if (valor != null) {
                             PLAYERS = true;
-                            lsplayer.add(new PlayersListView(id, idjogo1, name,  rebuy,  addon, valor,vlentrada,vlrebuy,vladdon,1));
+                            lsplayer.add(new PlayersListView(id, idjogo1, name,  rebuy,  addon, valor,vlentrada,vlrebuy,vladdon,1,img));
                         }
 
                     }
