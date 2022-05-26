@@ -13,11 +13,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.icu.text.NumberFormat;
 import android.inputmethodservice.Keyboard;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -51,6 +55,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Poker extends Activity implements ItemClickListener{
 
@@ -89,6 +95,12 @@ public class Poker extends Activity implements ItemClickListener{
     public static String  valor, vlrebuy,vladdon,vlentrada,total,totalrebuy,totaladdon,totalplayers;
 
     public static TextView vltotaljogo,ttrebuy,ttaddon,ttplayers,primeiro,segundo,terceiro,noplayers,driscrijogo;
+
+    public static Uri fileUri;
+    String picturePath;
+    Uri selectedImage;
+    Bitmap photo;
+    String ba1;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -497,6 +509,35 @@ public class Poker extends Activity implements ItemClickListener{
             //ao apagar todos valores de uma só vez dava erro
             //Com a exception o valor retornado é 0.00
             return new BigDecimal(0);
+
+        }
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //if (requestCode == 100 && resultCode == RESULT_OK) {
+        if (requestCode == 100 && data != null) {
+
+            //Toast.makeText(Poker.this, "Camera not supported", Toast.LENGTH_LONG).show();
+
+
+
+            selectedImage = data.getData();
+            photo = (Bitmap) data.getExtras().get("data");
+
+            // Cursor to get image uri to display
+
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            CircleImageView imageView = (CircleImageView)findViewById(R.id.imgaddplayers);
+            //imageView.setImageBitmap(photo);
+          //  imageView.setImageResource(R.mipmap.boxout128);
 
         }
     }

@@ -1,7 +1,9 @@
 package com.example.luiseduardo.infrafacil;
 
+import static android.app.Activity.RESULT_OK;
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
 import static com.example.luiseduardo.infrafacil.MoneyTextWatcher.getCurrencySymbol;
+import static com.example.luiseduardo.infrafacil.Poker.fileUri;
 import static com.example.luiseduardo.infrafacil.Poker.lsplayer;
 import static com.example.luiseduardo.infrafacil.Poker.myrecyclerview;
 import static com.example.luiseduardo.infrafacil.Poker.v;
@@ -14,6 +16,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.icu.text.NumberFormat;
 import android.net.Uri;
@@ -60,6 +64,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder> {
 
     private  List<PlayersListView> list;
@@ -84,7 +90,14 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
     private static customAdapter  mAdapter;
     private ProgressDialog pDialog;
     private boolean PLAYERS = false;
-    private Uri fileUri;
+
+    //public Uri fileUri;
+    String picturePath;
+    Uri selectedImage;
+    Bitmap photo;
+    String ba1;
+
+    public static String URL = "Paste your URL here";
 
     JSONParser jsonParserR = new JSONParser();
     private static String urlplayers = "http://futsexta.16mb.com/Poker/poker_get_playersjogo.php";
@@ -338,6 +351,8 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                     //Toast.makeText(mContext, "Long! " + idplayer, Toast.LENGTH_SHORT).show();
                     sUsername = String.valueOf(tv_nome.getText());
                     Pozi = getAdapterPosition();
+                    imageuser = tv_imgpatch;
+
 
                     myPopupMenu(view);
 
@@ -601,7 +616,12 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
         if (title.equals("Deletar")){
             final ImageView img = promptView.findViewById(R.id.imgaddplayers);
-            img.setImageResource(R.mipmap.usercircledelete);
+            //img.setImageResource(R.mipmap.usercircledelete);
+            if(imageuser.equals("0")){
+                Picasso.with(mContext).load("http://futsexta.16mb.com/Poker/imgplayer/userdelete.png").into(img);
+            }else{
+                Picasso.with(mContext).load(imageuser).into(img);
+            }
 
             final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
             tvaction.setText("Excluir Player");
@@ -621,7 +641,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             //Picasso.with(mContext).load("https://lh3.googleusercontent.com/-RYaeIsr3gxQ/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclMBGUWtlvkOi5n-9B_ltzdNbJzvQ/photo.jpg?sz=46").into(img);
 
             if(imageuser.equals("0")){
-                Picasso.with(mContext).load("https://lh3.googleusercontent.com/-RYaeIsr3gxQ/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclMBGUWtlvkOi5n-9B_ltzdNbJzvQ/photo.jpg?sz=46").into(img);
+                Picasso.with(mContext).load("http://futsexta.16mb.com/Poker/imgplayer/useredit.png").into(img);
             }else{
                 Picasso.with(mContext).load(imageuser).into(img);
             }
@@ -632,20 +652,24 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                 @Override
                 public void onClick(View view) {
                     //Toast.makeText(mContext, "FOTO", Toast.LENGTH_SHORT).show();
-                    if (mContext.getPackageManager().hasSystemFeature(
+                    if (context.getApplicationContext().getPackageManager().hasSystemFeature(
                             PackageManager.FEATURE_CAMERA)) {
                         // Open default camera
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 
-                        // start the image capture Intent
+                        // start the image capture Intent ((Activity)context)
                         ((Activity)context).startActivityForResult(intent, 100);
 
                     } else {
                         Toast.makeText(mContext, "Camera not supported", Toast.LENGTH_LONG).show();
                     }
                 }
+
+
             });
+
+
 
             final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
             tvaction.setText("Editando Player");
@@ -708,6 +732,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         });
         final AlertDialog dialog = alert.create();
         dialog.show();
+
 
     }
 
@@ -805,4 +830,33 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
         }
     }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            Toast.makeText(mContext, "Camera not supported", Toast.LENGTH_LONG).show();
+/*
+
+
+            selectedImage = data.getData();
+            photo = (Bitmap) data.getExtras().get("data");
+
+            // Cursor to get image uri to display
+
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = mContext.getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            CircleImageView  imageView = (CircleImageView)((Activity)mContext).findViewById(R.id.imgaddplayers);
+            //imageView.setImageBitmap(photo);
+            imageView.setImageResource(R.mipmap.boxout128);
+*/
+        }
+    }
+
 }
