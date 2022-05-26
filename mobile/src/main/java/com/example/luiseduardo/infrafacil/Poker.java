@@ -43,11 +43,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -101,6 +104,10 @@ public class Poker extends Activity implements ItemClickListener{
     Uri selectedImage;
     Bitmap photo;
     String ba1;
+
+    private static final int CAMERA_REQUEST = 1888;
+
+    private WeakReference<CircleImageView> imageViewReference;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -513,13 +520,28 @@ public class Poker extends Activity implements ItemClickListener{
         }
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
+        {
+            Bundle bundle = data.getExtras();
+            if (bundle != null) {
+                Bitmap photo = bundle.getParcelable("data");
+                //Bitmap photo = (Bitmap) data.getExtras().get("data");
+                //ImageView imageView = (ImageView)findViewById(R.id.imageView7);
+
+                CircleImageView imageView = (CircleImageView) mfindViewById(R.id.imgaddplayers);
+                //Picasso.with(this).load("http://futsexta.16mb.com/Poker/imgplayer/useredit.png").into(imageView);
+                imageView.setImageBitmap(photo);
+            }
+        }
+
         //if (requestCode == 100 && resultCode == RESULT_OK) {
-        if (requestCode == 100 && data != null) {
+       // if (requestCode == 100 && data != null) {
 
             //Toast.makeText(Poker.this, "Camera not supported", Toast.LENGTH_LONG).show();
 
 
-
+/*
             selectedImage = data.getData();
             photo = (Bitmap) data.getExtras().get("data");
 
@@ -537,10 +559,23 @@ public class Poker extends Activity implements ItemClickListener{
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             CircleImageView imageView = (CircleImageView)findViewById(R.id.imgaddplayers);
             //imageView.setImageBitmap(photo);
-          //  imageView.setImageResource(R.mipmap.boxout128);
+          //  imageView.setImageResource(R.mipmap.boxout128);*/
 
-        }
+       // }
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // save file url in bundle as it will be null on scren orientation changes
+        outState.putParcelable("file_uri", fileUri);
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)         {
+        super.onRestoreInstanceState(savedInstanceState);
+// get the file url
+        fileUri = savedInstanceState.getParcelable("file_uri");
+    }
 }
 

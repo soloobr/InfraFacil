@@ -1,13 +1,15 @@
 package com.example.luiseduardo.infrafacil;
 
 import static android.app.Activity.RESULT_OK;
+import static android.support.v4.app.ActivityCompat.requestPermissions;
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
+import static android.support.v4.content.ContextCompat.checkSelfPermission;
 import static com.example.luiseduardo.infrafacil.MoneyTextWatcher.getCurrencySymbol;
-import static com.example.luiseduardo.infrafacil.Poker.fileUri;
 import static com.example.luiseduardo.infrafacil.Poker.lsplayer;
 import static com.example.luiseduardo.infrafacil.Poker.myrecyclerview;
 import static com.example.luiseduardo.infrafacil.Poker.v;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,9 +24,12 @@ import android.graphics.Color;
 import android.icu.text.NumberFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -56,6 +61,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -91,11 +98,23 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
     private ProgressDialog pDialog;
     private boolean PLAYERS = false;
 
-    //public Uri fileUri;
+    //private Uri fileUri;
     String picturePath;
     Uri selectedImage;
     Bitmap photo;
     String ba1;
+
+    private static final int MY_CAMERA_PERMISSION_CODE = 100;
+    private static final int CAMERA_REQUEST = 1888;
+
+    private static View layout;
+    private WeakReference<CircleImageView> imageViewReference;
+
+
+    public final String APP_TAG = "MyCustomApp";
+    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    public String photoFileName = "photo.jpg";
+    File photoFile;
 
     public static String URL = "Paste your URL here";
 
@@ -635,7 +654,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
         if (title.equals("Editar")){
 
-            final ImageView img = promptView.findViewById(R.id.imgaddplayers);
+            CircleImageView img = promptView.findViewById(R.id.imgaddplayers);
             //img.setImageResource(R.mipmap.usercirclegear128);
             //img.setImageResource(R.mipmap.boxout128);
             //Picasso.with(mContext).load("https://lh3.googleusercontent.com/-RYaeIsr3gxQ/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclMBGUWtlvkOi5n-9B_ltzdNbJzvQ/photo.jpg?sz=46").into(img);
@@ -645,25 +664,43 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             }else{
                 Picasso.with(mContext).load(imageuser).into(img);
             }
+            layout = View.inflate(mContext, R.layout.custom_alertnewplayer, null);
+            CircleImageView imgg = promptView.findViewById(R.id.imgaddplayers);
+
+
 
 
             //img.setBackground(ContextCompat.getDrawable(context,R.drawable.img));
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    if (ContextCompat.checkSelfPermission(context,Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                    {
+                        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+                        Toast.makeText(mContext, "sem permissão", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        ((Activity)context).startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                    }
+
+
                     //Toast.makeText(mContext, "FOTO", Toast.LENGTH_SHORT).show();
-                    if (context.getApplicationContext().getPackageManager().hasSystemFeature(
-                            PackageManager.FEATURE_CAMERA)) {
+                    //if (context.getApplicationContext().getPackageManager().hasSystemFeature(
+                    //        PackageManager.FEATURE_CAMERA)) {
+                        /*
                         // Open default camera
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Poker.fileUri);
 
                         // start the image capture Intent ((Activity)context)
-                        ((Activity)context).startActivityForResult(intent, 100);
+                        ((Activity)context).startActivityForResult(intent, 100);*/
 
-                    } else {
-                        Toast.makeText(mContext, "Camera not supported", Toast.LENGTH_LONG).show();
-                    }
+                   // } else {
+                   //     Toast.makeText(mContext, "Camera not supported", Toast.LENGTH_LONG).show();
+                   // }
                 }
 
 
@@ -858,5 +895,39 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 */
         }
     }
+    public File getPhotoFileUri(String fileName) {
+        // Get safe storage directory for photos
+        // Use `getExternalFilesDir` on Context to access package-specific directories.
+        // This way, we don't need to request external read/write runtime permissions.
+        File mediaStorageDir = new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
 
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+            Log.d(APP_TAG, "failed to create directory");
+        }
+
+        // Return the file target for the photo based on filename
+        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+
+        return file;
+    }
+    /*
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_CAMERA_PERMISSION_CODE)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            }
+            else
+            {
+                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
+    }*/
 }
