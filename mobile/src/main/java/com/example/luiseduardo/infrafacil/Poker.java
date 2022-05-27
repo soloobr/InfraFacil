@@ -107,6 +107,8 @@ public class Poker extends Activity implements ItemClickListener{
 
     private static final int CAMERA_REQUEST = 1888;
 
+    private OnIntentReceived mIntentListener;
+
     private WeakReference<CircleImageView> imageViewReference;
 
     @Override
@@ -416,6 +418,7 @@ public class Poker extends Activity implements ItemClickListener{
                 recyclerView.setAdapter(mAdapter);
                 mAdapter.setClickListener(Poker.this);
                 noplayers.setVisibility(View.GONE);
+
             }else{
                 noplayers.setVisibility(View.VISIBLE);
             }
@@ -519,20 +522,28 @@ public class Poker extends Activity implements ItemClickListener{
 
         }
     }
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
         {
-            Bundle bundle = data.getExtras();
-            if (bundle != null) {
-                Bitmap photo = bundle.getParcelable("data");
-                //Bitmap photo = (Bitmap) data.getExtras().get("data");
-                //ImageView imageView = (ImageView)findViewById(R.id.imageView7);
 
-                CircleImageView imageView = (CircleImageView) mfindViewById(R.id.imgaddplayers);
-                //Picasso.with(this).load("http://futsexta.16mb.com/Poker/imgplayer/useredit.png").into(imageView);
-                imageView.setImageBitmap(photo);
+            try{
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    Bitmap photo = bundle.getParcelable("data");
+                    //Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    //ImageView imageView = (ImageView)findViewById(R.id.imageView7);
+
+                    CircleImageView imageView = (CircleImageView) findViewById(R.id.imgaddplayers);
+                    //Picasso.with(this).load("http://futsexta.16mb.com/Poker/imgplayer/useredit.png").into(imageView);
+                    imageView.setImageBitmap(photo);
+                }
+            }catch(Exception e){
+                e.printStackTrace();
             }
+
+
         }
 
         //if (requestCode == 100 && resultCode == RESULT_OK) {

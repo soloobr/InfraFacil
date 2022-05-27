@@ -1,6 +1,7 @@
 package com.example.luiseduardo.infrafacil;
 
 import static android.app.Activity.RESULT_OK;
+import static android.app.PendingIntent.getActivity;
 import static android.support.v4.app.ActivityCompat.requestPermissions;
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
@@ -24,10 +25,12 @@ import android.graphics.Color;
 import android.icu.text.NumberFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.view.menu.MenuBuilder;
@@ -73,7 +76,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder> {
+public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder>  {
 
     private  List<PlayersListView> list;
     private int rowLayout;
@@ -127,6 +130,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         this.mContext = context;
 
     }
+
     @Override
     public ViewHolder onCreateViewHolder( ViewGroup viewGroup, int position) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(rowLayout, viewGroup, false);
@@ -424,7 +428,9 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                          return true;
                     case R.id.edite:
                         showAlert(mContext, "Editar", "Editando Player");
-
+                        //FragmentManager manager = getFragmentManager();
+                        //MyDialogFragment myDialogFragment = new MyDialogFragment();
+                        //myDialogFragment.show(manager, "DialogFragment");
                         //Toast.makeText(mContext, "clicked edite" + idplayer, Toast.LENGTH_SHORT).show();
                         return true;
                     default:
@@ -624,11 +630,11 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         }
     }
 
-    public void showAlert(Context context, String title, String message){
+    public void showAlert(Context MMcontext, String title, String message){
 
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        AlertDialog.Builder alert = new AlertDialog.Builder(MMcontext);
+        LayoutInflater layoutInflater = LayoutInflater.from(MMcontext);
         View promptView = layoutInflater.inflate(R.layout.custom_alertnewplayer, null);
 
 
@@ -675,15 +681,15 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                 @Override
                 public void onClick(View view) {
 
-                    if (ContextCompat.checkSelfPermission(context,Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                    if (ContextCompat.checkSelfPermission(MMcontext,Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
                     {
-                        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+                        ActivityCompat.requestPermissions((Activity) MMcontext, new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
                         Toast.makeText(mContext, "sem permissão", Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
                         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        ((Activity)context).startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                        ((Activity)MMcontext).startActivityForResult(cameraIntent, CAMERA_REQUEST);
                     }
 
 
@@ -759,7 +765,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
 
                     new UpdatePlayer().execute();
 
-                    ((InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE))
+                    ((InputMethodManager) MMcontext.getSystemService(MMcontext.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(ednome.getWindowToken(), 0);
                     Edit = false;
                 }
@@ -769,6 +775,8 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         });
         final AlertDialog dialog = alert.create();
         dialog.show();
+
+
 
 
     }
@@ -868,33 +876,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         }
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 100 && resultCode == RESULT_OK) {
-            Toast.makeText(mContext, "Camera not supported", Toast.LENGTH_LONG).show();
-/*
 
-
-            selectedImage = data.getData();
-            photo = (Bitmap) data.getExtras().get("data");
-
-            // Cursor to get image uri to display
-
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = mContext.getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            picturePath = cursor.getString(columnIndex);
-            cursor.close();
-
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            CircleImageView  imageView = (CircleImageView)((Activity)mContext).findViewById(R.id.imgaddplayers);
-            //imageView.setImageBitmap(photo);
-            imageView.setImageResource(R.mipmap.boxout128);
-*/
-        }
-    }
     public File getPhotoFileUri(String fileName) {
         // Get safe storage directory for photos
         // Use `getExternalFilesDir` on Context to access package-specific directories.
@@ -930,4 +912,6 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             }
         }
     }*/
+
+
 }
