@@ -3,12 +3,14 @@ package com.example.luiseduardo.infrafacil;
 import static com.example.luiseduardo.infrafacil.Poker_new.MoneyTextWatcher.getCurrencySymbol;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
@@ -42,10 +44,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class Poker_new extends AppCompatActivity implements
         View.OnClickListener {
     Button btncanceljogo, btnsavejogo;
     ImageButton btndata;
+    CircleImageView img;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private static String Mes,Dia,Ano,sData,sSdata;
     TextView dateEditText;
@@ -57,11 +62,17 @@ public class Poker_new extends AppCompatActivity implements
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
     String  sUsername, ssData, sVldentrada,sVldrebuy,sVldaddon,sQtdentrada,sQtdrebuy,sQtdaddon;
+    private static final int CAMERA_REQUEST = 1888;
+    private static final int MY_CAMERA_PERMISSION_CODE = 100;
+
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newpoker);
+
+        img = (CircleImageView) findViewById(R.id.imgaddplayers);
         btndata =  (ImageButton) findViewById(R.id.btn_date);
         btncanceljogo = (Button) findViewById(R.id.btnCancelarnjogo);
         dateEditText = (TextView) findViewById(R.id.editTextDate);
@@ -574,5 +585,26 @@ public class Poker_new extends AppCompatActivity implements
                     .hideSoftInputFromWindow(
                             view.getWindowToken(), 0);
         }
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+
+            try {
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    //bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    //Bitmap
+                    bitmap = bundle.getParcelable("data");
+                    CircleImageView imageView = (CircleImageView) this.findViewById(R.id.imgaddplayers);
+                    imageView.setImageBitmap(bitmap);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
     }
 }
