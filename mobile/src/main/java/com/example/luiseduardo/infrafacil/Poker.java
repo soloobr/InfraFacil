@@ -22,6 +22,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -31,6 +35,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -61,7 +66,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Poker extends Activity implements ItemClickListener{
+public class Poker extends FragmentActivity implements ItemClickListener{
 
     private AdapterListViewPlayers adapterListViewPlayers;
     private static String urlplayers = "http://futsexta.16mb.com/Poker/poker_get_playersjogo.php";
@@ -104,6 +109,7 @@ public class Poker extends Activity implements ItemClickListener{
     Uri selectedImage;
     Bitmap photo;
     String ba1;
+    public static boolean reload = false;
 
     private static final int CAMERA_REQUEST = 1888;
 
@@ -175,7 +181,7 @@ public class Poker extends Activity implements ItemClickListener{
     }
     @SuppressLint("ResourceAsColor")
     public void onClickNewPlayer(View v) {
-
+        //openDialogFragment(v);
         AlertDialog.Builder alert = new AlertDialog.Builder(Poker.this);
         LayoutInflater layoutInflater = LayoutInflater.from(Poker.this);
         View promptView = layoutInflater.inflate(R.layout.custom_alertnewplayer, null);
@@ -588,5 +594,48 @@ public class Poker extends Activity implements ItemClickListener{
 // get the file url
         fileUri = savedInstanceState.getParcelable("file_uri");
     }
+/*
+    public static class MyDialogFragment extends DialogFragment {
+        static MyDialogFragment newInstance() {
+            return new MyDialogFragment();
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View v = inflater.inflate(R.layout.custom_alertnewplayer, container, false);
+            View tv = v.findViewById(R.id.text);
+            ((TextView)tv).setText("This is an instance of MyDialogFragment");
+            return v;
+        }
+        void showDialog() {
+            // Create the fragment and show it as a dialog.
+            DialogFragment newFragment = MyDialogFragment.newInstance();
+            newFragment.show(getFragmentManager(), "dialog");
+        }
+    }*/
+
+    public void openDialogFragment(View view){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        MyDialogFragment df = new MyDialogFragment();
+        df.show(ft,"dialog");
+    }
+
+    public void turnOffFrag(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        MyDialogFragment df = (MyDialogFragment) getSupportFragmentManager().findFragmentByTag("dialog");
+        if(df !=  null ){
+            //ImageView img = (ImageView) df.getView().findViewById(R.id.imgaddplayers);
+            //img.setImageBitmap(photo);
+            //new GetDados().execute();
+        df.dismiss();
+        ft.remove(df);
+
+        }
+        new GetDados().execute();
+        new GetTotais().execute();
+    }
+
+
 }
 

@@ -18,6 +18,15 @@
             android:background="@color/grey05"
             android:orientation="horizontal">
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgaddplayerslist"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_weight="0"
+                android:src="@mipmap/usercirclegear128"
+                app:civ_border_color="@android:color/transparent"
+                app:civ_border_width="3dp" />
+
             <TextView
                 android:id="@+id/idplayer"
                 android:layout_width="wrap_content"
@@ -28,7 +37,8 @@
                 android:text="0"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/main_line_nome"

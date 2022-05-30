@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         android:windowSoftInputMode="adjustPan">
+
         <activity android:name="com.example.luiseduardo.infrafacil.Produtos"></activity>
         <activity
             android:name="com.example.luiseduardo.infrafacil.Poker"

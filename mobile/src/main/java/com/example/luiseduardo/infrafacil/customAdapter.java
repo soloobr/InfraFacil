@@ -14,6 +14,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,9 +31,13 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -57,6 +62,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.apache.http.message.BasicNameValuePair;
@@ -76,13 +83,14 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder>  {
+public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder> implements MyDialogFragment.DialogListener {
 
     private  List<PlayersListView> list;
     private int rowLayout;
     private Context mContext;
     private ItemClickListener clickListener;
     public static String  sUsername,idplayer,idjogo,rebuy, addon, valor, vlrebuy,vladdon,vlentrada,totalrebuy,totaladdon,totalplayers,imageuser;
+
     private static String total = "0";
     JSONParser jsonParser = new JSONParser();
     private static String URLDELETE = "http://futsexta.16mb.com/Poker/Poker_Delete_Players.php";
@@ -107,6 +115,9 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
     Bitmap photo;
     String ba1;
 
+    TextView textView;
+    MyDialogFragment dialogFragment;
+
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
     private static final int CAMERA_REQUEST = 1888;
 
@@ -118,6 +129,8 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     File photoFile;
+
+    private Context context;
 
     public static String URL = "Paste your URL here";
 
@@ -148,6 +161,8 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         myViewHolder.tv_qtdrebuy.setText(city.getRebuy());
         myViewHolder.tv_qtdaddon.setText(city.getAddon());
         myViewHolder.tv_imgpatch = city.getImgpatch();
+        myViewHolder.tv_rebuy = city.getRebuy();
+        myViewHolder.tv_addon = city.getAddon();
 
         idjogo = city.getIdjogo();
         vlentrada = city.getVlentrada();
@@ -156,6 +171,21 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         valor = city.getValor();
         sUsername = city.getNome();
         imageuser = city.getImgpatch();
+
+        if(imageuser.equals("0")){
+            Picasso.with(mContext).load("http://futsexta.16mb.com/Poker/imgplayer/useredit.png").into(myViewHolder.tv_imglist);
+        }else{
+            if(Poker.reload){
+                Picasso.with(mContext).load(imageuser).networkPolicy(NetworkPolicy.NO_CACHE)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE).into(myViewHolder.tv_imglist);
+
+            }else{
+                Picasso.with(mContext).load(imageuser).into(myViewHolder.tv_imglist);
+            }
+        }
+        //Picasso.with(mContext).load(imageuser).into(myViewHolder.tv_imglist);
+        //rebuy = city.getRebuy();
+        //addon = city.getAddon();
 
         //int ent = (int)Double.parseDouble(vlentrada);
         //int valorp = (int)Double.parseDouble(valor);
@@ -179,6 +209,14 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         this.clickListener = itemClickListener;
     }
 
+    @Override
+    public void onFinishEditDialog(String inputText) {
+        if (TextUtils.isEmpty(inputText)) {
+            textView.setText("Email was not entered");
+        } else
+            textView.setText("Email entered: " + inputText);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView title;
         public ImageButton btnaddon;
@@ -189,6 +227,10 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         private TextView tv_qtdaddon;
         private TextView tv_valortotal;
         private String tv_imgpatch;
+        private String tv_rebuy;
+        private String tv_addon;
+        private CircleImageView tv_imglist;
+
         //private Button btn_addplayers;
         //private String tv_vlrebuy;
 
@@ -203,6 +245,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             tv_qtdrebuy = (TextView)itemView.findViewById(R.id.main_line_valorrebuy);
             tv_qtdaddon = (TextView)itemView.findViewById(R.id.main_line_valoraddon);
             tv_valortotal = (TextView)itemView.findViewById(R.id.main_line_valortotal);
+            tv_imglist = (CircleImageView)itemView.findViewById(R.id.imgaddplayerslist);
             //tv_imgpatch =
         //btn_addplayers = (Button)itemView.findViewById(R.id.btnewplayers);
 
@@ -210,160 +253,163 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-                    LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-                    View promptView = layoutInflater.inflate(R.layout.custom_alertplayers, null);
 
-                    idplayer = String.valueOf(tv_idplayer.getText());
-                    rebuy = String.valueOf(tv_qtdrebuy.getText());
-                    addon = String.valueOf(tv_qtdaddon.getText());
-                    //valor = String.valueOf(restotal);
-                    imageuser = tv_imgpatch;
+                    if(mContext != null) {
+                        int position = getAdapterPosition();
+                        AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+                        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+                        View promptView = layoutInflater.inflate(R.layout.custom_alertplayers, null);
 
-                    final TextView tvnome = promptView.findViewById(R.id.alnomeplayer);
-                    tvnome.setText(String.valueOf(tv_nome.getText()));
+                        idplayer = String.valueOf(tv_idplayer.getText());
+                        //rebuy = String.valueOf(tv_qtdrebuy.getText());
+                        //addon = String.valueOf(tv_qtdaddon.getText());
+                        //valor = String.valueOf(restotal);
+                        imageuser = tv_imgpatch;
 
-                    final TextView tvid = promptView.findViewById(R.id.alidplayer);
-                    tvid.setText(String.valueOf(tv_idplayer.getText()));
+                        final TextView tvnome = promptView.findViewById(R.id.alnomeplayer);
+                        tvnome.setText(String.valueOf(tv_nome.getText()));
 
-                    final TextView tvqtdreb = promptView.findViewById(R.id.alqtdrebuy);
-                    tvqtdreb.setText(String.valueOf(tv_qtdrebuy.getText()));
+                        final TextView tvid = promptView.findViewById(R.id.alidplayer);
+                        tvid.setText(String.valueOf(tv_idplayer.getText()));
 
-                    final CheckBox tvaddontrue = promptView.findViewById(R.id.aladdontrue);
-                    tvaddontrue.setText(String.valueOf(tv_qtdaddon.getText()));
-                    if(tv_qtdaddon.getText().equals("0")){
-                        tvaddontrue.setText(String.valueOf("Não"));
-                        tvaddontrue.setChecked(false);
-                    }
-                    if (tv_qtdaddon.getText().equals("1")){
-                        tvaddontrue.setText(String.valueOf("Sim"));
-                        tvaddontrue.setChecked(true);
-                    }
-                    final TextView tvqtdaddon = promptView.findViewById(R.id.alqtdaddon);
-                    tvqtdaddon.setText(String.valueOf(tv_qtdaddon.getText()));
+                        final TextView tvqtdreb = promptView.findViewById(R.id.alqtdrebuy);
+                        tvqtdreb.setText(String.valueOf(tv_qtdrebuy.getText()));
 
-                    alert.setView(promptView);
-                    alert.setCancelable(false);
+                        final CheckBox tvaddontrue = promptView.findViewById(R.id.aladdontrue);
+                        tvaddontrue.setText(String.valueOf(tv_qtdaddon.getText()));
+                        if (tv_qtdaddon.getText().equals("0")) {
+                            tvaddontrue.setText(String.valueOf("Não"));
+                            tvaddontrue.setChecked(false);
+                        }
+                        if (tv_qtdaddon.getText().equals("1")) {
+                            tvaddontrue.setText(String.valueOf("Sim"));
+                            tvaddontrue.setChecked(true);
+                        }
+                        final TextView tvqtdaddon = promptView.findViewById(R.id.alqtdaddon);
+                        tvqtdaddon.setText(String.valueOf(tv_qtdaddon.getText()));
 
-                    ImageButton btn_1= (ImageButton) promptView.findViewById(R.id.btndeleterebuy);
-                    btn_1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                        alert.setView(promptView);
+                        alert.setCancelable(false);
 
-
-                            //do required function
-                            // don't forget to call alertD.dismiss()
-                            //Toast.makeText(mContext, "DELETE Rebuy", Toast.LENGTH_SHORT).show();
+                        ImageButton btn_1 = (ImageButton) promptView.findViewById(R.id.btndeleterebuy);
+                        btn_1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
 
 
-                            if (tvqtdreb.getText().equals("0")){
-                                Toast.makeText(mContext, "Rebuy não pode ser negativo!", Toast.LENGTH_SHORT).show();
-                            }else{
+                                //do required function
+                                // don't forget to call alertD.dismiss()
+                                //Toast.makeText(mContext, "DELETE Rebuy", Toast.LENGTH_SHORT).show();
+
+
+                                if (tvqtdreb.getText().equals("0")) {
+                                    Toast.makeText(mContext, "Rebuy não pode ser negativo!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    rebuy = String.valueOf(tvqtdreb.getText());
+
+                                    int reb = (int) Double.parseDouble(rebuy);
+
+                                    reb = reb - 1;
+                                    tvqtdreb.setText(String.valueOf(reb));
+                                }
+
+
+                                //tv_qtdrebuy.setText(String.valueOf(reb));
+
+                            }
+                        });
+                        ImageButton btn_2 = (ImageButton) promptView.findViewById(R.id.btnaddrebuy);
+                        btn_2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                //do required function
+                                // don't forget to call alertD.dismiss()
+                                //Toast.makeText(mContext, "ADD Rebuy", Toast.LENGTH_SHORT).show();
                                 rebuy = String.valueOf(tvqtdreb.getText());
 
-                                int reb = (int)Double.parseDouble(rebuy);
+                                int reb = (int) Double.parseDouble(rebuy);
 
-                                reb = reb - 1;
+                                reb = reb + 1;
                                 tvqtdreb.setText(String.valueOf(reb));
+                                //tv_qtdrebuy.setText(String.valueOf(reb));
+
                             }
+                        });
 
+                        alert.setCancelable(false);
 
-                            //tv_qtdrebuy.setText(String.valueOf(reb));
+                        alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
 
-                        }
-                    });
-                    ImageButton btn_2= (ImageButton) promptView.findViewById(R.id.btnaddrebuy);
-                    btn_2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            //do required function
-                            // don't forget to call alertD.dismiss()
-                            //Toast.makeText(mContext, "ADD Rebuy", Toast.LENGTH_SHORT).show();
-                            rebuy = String.valueOf(tvqtdreb.getText());
-
-                            int reb = (int)Double.parseDouble(rebuy);
-
-                            reb = reb + 1;
-                            tvqtdreb.setText(String.valueOf(reb));
-                            //tv_qtdrebuy.setText(String.valueOf(reb));
-
-                        }
-                    });
-
-                    alert.setCancelable(false);
-
-                    alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(mContext, "Edição cancelada", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                    alert.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                            idplayer = String.valueOf(tv_idplayer.getText());
-                            rebuy = String.valueOf(tvqtdreb.getText());
-                            addon = String.valueOf(tvqtdaddon.getText());
-                            sUsername = String.valueOf(tv_nome.getText());
-
-
-                            int ent = (int)Double.parseDouble(vlentrada);
-                            int vlreb = (int)Double.parseDouble(vlrebuy);
-                            int vlad = (int)Double.parseDouble(vladdon);
-
-                            int reb = (int)Double.parseDouble(rebuy);
-                            int rebparcial = reb * vlreb;
-
-                            int ad = (int)Double.parseDouble(addon);
-                            int adparcial = ad * vlad;
-
-                            int total = rebparcial + adparcial +ent;
-
-
-                            valor = String.valueOf(total);
-
-                            //String valor = mData.get(position).getValoruni();
-                            BigDecimal parsed = parseToBigDecimal(valor);
-                            String formatted;
-                            formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
-                            //holder.tv_valor.setText(formatted);
-                            tv_valortotal.setText(formatted);
-                            tv_qtdrebuy.setText(String.valueOf(reb));
-                            tv_qtdaddon.setText(addon);
-                            new UpdatePlayer().execute();
-
-                            //Poker.vltotaljogo.setText(formatted);
-                        }
-                    });
-
-                    //CheckBox btn_1= (ImageButton) promptView.findViewById(R.id.btndeleterebuy);
-                    tvaddontrue.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            //addon = String.valueOf(tvqtdaddon.getText());
-                            if (tvaddontrue.getText() == "Sim"){
-
-                                tvaddontrue.setText(String.valueOf("Não"));
-                                tvaddontrue.setChecked(false);
-                                tvqtdaddon.setText("0");
-                            }else if(tvaddontrue.getText() == "Não"){
-                                tvaddontrue.setText(String.valueOf("Sim"));
-                                tvaddontrue.setChecked(true);
-                                tvqtdaddon.setText("1");
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(mContext, "Movimentação cancelada", Toast.LENGTH_SHORT).show();
                             }
+                        });
+
+                        alert.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                idplayer = String.valueOf(tv_idplayer.getText());
+                                rebuy = String.valueOf(tvqtdreb.getText());
+                                addon = String.valueOf(tvqtdaddon.getText());
+                                sUsername = String.valueOf(tv_nome.getText());
 
 
-                        }
-                    });
+                                int ent = (int) Double.parseDouble(vlentrada);
+                                int vlreb = (int) Double.parseDouble(vlrebuy);
+                                int vlad = (int) Double.parseDouble(vladdon);
 
-                    final AlertDialog dialog = alert.create();
-                    dialog.show();
+                                int reb = (int) Double.parseDouble(rebuy);
+                                int rebparcial = reb * vlreb;
+
+                                int ad = (int) Double.parseDouble(addon);
+                                int adparcial = ad * vlad;
+
+                                int total = rebparcial + adparcial + ent;
+
+
+                                valor = String.valueOf(total);
+
+                                //String valor = mData.get(position).getValoruni();
+                                BigDecimal parsed = parseToBigDecimal(valor);
+                                String formatted;
+                                formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
+                                //holder.tv_valor.setText(formatted);
+                                tv_valortotal.setText(formatted);
+                                tv_qtdrebuy.setText(String.valueOf(reb));
+                                tv_qtdaddon.setText(addon);
+                                new UpdatePlayer().execute();
+
+                                //Poker.vltotaljogo.setText(formatted);
+                            }
+                        });
+
+                        //CheckBox btn_1= (ImageButton) promptView.findViewById(R.id.btndeleterebuy);
+                        tvaddontrue.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //addon = String.valueOf(tvqtdaddon.getText());
+                                if (tvaddontrue.getText() == "Sim") {
+
+                                    tvaddontrue.setText(String.valueOf("Não"));
+                                    tvaddontrue.setChecked(false);
+                                    tvqtdaddon.setText("0");
+                                } else if (tvaddontrue.getText() == "Não") {
+                                    tvaddontrue.setText(String.valueOf("Sim"));
+                                    tvaddontrue.setChecked(true);
+                                    tvqtdaddon.setText("1");
+                                }
+
+
+                            }
+                        });
+
+                        final AlertDialog dialog = alert.create();
+                        dialog.show();
+                    }
                 }
             });
 
@@ -375,6 +421,30 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                     sUsername = String.valueOf(tv_nome.getText());
                     Pozi = getAdapterPosition();
                     imageuser = tv_imgpatch;
+                    rebuy = tv_rebuy;
+                    addon = tv_addon;
+                    valor = String.valueOf(tv_valortotal);
+
+                    //idplayer = String.valueOf(tv_idplayer.getText());
+                    //rebuy = String.valueOf(tvqtdreb.getText());
+                    //addon = String.valueOf(tvqtdaddon.getText());
+                    //sUsername = String.valueOf(tv_nome.getText());
+
+
+                    int ent = (int) Double.parseDouble(vlentrada);
+                    int vlreb = (int) Double.parseDouble(vlrebuy);
+                    int vlad = (int) Double.parseDouble(vladdon);
+
+                    int reb = (int) Double.parseDouble(rebuy);
+                    int rebparcial = reb * vlreb;
+
+                    int ad = (int) Double.parseDouble(addon);
+                    int adparcial = ad * vlad;
+
+                    int total = rebparcial + adparcial + ent;
+
+
+                    valor = String.valueOf(total);
 
 
                     myPopupMenu(view);
@@ -424,13 +494,12 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                     case R.id.delete:
                         //Toast.makeText(mContext, "clicked delete" + idplayer + " "+idjogo, Toast.LENGTH_SHORT).show();
                         showAlert(mContext, "Deletar", "Deletando Player");
-                        //new DeletePlayer().execute();
+           //new DeletePlayer().execute();
                          return true;
                     case R.id.edite:
-                        showAlert(mContext, "Editar", "Editando Player");
-                        //FragmentManager manager = getFragmentManager();
-                        //MyDialogFragment myDialogFragment = new MyDialogFragment();
-                        //myDialogFragment.show(manager, "DialogFragment");
+                        FragmentTransaction ft = ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction();
+                        MyDialogFragment df = new MyDialogFragment();
+                        df.show(ft,"dialog");
                         //Toast.makeText(mContext, "clicked edite" + idplayer, Toast.LENGTH_SHORT).show();
                         return true;
                     default:
@@ -648,13 +717,21 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                 Picasso.with(mContext).load(imageuser).into(img);
             }
 
-            final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
-            tvaction.setText("Excluir Player");
+            final TextView nameview = promptView.findViewById(R.id.tvname);
+            nameview.setText(sUsername);
 
+            final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
+            tvaction.setVisibility(View.VISIBLE);
+
+
+
+            final TextView txnome = promptView.findViewById(R.id.txnomep);
+            txnome.setVisibility(View.GONE);
             final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
-            ednome.setText(sUsername);
+            //ednome.setText(sUsername);
             //ednome.setEnabled(false);
-            ednome.setFocusable(false);
+            //ednome.setFocusable(false);
+            ednome.setVisibility(View.GONE);
             Delete = true;
         }
 
@@ -877,7 +954,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
     }
 
 
-    public File getPhotoFileUri(String fileName) {
+    /*public File getPhotoFileUri(String fileName) {
         // Get safe storage directory for photos
         // Use `getExternalFilesDir` on Context to access package-specific directories.
         // This way, we don't need to request external read/write runtime permissions.
@@ -892,7 +969,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
         File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
 
         return file;
-    }
+    }*/
     /*
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
@@ -912,6 +989,5 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             }
         }
     }*/
-
 
 }
