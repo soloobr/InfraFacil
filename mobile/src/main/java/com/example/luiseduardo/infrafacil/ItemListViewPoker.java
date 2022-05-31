@@ -1,6 +1,10 @@
 package com.example.luiseduardo.infrafacil;
 
 public class ItemListViewPoker {
+    private final String image_path;
+
+
+
     private String id;
     private String Descricao;
     private String Data;
@@ -12,6 +16,7 @@ public class ItemListViewPoker {
     private String qtdfichaaddon;
     private String qtdplayers;
 
+    public String getImage_path() { return image_path;}
     public String getQtdplayers() {
         return qtdplayers;
     }
@@ -92,7 +97,7 @@ public class ItemListViewPoker {
         this.qtdfichaaddon = qtdfichaaddon;
     }
 
-    public ItemListViewPoker(String id, String Descricao, String Data, String vlentrada, String qtdfichaentrada, String vlrebuy, String qtdficharebuy, String vladdon, String qtdfichaaddon, String qtdplayers)
+    public ItemListViewPoker(String id, String Descricao, String Data, String vlentrada, String qtdfichaentrada, String vlrebuy, String qtdficharebuy, String vladdon, String qtdfichaaddon, String qtdplayers, String image_path)
 
     {
         this.id = id;
@@ -105,6 +110,7 @@ public class ItemListViewPoker {
         this.vladdon = vladdon;
         this.qtdfichaaddon = qtdfichaaddon;
         this.qtdplayers = qtdplayers;
+        this.image_path = image_path;
 
 
     }

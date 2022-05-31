@@ -5,6 +5,7 @@ import static com.example.luiseduardo.infrafacil.PecaFragment.Somavebdas;
 import static com.example.luiseduardo.infrafacil.PecaFragment.lsvendas;
 import static com.example.luiseduardo.infrafacil.Poker_new.MoneyTextWatcher.getCurrencySymbol;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,12 +16,16 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -48,6 +53,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
+
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,6 +76,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class Poker_main extends AppCompatActivity implements AdapterView.OnItemClickListener,DatePickerDialog.OnDateSetListener {
     private ProgressDialog pDialog;
     private static String urlAll = "http://futsexta.16mb.com/Poker/poker_get_jogo.php";
@@ -81,6 +92,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     ArrayList<ItemListViewFornecedor> itensfornecedor = new ArrayList<>();
     //ArrayList<HashMap<String, String>> newItemlist = new ArrayList<HashMap<String, String>>();
     //List<ItemListViewFornecedor> rowItems;
+    Bitmap bitmap;
     private ListView lv;
     List<ItemListViewFornecedor> rowItems;
     String[] Itemtar1 = { "Adicionar Tarefa", "Formatação", "Visita Técnica", "Conf. Router", "Instalar Office", "Outro"};
@@ -125,12 +137,15 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     private  int Pozi;
     static Boolean Delete = false;
     static Boolean Edit = false;
-    String  sUsername, ssData, sVldentrada,sVldrebuy,sVldaddon,sQtdentrada,sQtdrebuy,sQtdaddon;
+    String  sUsername, ssData, sVldentrada,sVldrebuy,sVldaddon,sQtdentrada,sQtdrebuy,sQtdaddon,sImg;
     Button btncanceljogo, btnsavejogo;
     //TextView dateEditText;
     //private EditText editvalorentrada,editvalorrebuy,editvaloraddon;
     private String datejogo ;
     private  Runnable run;
+
+    private static final int CAMERA_REQUEST = 1888;
+    private static final int MY_CAMERA_PERMISSION_CODE = 100;
 
 
     @Override
@@ -257,6 +272,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 sQtdrebuy = itens.get(i).getQtdficharebuy();
                 sQtdaddon = itens.get(i).getQtdfichaaddon();
                 sData = itens.get(i).getData();
+                sImg = itens.get(i).getImage_path();
 
                // Pozi = itens.get(i).getId();
                 myPopupMenu(view);
@@ -444,8 +460,32 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
         //if (title.equals("Editar")){
 
-            final ImageView img = promptView.findViewById(R.id.imgNewCliente);
-            img.setImageResource(R.mipmap.usercirclegear128);
+        final CircleImageView img = promptView.findViewById(R.id.imgjogo);
+        if(sImg.equals("0")){
+            Picasso.with(this).load("http://futsexta.16mb.com/Poker/imgjogo/default.png").into(img);
+        }else{
+            if(Poker.reload){
+                Picasso.with(this).load(sImg).networkPolicy(NetworkPolicy.NO_CACHE)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE).into(img);
+
+            }else{
+                Picasso.with(this).load(sImg).into(img);
+            }
+        }
+        final CircleImageView imgPhoto = promptView.findViewById(R.id.imgfhoto);
+        imgPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ContextCompat.checkSelfPermission(Poker_main.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(Poker_main.this, new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+                    Toast.makeText(Poker_main.this, "sem permissão", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                }
+            }
+        });
+           // img.setImageResource(R.mipmap.usercirclegear128);
 
             //final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
 
@@ -528,6 +568,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
                 closeKeyboard();
             }
 
@@ -644,7 +685,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                         //inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     }
                 }
-                //closeKeyboard();
+                closeKeyboard();
                 //InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 //imm.hideSoftInputFromWindow(dialog.getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
             }
@@ -860,8 +901,9 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                         String vladdon = object.getString("vladdon");
                         String qtdfichaaddon = object.getString("qtdfichaaddon");
                         String ttplayers = object.getString("ttplayers");
+                        String img = object.getString("image_path");
 
-                        ItemListViewPoker item1 = new ItemListViewPoker(id,Descricao, Data, vlentrada,qtdfichaentrada,vlrebuy,qtdficharebuy,vladdon,qtdfichaaddon,ttplayers);
+                        ItemListViewPoker item1 = new ItemListViewPoker(id,Descricao, Data, vlentrada,qtdfichaentrada,vlrebuy,qtdficharebuy,vladdon,qtdfichaaddon,ttplayers,img);
                         itens.add(item1);
                         descrijogo = object.getString("Descricao");
                     }
@@ -944,8 +986,9 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                         String vladdon = object.getString("vladdon");
                         String qtdfichaaddon = object.getString("qtdfichaaddon");
                         String ttplayers = object.getString("ttplayers");
+                        String img = object.getString("image_path");
 
-                        ItemListViewPoker item1 = new ItemListViewPoker(id,Descricao, Data, vlentrada,qtdfichaentrada,vlrebuy,qtdficharebuy,vladdon,qtdfichaaddon,ttplayers);
+                        ItemListViewPoker item1 = new ItemListViewPoker(id,Descricao, Data, vlentrada,qtdfichaentrada,vlrebuy,qtdficharebuy,vladdon,qtdfichaaddon,ttplayers,img);
                         itens.add(item1);
                         descrijogo = object.getString("Descricao");
                     }
@@ -1027,8 +1070,9 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                         String vladdon = object.getString("vladdon");
                         String qtdfichaaddon = object.getString("qtdfichaaddon");
                         String ttplayers = object.getString("ttplayers");
+                        String img = object.getString("image_path");
 
-                        ItemListViewPoker item1 = new ItemListViewPoker(id,Descricao, Data, vlentrada,qtdfichaentrada,vlrebuy,qtdficharebuy,vladdon,qtdfichaaddon,ttplayers);
+                        ItemListViewPoker item1 = new ItemListViewPoker(id,Descricao, Data, vlentrada,qtdfichaentrada,vlrebuy,qtdficharebuy,vladdon,qtdfichaaddon,ttplayers,img);
                         itens.add(item1);
                         descrijogo = object.getString("Descricao");
                     }
@@ -1504,16 +1548,26 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         //closeKeyboard();
     }
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
 
-        if (requestCode == 2) {
-            //if(resultCode == Activity.RESULT_OK){
-                // Faça algo
-                new GetDados_jogos().execute();
+            try {
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    //bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    //Bitmap
+                    bitmap = bundle.getParcelable("data");
+                    CircleImageView imageView = (CircleImageView) this.findViewById(R.id.imgjogo);
+                    imageView.setImageBitmap(bitmap);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            //}
+
         }
+
     }
     private void closeKeyboard(){
         View view = this.getCurrentFocus();
@@ -1529,5 +1583,11 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                     .hideSoftInputFromWindow(
                             view.getWindowToken(), 0);
        // }
+    }
+    @SuppressLint("ResourceAsColor")
+    public void LoadPhoto(View view) {
+
+
+
     }
 }

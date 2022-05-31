@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content">
 
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/imgaddplayers"
+                        android:id="@+id/imgjogo"
                         android:layout_width="130dp"
                         android:layout_height="130dp"
                         android:padding="5dp"
@@ -42,8 +42,12 @@
                         android:id="@+id/imgfhoto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="5dp"
                         android:layout_gravity="bottom|right"
+                        android:background="@drawable/round_button"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:onClick="LoadPhoto"
+                        android:padding="5dp"
                         android:src="@android:drawable/ic_menu_camera"
                         app:civ_border_color="@android:color/transparent"
                         app:civ_border_width="3dp" />

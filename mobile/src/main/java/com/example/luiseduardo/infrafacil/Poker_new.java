@@ -1,7 +1,9 @@
 package com.example.luiseduardo.infrafacil;
 
 import static com.example.luiseduardo.infrafacil.Poker_new.MoneyTextWatcher.getCurrencySymbol;
+import static com.example.luiseduardo.infrafacil.customAdapter.imageuser;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,15 +12,19 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -31,18 +37,36 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
+
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -66,7 +90,18 @@ public class Poker_new extends AppCompatActivity implements
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
 
     Bitmap bitmap;
+    ProgressDialog progressDialog ;
+    boolean check = true;
 
+    String GetImageNameFromEditText;
+
+    String ImageNameFieldOnServer = "image_name" ;
+
+    String ImagePathFieldOnServer = "image_path" ;
+    String mask, old;
+
+    String ImageUploadPathOnSever ="http://futsexta.16mb.com/Poker/imgjogo/capture_img_upload_to_server.php" ;
+    boolean isUpdating;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,9 +122,10 @@ public class Poker_new extends AppCompatActivity implements
         editvalorrebuy.addTextChangedListener(new Poker_new.MoneyTextWatcher(editvalorrebuy));
         editvaloraddon.addTextChangedListener(new Poker_new.MoneyTextWatcher(editvaloraddon));
 
-        editqtdentrada.addTextChangedListener(new Poker_new.MilharTextWatcher(editqtdentrada));
-        editqtdrebuy.addTextChangedListener(new Poker_new.MilharTextWatcher(editqtdrebuy));
-        editqtdaddon.addTextChangedListener(new Poker_new.MilharTextWatcher(editqtdaddon));
+        editqtdentrada.addTextChangedListener(MaskEditUtil.mask(editqtdentrada, MaskEditUtil.FORMAT_CPF));
+        editqtdrebuy.addTextChangedListener(MaskEditUtil.mask(editqtdrebuy, MaskEditUtil.FORMAT_CPF));
+        editqtdaddon.addTextChangedListener(MaskEditUtil.mask(editqtdaddon, MaskEditUtil.FORMAT_CPF));
+
 
         LinearLayout LButtons = (LinearLayout) findViewById(R.id.LayoutButtons);
         LButtons.setVisibility(View.VISIBLE);
@@ -104,6 +140,20 @@ public class Poker_new extends AppCompatActivity implements
 
 
     }
+
+    @SuppressLint("ResourceAsColor")
+    public void LoadPhoto(View view) {
+
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) this, new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+            Toast.makeText(this, "sem permissão", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        }
+    }
+
 
     @SuppressLint("ResourceAsColor")
     public void onClick(View view) {
@@ -152,6 +202,9 @@ public class Poker_new extends AppCompatActivity implements
 
     @SuppressLint("ResourceAsColor")
     public void onClickSAVE(View v) {
+
+        GetImageNameFromEditText = sUsername;
+
 
 
         TextView dateEditText = (TextView) findViewById(R.id.editTextDate);
@@ -226,8 +279,17 @@ public class Poker_new extends AppCompatActivity implements
             return;
         }
 
+        if(bitmap != null){
+            ImageUploadToServerFunction();
+
+        }
+
         new InsertJogo().execute();
+
         closeKeyboard();
+                    /*Poker.reload = false;
+            ((InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE))
+                    .hideSoftInputFromWindow(name.getWindowToken(), 0);*/
 
     }
 
@@ -438,131 +500,6 @@ public class Poker_new extends AppCompatActivity implements
             return NumberFormat.getCurrencyInstance(Locale.getDefault()).getCurrency().getSymbol();
         }
     }
-    public static class MilharTextWatcher implements TextWatcher {
-        private WeakReference<EditText> editTextWeakReference;
-        private final Locale locale = Locale.getDefault();
-
-        public MilharTextWatcher(EditText editText) {
-            this.editTextWeakReference = new WeakReference<>(editText);
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-            EditText editText = editTextWeakReference.get();
-            if (editText == null) return;
-            editText.removeTextChangedListener(this);
-
-            BigDecimal parsed = parseToBigDecimal(editable.toString());
-            String formatted;
-            formatted = NumberFormat.getCurrencyInstance().format(parsed);
-
-            //Remove o símbolo da moeda e espaçamento pra evitar bug
-            //String replaceable = String.format("[%s\\s]", getCurrencySymbol());
-            //String cleanString = formatted.replaceAll(replaceable, "");
-
-            //editText.setText(cleanString);
-            //editText.setText(formatted);
-            //editText.setSelection(cleanString.length());
-            editText.setSelection(formatted.length());
-            editText.addTextChangedListener(this);
-        }
-
-
-        public void afterTextChangeBanco(Editable editable) {
-            EditText editText = editTextWeakReference.get();
-            if (editText == null) return;
-            editText.removeTextChangedListener(this);
-
-            BigDecimal parsed = parseToBigDecimal(editable.toString());
-            String formatted;
-            formatted = NumberFormat.getCurrencyInstance().format(parsed);
-
-            //Remove o símbolo da moeda e espaçamento pra evitar bug
-            String replaceable = String.format("[%s\\s]", getCurrencySymbol());
-            String cleanString = formatted.replaceAll(replaceable, "");
-
-            editText.setText(cleanString);
-            //editText.setText(formatted);
-            editText.setSelection(cleanString.length());
-            //editText.setSelection(formatted.length());
-            editText.addTextChangedListener(this);
-        }
-
-        private BigDecimal parseToBigDecimal(String value) {
-            String replaceable = String.format("[%s,.\\s]", getCurrencySymbol());
-
-            String cleanString = value.replaceAll(replaceable, "");
-
-            try {
-                return new BigDecimal(cleanString).setScale(
-                        2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR);
-            } catch (NumberFormatException e) {
-                //ao apagar todos valores de uma só vez dava erro
-                //Com a exception o valor retornado é 0.00
-                return new BigDecimal(0);
-
-            }
-        }
-
-        public static String formatPrice(String price) {
-            //Ex - price = 2222
-            //retorno = 2222.00
-            DecimalFormat df = new DecimalFormat("0.00");
-            return String.valueOf(df.format(Double.valueOf(price)));
-
-        }
-
-        public static String formatTextPrice(String price) {
-            //Ex - price = 3333.30
-            //retorna formato monetário em Br = 3.333,30
-            //retorna formato monetário EUA: 3,333.30
-            //retornar formato monetário de alguns países europeu: 3 333,30
-            BigDecimal bD = new BigDecimal(formatPriceSave(formatPrice(price)));
-            String newFormat = null;
-            newFormat = String.valueOf(NumberFormat.getCurrencyInstance(Locale.getDefault()).format(bD));
-            String replaceable = String.format("[%s]", getCurrencySymbol());
-            return newFormat.replaceAll(replaceable, "");
-
-        }
-
-        static String formatPriceSave(String price) {
-            //Ex - price = $ 5555555
-            //return = 55555.55 para salvar no banco de dados
-            String replaceable = String.format("[%s,.\\s]", getCurrencySymbol());
-            String cleanString = price.replaceAll(replaceable, "");
-            StringBuilder stringBuilder = new StringBuilder(cleanString.replaceAll(" ", ""));
-
-            return String.valueOf(stringBuilder.insert(cleanString.length() - 2, '.'));
-
-        }
-
-        static String formatPriceSaveBanco(String price) {
-            //Ex - price = $ 5555555
-            //return = 55555.55 para salvar no banco de dados
-            String replaceable = String.format("[%s,.\\s]", getCurrencySymbol());
-            String cleanString = price.replaceAll(replaceable, "");
-            StringBuilder stringBuilder = new StringBuilder(cleanString.replaceAll(" ", ""));
-
-            return String.valueOf(stringBuilder.insert(cleanString.length() - 2, '.'));
-
-
-
-        }
-
-        public static String getCurrencySymbol() {
-            return NumberFormat.getCurrencyInstance(Locale.getDefault()).getCurrency().getSymbol();
-        }
-    }
     private void closeKeyboard()
     {
         // this will give us the view
@@ -604,6 +541,158 @@ public class Poker_new extends AppCompatActivity implements
             }
 
 
+        }
+
+    }
+
+    public void  ImageUploadToServerFunction(){
+
+        ByteArrayOutputStream byteArrayOutputStreamObject ;
+
+        byteArrayOutputStreamObject = new ByteArrayOutputStream();
+
+        // Converting bitmap image to jpeg format, so by default image will upload in jpeg format.
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStreamObject);
+
+        byte[] byteArrayVar = byteArrayOutputStreamObject.toByteArray();
+
+        final String ConvertImage = Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
+
+        class AsyncTaskUploadClass extends AsyncTask<Void,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+
+                super.onPreExecute();
+                progressDialog = new ProgressDialog(Poker_new.this);
+                progressDialog.setMessage("Image is Uploading, Please Wait");
+                progressDialog.setIndeterminate(false);
+                progressDialog.setCancelable(true);
+                progressDialog.show();
+                // Showing progress dialog at image upload time.
+                //progressDialog = ProgressDialog.show(Poker_new.this),"Image is Uploading","Please Wait",false,false);
+            }
+
+            @Override
+            protected void onPostExecute(String string1) {
+
+                super.onPostExecute(string1);
+
+                //new UpdatePlayer().execute();
+                // Dismiss the progress dialog after done uploading.
+                progressDialog.dismiss();
+
+
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                Poker_new.ImageProcessClass imageProcessClass = new Poker_new.ImageProcessClass();
+
+                HashMap<String,String> HashMapParams = new HashMap<String,String>();
+
+                HashMapParams.put(ImageNameFieldOnServer, GetImageNameFromEditText);
+                HashMapParams.put("id", customAdapter.idjogo);
+                HashMapParams.put(ImagePathFieldOnServer, ConvertImage);
+
+                String FinalData = imageProcessClass.ImageHttpRequest(ImageUploadPathOnSever, HashMapParams);
+
+                return FinalData;
+            }
+        }
+        AsyncTaskUploadClass AsyncTaskUploadClassOBJ = new AsyncTaskUploadClass();
+
+        AsyncTaskUploadClassOBJ.execute();
+    }
+
+    public class ImageProcessClass{
+
+        public String ImageHttpRequest(String requestURL, HashMap<String, String> PData) {
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            try {
+
+                URL url;
+                HttpURLConnection httpURLConnectionObject ;
+                OutputStream OutPutStream;
+                BufferedWriter bufferedWriterObject ;
+                BufferedReader bufferedReaderObject ;
+                int RC ;
+
+                url = new URL(requestURL);
+
+                httpURLConnectionObject = (HttpURLConnection) url.openConnection();
+
+                httpURLConnectionObject.setReadTimeout(19000);
+
+                httpURLConnectionObject.setConnectTimeout(19000);
+
+                httpURLConnectionObject.setRequestMethod("POST");
+
+                httpURLConnectionObject.setDoInput(true);
+
+                httpURLConnectionObject.setDoOutput(true);
+
+                OutPutStream = httpURLConnectionObject.getOutputStream();
+
+                bufferedWriterObject = new BufferedWriter(
+
+                        new OutputStreamWriter(OutPutStream, "UTF-8"));
+
+                bufferedWriterObject.write(bufferedWriterDataFN(PData));
+
+                bufferedWriterObject.flush();
+
+                bufferedWriterObject.close();
+
+                OutPutStream.close();
+
+                RC = httpURLConnectionObject.getResponseCode();
+
+                if (RC == HttpsURLConnection.HTTP_OK) {
+
+                    bufferedReaderObject = new BufferedReader(new InputStreamReader(httpURLConnectionObject.getInputStream()));
+
+                    stringBuilder = new StringBuilder();
+
+                    String RC2;
+
+                    while ((RC2 = bufferedReaderObject.readLine()) != null){
+
+                        stringBuilder.append(RC2);
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return stringBuilder.toString();
+        }
+
+        private String bufferedWriterDataFN(HashMap<String, String> HashMapParams) throws UnsupportedEncodingException {
+
+            StringBuilder stringBuilderObject;
+
+            stringBuilderObject = new StringBuilder();
+
+            for (Map.Entry<String, String> KEY : HashMapParams.entrySet()) {
+
+                if (check)
+
+                    check = false;
+                else
+                    stringBuilderObject.append("&");
+
+                stringBuilderObject.append(URLEncoder.encode(KEY.getKey(), "UTF-8"));
+
+                stringBuilderObject.append("=");
+
+                stringBuilderObject.append(URLEncoder.encode(KEY.getValue(), "UTF-8"));
+            }
+
+            return stringBuilderObject.toString();
         }
 
     }
