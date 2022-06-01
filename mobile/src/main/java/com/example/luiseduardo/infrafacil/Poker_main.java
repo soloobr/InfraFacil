@@ -101,7 +101,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
     private String TAG = Produtos.class.getSimpleName();
     private String qtdvendalaste, qtdvendanow, somaqtdnew,qtdprodvend, idvenda, idprod,  qtd,    idocor, datavenda,  idforne,  valoruni, valorpago,  valortotal,  formadepagamento,  status,  parcela, qtdparcel,  valorparcela,  name, descri;
-    public String DescriJodo, searchidata = "0";
+    public String  searchidata = "0";
     public static String Origem, idjogo,descrijogo,qtdplayers;
     private RadioButton buttonavista, buttonparcelado;
 
@@ -208,35 +208,12 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
             @SuppressLint("ResourceAsColor")
             @Override
-
             public void onClick(View view) {
-                idjogo = "0";
+                idjogo = "id";
+                descrijogo = "";
                 new GetDados_jogos().execute();
             }
         });
-        /*btnRefresh.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN: {
-                        ImageButton view = (ImageButton) v;
-                        view.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-                        v.invalidate();
-                        break;
-                    }
-                    case MotionEvent.ACTION_UP:
-                        // Your action here on button click
-                    case MotionEvent.ACTION_CANCEL: {
-                        ImageButton view = (ImageButton) v;
-                        view.getBackground().clearColorFilter();
-                        view.invalidate();
-                        break;
-                    }
-                }
-                return true;
-            }
-        });*/
         Intent iin= getIntent();
         Bundle b = iin.getExtras();
 
@@ -246,9 +223,9 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         }else{
             Origem = "ADDITEM";
         }
-        idjogo = "0";
-        OcorList = new ArrayList<>();
-        new Poker_main.GetDados_jogos().execute();
+        //idjogo = "0";
+        //OcorList = new ArrayList<>();
+        new GetDados_jogos().execute();
 
         lv = (ListView) findViewById(R.id.listviwerjogos);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -296,7 +273,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                DescriJodo = searchView.getQuery().toString();
+                descrijogo = searchView.getQuery().toString();
 
                 new GetDados_jogos_from_search().execute();
 
@@ -879,7 +856,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
             List params = new ArrayList();
             params.add(new BasicNameValuePair("idjogo",idjogo));
-            params.add(new BasicNameValuePair("descri",DescriJodo));
+            params.add(new BasicNameValuePair("descri",descrijogo));
             params.add(new BasicNameValuePair("searchedata",searchidata));
 
             JSONObject json = new JSONObject();
@@ -964,7 +941,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
             List params = new ArrayList();
             params.add(new BasicNameValuePair("idjogo",idjogo));
-            params.add(new BasicNameValuePair("descri",DescriJodo));
+            params.add(new BasicNameValuePair("descri",descrijogo));
             params.add(new BasicNameValuePair("searchedata",searchidata));
 
             JSONObject json = new JSONObject();
@@ -1048,7 +1025,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
             List params = new ArrayList();
             params.add(new BasicNameValuePair("idjogo",idjogo));
-            //params.add(new BasicNameValuePair("descri",DescriJodo));
+            //params.add(new BasicNameValuePair("descri",descrijogo));
             params.add(new BasicNameValuePair("searchedata",searchidata));
 
             JSONObject jsonD = new JSONObject();
@@ -1605,6 +1582,8 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             //ImageView img = (ImageView) df.getView().findViewById(R.id.imgaddplayers);
             //img.setImageBitmap(photo);
             //new GetDados().execute();
+            idjogo = "0";
+            descrijogo = "";
             df.dismiss();
             ft.remove(df);
 

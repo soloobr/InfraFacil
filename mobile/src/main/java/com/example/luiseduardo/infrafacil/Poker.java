@@ -219,8 +219,7 @@ public class Poker extends FragmentActivity implements ItemClickListener{
         final AlertDialog dialog = alert.create();
         dialog.show();
     }
-    public static void methodOnBtnClick(int position)
-    {
+    public static void methodOnBtnClick(int position){
 
     }
     class GetTotais extends AsyncTask<String, String, String> {
@@ -303,7 +302,6 @@ public class Poker extends FragmentActivity implements ItemClickListener{
 
         }
     }
-
     public  void Premiacao() {
 
         int vl = (int)Double.parseDouble(total);
@@ -512,7 +510,6 @@ public class Poker extends FragmentActivity implements ItemClickListener{
         super.onResume();
 
     }
-
     private BigDecimal parseToBigDecimal(String value) {
         String replaceable = String.format("[%s,.\\s]", getCurrencySymbol());
 
@@ -587,7 +584,6 @@ public class Poker extends FragmentActivity implements ItemClickListener{
         // save file url in bundle as it will be null on scren orientation changes
         outState.putParcelable("file_uri", fileUri);
     }
-
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState)         {
         super.onRestoreInstanceState(savedInstanceState);
@@ -614,13 +610,11 @@ public class Poker extends FragmentActivity implements ItemClickListener{
             newFragment.show(getFragmentManager(), "dialog");
         }
     }*/
-
     public void openDialogFragment(View view){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         MyDialogFragment df = new MyDialogFragment();
         df.show(ft,"dialog");
     }
-
     public void turnOffFrag(){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         MyDialogFragment df = (MyDialogFragment) getSupportFragmentManager().findFragmentByTag("dialog");

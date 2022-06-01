@@ -107,7 +107,7 @@ public class MyDialogFragment_Jogo extends DialogFragment {
     String GetImageNameFromEditText;
     String ImageNameFieldOnServer = "image_name" ;
     String ImagePathFieldOnServer = "image_path" ;
-    String ImageUploadPathOnSever ="http://futsexta.16mb.com/Poker/imgjogo/capture_img_upload_to_server.php" ;
+    String ImageUploadPathOnSever ="http://futsexta.16mb.com/Poker/capture_img_jogo.php" ;
 
     @Nullable
     @Override
@@ -239,7 +239,7 @@ public class MyDialogFragment_Jogo extends DialogFragment {
                 //((Poker) getActivity()).turnOffFrag();
             }
         });
-        Button btnsave = (Button) view.findViewById(R.id.btnSalvar);
+        Button btnsave = (Button) view.findViewById(R.id.btnSalvarjogo);
         btnsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

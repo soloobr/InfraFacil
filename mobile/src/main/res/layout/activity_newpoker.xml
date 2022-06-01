@@ -357,7 +357,7 @@
             android:padding="5dp">
 
             <Button
-                android:id="@+id/btnSalvar"
+                android:id="@+id/btnSalvarjogo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custombutton"
