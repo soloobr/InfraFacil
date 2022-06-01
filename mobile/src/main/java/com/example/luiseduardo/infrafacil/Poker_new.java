@@ -1,6 +1,7 @@
 package com.example.luiseduardo.infrafacil;
 
 import static com.example.luiseduardo.infrafacil.Poker_new.MoneyTextWatcher.getCurrencySymbol;
+import static com.example.luiseduardo.infrafacil.customAdapter.idjogo;
 import static com.example.luiseduardo.infrafacil.customAdapter.imageuser;
 
 import android.Manifest;
@@ -85,6 +86,8 @@ public class Poker_new extends AppCompatActivity implements
     private static String GETINFO_URL = "http://futsexta.16mb.com/Poker/Poker_insert_Jogo.php";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
+    private static final String TAG_ID = "id";
+
     String  sUsername, ssData, sVldentrada,sVldrebuy,sVldaddon,sQtdentrada,sQtdrebuy,sQtdaddon;
     private static final int CAMERA_REQUEST = 1888;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
@@ -205,8 +208,6 @@ public class Poker_new extends AppCompatActivity implements
 
         GetImageNameFromEditText = sUsername;
 
-
-
         TextView dateEditText = (TextView) findViewById(R.id.editTextDate);
         ssData = dateEditText.getText().toString();
         if (ssData.matches("")) {
@@ -279,10 +280,7 @@ public class Poker_new extends AppCompatActivity implements
             return;
         }
 
-        if(bitmap != null){
-            ImageUploadToServerFunction();
 
-        }
 
         new InsertJogo().execute();
 
@@ -314,6 +312,7 @@ public class Poker_new extends AppCompatActivity implements
 
 
             int success;
+            String nweid;
             try {
 
                 // Building Parameters
@@ -328,6 +327,7 @@ public class Poker_new extends AppCompatActivity implements
                 params.add(new BasicNameValuePair("qtdficharebuy", sQtdrebuy));
                 params.add(new BasicNameValuePair("vladdon", sVldaddon));
                 params.add(new BasicNameValuePair("qtdfichaaddon", sQtdaddon));
+                //params.add(new BasicNameValuePair("image_path", sQtdaddon));
 
                 //Log.d("Debug!", "starting");
 
@@ -338,16 +338,22 @@ public class Poker_new extends AppCompatActivity implements
 
                 // json success tag
                 success = json.getInt(TAG_SUCCESS);
+                nweid = json.getString(TAG_ID);
                 if (success == 1) {
-                    Log.d("successo!", json.toString());
-                    finish();
+                    Log.d("Jogo Atualizado", json.getString(TAG_MESSAGE));
                     return json.getString(TAG_MESSAGE);
 
-                } else {
+                    //finish();
+                } else if (success == 0) {
+                    Log.d("successo jogo criado!", json.toString());
+                    idjogo = nweid;
+                    //finish();
+                    return json.getString(TAG_MESSAGE);
+                } else{
                     Log.d("Jogo não Criado", json.getString(TAG_MESSAGE));
-                    finish();
                     return json.getString(TAG_MESSAGE);
                 }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -361,13 +367,20 @@ public class Poker_new extends AppCompatActivity implements
             // dismiss the dialog once product deleted
             pDialog.dismiss();
             if (file_url != null) {
-                Toast.makeText(Poker_new.this, file_url, Toast.LENGTH_LONG).show();
+
+                if(file_url.equals("Jogo Inserido com sucesso!")){
+                    if(bitmap != null){
+                        ImageUploadToServerFunction();
+                    }
+
+                    Toast.makeText(Poker_new.this, file_url, Toast.LENGTH_LONG).show();
+                };
             }
             //new Poker_main.GetDados_jogos();
-            Intent intent=new Intent();
+            //Intent intent=new Intent();
             //intent.putExtra("MESSAGE",message);
-            setResult(2,intent);
-            finish();
+            //setResult(2,intent);
+            //finish();
 
 
         }
@@ -500,8 +513,7 @@ public class Poker_new extends AppCompatActivity implements
             return NumberFormat.getCurrencyInstance(Locale.getDefault()).getCurrency().getSymbol();
         }
     }
-    private void closeKeyboard()
-    {
+    private void closeKeyboard(){
         // this will give us the view
         // which is currently focus
         // in this layout
@@ -533,7 +545,7 @@ public class Poker_new extends AppCompatActivity implements
                     //bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                     //Bitmap
                     bitmap = bundle.getParcelable("data");
-                    CircleImageView imageView = (CircleImageView) this.findViewById(R.id.imgaddplayers);
+                    CircleImageView imageView = (CircleImageView) this.findViewById(R.id.imgjogo);
                     imageView.setImageBitmap(bitmap);
                 }
             } catch (Exception e) {
@@ -593,7 +605,7 @@ public class Poker_new extends AppCompatActivity implements
                 HashMap<String,String> HashMapParams = new HashMap<String,String>();
 
                 HashMapParams.put(ImageNameFieldOnServer, GetImageNameFromEditText);
-                HashMapParams.put("id", customAdapter.idjogo);
+                HashMapParams.put("id", idjogo);
                 HashMapParams.put(ImagePathFieldOnServer, ConvertImage);
 
                 String FinalData = imageProcessClass.ImageHttpRequest(ImageUploadPathOnSever, HashMapParams);

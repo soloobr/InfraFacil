@@ -25,6 +25,8 @@ import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -100,7 +102,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     private String TAG = Produtos.class.getSimpleName();
     private String qtdvendalaste, qtdvendanow, somaqtdnew,qtdprodvend, idvenda, idprod,  qtd,    idocor, datavenda,  idforne,  valoruni, valorpago,  valortotal,  formadepagamento,  status,  parcela, qtdparcel,  valorparcela,  name, descri;
     public String DescriJodo, searchidata = "0";
-    private  String Origem, idjogo,descrijogo,qtdplayers;
+    public static String Origem, idjogo,descrijogo,qtdplayers;
     private RadioButton buttonavista, buttonparcelado;
 
     private  ArrayList<ItemListViewFornecedor> mFornecedorList;
@@ -124,7 +126,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     private ImageView imgaddnew, btnRefresh;
     private ImageButton btnDatePicker;
     private int mYear, mMonth, mDay, mHour, mMinute;
-    private static String Mes,Dia,Ano,sData;
+    public static String Mes,Dia,Ano,sData;
     ImageButton btndata;
     TextView dateEditText;
 
@@ -137,12 +139,14 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     private  int Pozi;
     static Boolean Delete = false;
     static Boolean Edit = false;
-    String  sUsername, ssData, sVldentrada,sVldrebuy,sVldaddon,sQtdentrada,sQtdrebuy,sQtdaddon,sImg;
+    public static  String  sUsername, ssData, sVldentrada,sVldrebuy,sVldaddon,sQtdentrada,sQtdrebuy,sQtdaddon,sImg;
     Button btncanceljogo, btnsavejogo;
     //TextView dateEditText;
     //private EditText editvalorentrada,editvalorrebuy,editvaloraddon;
-    private String datejogo ;
+    public static String datejogo ;
     private  Runnable run;
+
+    private Context mjContext;
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
@@ -391,8 +395,10 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                         //new DeletePlayer().execute();
                         return true;
                     case R.id.edite:
-                        showAlert(Poker_main.this, "Editar", "Editando Jogo");
-
+                        //showAlert(Poker_main.this, "Editar", "Editando Jogo");
+                        FragmentTransaction ft = ((FragmentActivity)Poker_main.this).getSupportFragmentManager().beginTransaction();
+                        MyDialogFragment_Jogo df = new MyDialogFragment_Jogo();
+                        df.show(ft,"dialog");
                         //Toast.makeText(mContext, "clicked edite" + idplayer, Toast.LENGTH_SHORT).show();
                         return true;
                     default:
@@ -1558,8 +1564,10 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                     //bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                     //Bitmap
                     bitmap = bundle.getParcelable("data");
-                    CircleImageView imageView = (CircleImageView) this.findViewById(R.id.imgjogo);
-                    imageView.setImageBitmap(bitmap);
+                    CircleImageView imageView = (CircleImageView) findViewById(R.id.imgjogo);
+                    ImageView imageView1 = (ImageView) findViewById(R.id.imgaddnewjogo);
+
+                    imageView1.setImageBitmap(bitmap);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1589,5 +1597,19 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
 
 
+    }
+    public void turnOffFrag(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        MyDialogFragment_Jogo df = (MyDialogFragment_Jogo) getSupportFragmentManager().findFragmentByTag("dialog");
+        if(df !=  null ){
+            //ImageView img = (ImageView) df.getView().findViewById(R.id.imgaddplayers);
+            //img.setImageBitmap(photo);
+            //new GetDados().execute();
+            df.dismiss();
+            ft.remove(df);
+
+        }
+        new GetDados_jogos().execute();
+        //new Poker_main().GetTotais().execute();
     }
 }
