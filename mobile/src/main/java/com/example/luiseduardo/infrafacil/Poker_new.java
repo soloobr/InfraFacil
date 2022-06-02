@@ -92,7 +92,7 @@ public class Poker_new extends AppCompatActivity implements
     private static final int CAMERA_REQUEST = 1888;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
 
-    public String newidjogo;
+    public static String newidjogo;
     Bitmap bitmap;
     ProgressDialog progressDialog ;
     boolean check = true;
@@ -104,7 +104,7 @@ public class Poker_new extends AppCompatActivity implements
     String ImagePathFieldOnServer = "image_path" ;
     String mask, old;
 
-    String ImageUploadPathOnSever ="http://futsexta.16mb.com/Poker/imgjogo/capture_img_upload_to_server.php" ;
+    String ImageUploadPathOnSever ="http://futsexta.16mb.com/Poker/capture_img_jogo.php";
     boolean isUpdating;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -224,6 +224,7 @@ public class Poker_new extends AppCompatActivity implements
 
                 new InsertJogo().execute();
 
+                LoadPhotos();
                 closeKeyboard();
             }
         });
@@ -378,25 +379,26 @@ public class Poker_new extends AppCompatActivity implements
             if (file_url != null) {
 
                 if(file_url.equals("Jogo Inserido com sucesso!")){
-                    if(bitmap != null){
-                        ImageUploadToServerFunction();
-                    }
+                    //LoadPhotos();
+                   // if(bitmap != null){
+
+                     //   ImageUploadToServerFunctionNewGame();
+                   // }
 
                     Toast.makeText(Poker_new.this, file_url, Toast.LENGTH_LONG).show();
                 };
             }
             //new Poker_main.GetDados_jogos();
-            Intent intent=new Intent();
-            intent.putExtra("ID",newidjogo);
-            setResult(2,intent);
-            finish();
+            //Intent intent=new Intent();
+            //intent.putExtra("ID",newidjogo);
+            //setResult(2,intent);
+            //finish();
 
 
         }
 
 
     }
-
     public static class MoneyTextWatcher implements TextWatcher {
         private WeakReference<EditText> editTextWeakReference;
         private final Locale locale = Locale.getDefault();
@@ -565,8 +567,7 @@ public class Poker_new extends AppCompatActivity implements
         }
 
     }
-
-    public void  ImageUploadToServerFunction(){
+    public void  ImageUploadToServerFunctionNewGame(){
 
         ByteArrayOutputStream byteArrayOutputStreamObject ;
 
@@ -585,11 +586,14 @@ public class Poker_new extends AppCompatActivity implements
             protected void onPreExecute() {
 
                 super.onPreExecute();
-                progressDialog = new ProgressDialog(Poker_new.this);
-                progressDialog.setMessage("Image is Uploading, Please Wait");
-                progressDialog.setIndeterminate(false);
-                progressDialog.setCancelable(true);
-                progressDialog.show();
+                progressDialog = ProgressDialog.show(Poker_new.this,"Image is Uploading","Please Wait",false,false);
+
+                //progressDialog = new ProgressDialog(Poker_new.this);
+                //progressDialog.setMessage("Image is Uploading, Please Wait");
+                //progressDialog.setIndeterminate(false);
+                //progressDialog.setCancelable(true);
+                //progressDialog.show();
+
                 // Showing progress dialog at image upload time.
                 //progressDialog = ProgressDialog.show(Poker_new.this),"Image is Uploading","Please Wait",false,false);
             }
@@ -614,7 +618,7 @@ public class Poker_new extends AppCompatActivity implements
                 HashMap<String,String> HashMapParams = new HashMap<String,String>();
 
                 HashMapParams.put(ImageNameFieldOnServer, GetImageNameFromEditText);
-                HashMapParams.put("id", newidjogo);
+                HashMapParams.put("id", Poker_new.newidjogo);
                 HashMapParams.put(ImagePathFieldOnServer, ConvertImage);
 
                 String FinalData = imageProcessClass.ImageHttpRequest(ImageUploadPathOnSever, HashMapParams);
@@ -626,7 +630,6 @@ public class Poker_new extends AppCompatActivity implements
 
         AsyncTaskUploadClassOBJ.execute();
     }
-
     public class ImageProcessClass{
 
         public String ImageHttpRequest(String requestURL, HashMap<String, String> PData) {
@@ -715,6 +718,16 @@ public class Poker_new extends AppCompatActivity implements
 
             return stringBuilderObject.toString();
         }
+
+    }
+    public void LoadPhotos() {
+
+
+                if(bitmap != null){
+
+                    ImageUploadToServerFunctionNewGame();
+                }
+
 
     }
 }
