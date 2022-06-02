@@ -2,9 +2,6 @@ package com.example.luiseduardo.infrafacil;
 
 public class ItemListViewPoker {
     private final String image_path;
-
-
-
     private String id;
     private String Descricao;
     private String Data;

@@ -102,7 +102,7 @@ public class Poker extends FragmentActivity implements ItemClickListener{
     public static String  idjogo,idplayer, rebuy, addon,descricao,sUsername;
     public static String  valor, vlrebuy,vladdon,vlentrada,total,totalrebuy,totaladdon,totalplayers;
 
-    public static TextView vltotaljogo,ttrebuy,ttaddon,ttplayers,primeiro,segundo,terceiro,noplayers,driscrijogo;
+    public static TextView vlrentrada, vlrrebuy, vlraddon,vltotaljogo,ttrebuy,ttaddon,ttplayers,primeiro,segundo,terceiro,noplayers,driscrijogo;
 
     public static Uri fileUri;
     String picturePath;
@@ -129,8 +129,35 @@ public class Poker extends FragmentActivity implements ItemClickListener{
         {
             String j =(String) b.get("id");
             String D = (String) b.get("Drisc");
+            String E = (String) b.get("ENTRADA");
+            String RE = (String) b.get("REBUY");
+            String A = (String) b.get("ADDON");
+
             idjogo = j;
             descricao = D;
+
+
+
+            vlrentrada = (TextView) findViewById(R.id.tvvalorentrada);
+            vlrrebuy = (TextView) findViewById(R.id.tvvlrebuy);
+            vlraddon = (TextView) findViewById(R.id.tvvladdon);
+
+            BigDecimal parsedent = parseToBigDecimal(E);
+            String formattedent;
+            formattedent = NumberFormat.getCurrencyInstance(locale).format(parsedent);
+            vlrentrada.setText(formattedent);
+
+            BigDecimal parsedreb = parseToBigDecimal(RE);
+            String formattedreb;
+            formattedreb = NumberFormat.getCurrencyInstance(locale).format(parsedreb);
+            vlrrebuy.setText(formattedreb);
+
+            BigDecimal parsedadd = parseToBigDecimal(A);
+            String formattedadd;
+            formattedadd = NumberFormat.getCurrencyInstance(locale).format(parsedadd);
+            vlraddon.setText(formattedadd);
+
+
         }else{
             idjogo = "0";
 
@@ -145,6 +172,8 @@ public class Poker extends FragmentActivity implements ItemClickListener{
         ttrebuy = (TextView) findViewById(R.id.tqtdrebuys);
         ttaddon = (TextView) findViewById(R.id.tqtdaddon);
         noplayers = (TextView) findViewById(R.id.tvsemplayers);
+
+
 
         primeiro = (TextView) findViewById(R.id.vlprimeiro);
         segundo = (TextView) findViewById(R.id.vlsegundo);
@@ -255,6 +284,12 @@ public class Poker extends FragmentActivity implements ItemClickListener{
                         String tta = object.getString("totaladdon");
                         String ttp = object.getString("totalplayers");
 
+
+                        /*int tr = (int)Double.parseDouble(ttr);
+                        int ta = (int)Double.parseDouble(tta);
+                        int tp = (int)Double.parseDouble(ttp);
+                        int vt = (ent * vent);
+                        String tt = String.valueOf(vt);*/
 
                         total = tt;
                         totalplayers = ttp;
@@ -371,11 +406,26 @@ public class Poker extends FragmentActivity implements ItemClickListener{
                         String name = c.getString("Nome_Player");
                         String rebuy = c.getString("rebuy");
                         String addon = c.getString("addon");
-                        String valor = c.getString("Valor");
+                        //String valor = c.getString("Valor");
                         String vlentrada = c.getString("vlentrada");
                         String vlrebuy = c.getString("vlrebuy");
                         String vladdon = c.getString("vladdon");
                         String img = c.getString("image_path");
+
+                        int ent = 1;
+                        int vent = (int)Double.parseDouble(vlentrada);
+                        int vtent = (ent * vent);
+
+                        int reb = (int)Double.parseDouble(rebuy);
+                        int vreb = (int)Double.parseDouble(vlrebuy);
+                        int vtreb = (reb * vreb);
+
+                        int add = (int)Double.parseDouble(addon);
+                        int vadd = (int)Double.parseDouble(vladdon);
+                        int vtadd = (add * vadd);
+
+                        int total = (vtent+vtreb+vtadd);
+                        String valor = String.valueOf(total);
 
 
                         if (valor != null) {
@@ -422,7 +472,7 @@ public class Poker extends FragmentActivity implements ItemClickListener{
                 recyclerView.setAdapter(mAdapter);
                 mAdapter.setClickListener(Poker.this);
                 noplayers.setVisibility(View.GONE);
-
+                new GetTotais().execute();
             }else{
                 noplayers.setVisibility(View.VISIBLE);
             }

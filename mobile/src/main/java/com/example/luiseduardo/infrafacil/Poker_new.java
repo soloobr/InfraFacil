@@ -92,6 +92,7 @@ public class Poker_new extends AppCompatActivity implements
     private static final int CAMERA_REQUEST = 1888;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
 
+    public String newidjogo;
     Bitmap bitmap;
     ProgressDialog progressDialog ;
     boolean check = true;
@@ -113,6 +114,7 @@ public class Poker_new extends AppCompatActivity implements
         img = (CircleImageView) findViewById(R.id.imgaddplayers);
         btndata =  (ImageButton) findViewById(R.id.btn_date);
         btncanceljogo = (Button) findViewById(R.id.btnCancelarnjogo);
+        btnsavejogo = (Button) findViewById(R.id.btnSalvarjogo);
         dateEditText = (TextView) findViewById(R.id.editTextDate);
         editvalorentrada = (EditText) findViewById(R.id.edvalorentrada);
         editvalorrebuy = (EditText) findViewById(R.id.edvalorrebuy);
@@ -138,6 +140,91 @@ public class Poker_new extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        btnsavejogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GetImageNameFromEditText = sUsername;
+
+                TextView dateEditText = (TextView) findViewById(R.id.editTextDate);
+                ssData = dateEditText.getText().toString();
+                if (ssData.matches("")) {
+                    Toast.makeText(Poker_new.this, "Favor Selecionar a data do Jogo", Toast.LENGTH_SHORT).show();
+                    btndata.performClick();
+                    return;
+                }
+
+                AutoCompleteTextView usernameEditText = (AutoCompleteTextView) findViewById(R.id.namejogo);
+                sUsername = usernameEditText.getText().toString();
+                if (sUsername.matches("")) {
+                    Toast.makeText(Poker_new.this, "Favor Preencher o nome do Jogo", Toast.LENGTH_SHORT).show();
+                    usernameEditText.requestFocus();
+                    return;
+                }
+
+
+                TextView Vldentrada = (TextView) findViewById(R.id.edvalorentrada);
+                sVldentrada = Vldentrada.getText().toString();
+
+                String replaceable = String.format("[%s\\s]", getCurrencySymbol());
+                sVldentrada = sVldentrada.replaceAll(replaceable, "");
+                sVldentrada = sVldentrada.replaceAll(",", "");
+
+                if ( (sVldentrada.matches("")) || (sVldentrada.matches("000") )) {
+                    Toast.makeText(Poker_new.this, "Favor preencher o valor da Entrada", Toast.LENGTH_SHORT).show();
+                    Vldentrada.requestFocus();
+                    return;
+                }
+                TextView Qtdentrada = (TextView) findViewById(R.id.edqtdentrada);
+                sQtdentrada = Qtdentrada.getText().toString();
+                if ( (sQtdentrada.matches("")) || (sQtdentrada.matches("0") )) {
+                    Toast.makeText(Poker_new.this, "Favor preencher a quantidade de ficha da Entrada", Toast.LENGTH_SHORT).show();
+                    Qtdentrada.requestFocus();
+                    return;
+                }
+
+                TextView Vldrebuy = (TextView) findViewById(R.id.edvalorrebuy);
+                sVldrebuy = Vldrebuy.getText().toString();
+                sVldrebuy = sVldrebuy.replaceAll(replaceable, "");
+                sVldrebuy = sVldrebuy.replaceAll(",", "");
+                if ((sVldrebuy.matches("")) || (sVldrebuy.matches("000")) ) {
+                    Toast.makeText(Poker_new.this, "Favor preencher o valor da Rebuy", Toast.LENGTH_SHORT).show();
+                    Vldrebuy.requestFocus();
+                    return;
+                }
+                TextView Qtdrebuy = (TextView) findViewById(R.id.edqtdrebuy);
+                sQtdrebuy = Qtdrebuy.getText().toString();
+                if ( (sQtdrebuy.matches("")) || (sQtdrebuy.matches("0") )) {
+                    Toast.makeText(Poker_new.this, "Favor preencher a quantidade de ficha do Rebuy", Toast.LENGTH_SHORT).show();
+                    Qtdrebuy.requestFocus();
+                    return;
+                }
+
+                TextView Vldaddon = (TextView) findViewById(R.id.edvaloraddon);
+                sVldaddon = Vldaddon.getText().toString();
+                sVldaddon = sVldaddon.replaceAll(replaceable, "");
+                sVldaddon = sVldaddon.replaceAll(",", "");
+                if ((sVldaddon.matches("")) || (sVldaddon.matches("000")) ) {
+                    Toast.makeText(Poker_new.this, "Favor preencher o valor da Addon", Toast.LENGTH_SHORT).show();
+                    Vldaddon.requestFocus();
+                    return;
+                }
+
+                TextView Qtdaddon = (TextView) findViewById(R.id.edqtdaddon);
+                sQtdaddon = Qtdaddon.getText().toString();
+                if ( (sQtdaddon.matches("")) || (sQtdaddon.matches("0") )) {
+                    Toast.makeText(Poker_new.this, "Favor preencher a quantidade de ficha do Addon", Toast.LENGTH_SHORT).show();
+                    Qtdaddon.requestFocus();
+                    return;
+                }
+
+
+
+                new InsertJogo().execute();
+
+                closeKeyboard();
             }
         });
 
@@ -206,85 +293,7 @@ public class Poker_new extends AppCompatActivity implements
     @SuppressLint("ResourceAsColor")
     public void onClickSAVE(View v) {
 
-        GetImageNameFromEditText = sUsername;
 
-        TextView dateEditText = (TextView) findViewById(R.id.editTextDate);
-        ssData = dateEditText.getText().toString();
-        if (ssData.matches("")) {
-            Toast.makeText(this, "Favor Selecionar a data do Jogo", Toast.LENGTH_SHORT).show();
-            btndata.performClick();
-            return;
-        }
-
-        AutoCompleteTextView usernameEditText = (AutoCompleteTextView) findViewById(R.id.namejogo);
-        sUsername = usernameEditText.getText().toString();
-        if (sUsername.matches("")) {
-            Toast.makeText(this, "Favor Preencher o nome do Jogo", Toast.LENGTH_SHORT).show();
-            usernameEditText.requestFocus();
-            return;
-        }
-
-
-        TextView Vldentrada = (TextView) findViewById(R.id.edvalorentrada);
-        sVldentrada = Vldentrada.getText().toString();
-
-        String replaceable = String.format("[%s\\s]", getCurrencySymbol());
-        sVldentrada = sVldentrada.replaceAll(replaceable, "");
-        sVldentrada = sVldentrada.replaceAll(",", "");
-
-        if ( (sVldentrada.matches("")) || (sVldentrada.matches("000") )) {
-            Toast.makeText(this, "Favor preencher o valor da Entrada", Toast.LENGTH_SHORT).show();
-            Vldentrada.requestFocus();
-            return;
-        }
-        TextView Qtdentrada = (TextView) findViewById(R.id.edqtdentrada);
-        sQtdentrada = Qtdentrada.getText().toString();
-        if ( (sQtdentrada.matches("")) || (sQtdentrada.matches("0") )) {
-            Toast.makeText(this, "Favor preencher a quantidade de ficha da Entrada", Toast.LENGTH_SHORT).show();
-            Qtdentrada.requestFocus();
-            return;
-        }
-
-        TextView Vldrebuy = (TextView) findViewById(R.id.edvalorrebuy);
-        sVldrebuy = Vldrebuy.getText().toString();
-        sVldrebuy = sVldrebuy.replaceAll(replaceable, "");
-        sVldrebuy = sVldrebuy.replaceAll(",", "");
-        if ((sVldrebuy.matches("")) || (sVldrebuy.matches("000")) ) {
-            Toast.makeText(this, "Favor preencher o valor da Rebuy", Toast.LENGTH_SHORT).show();
-            Vldrebuy.requestFocus();
-            return;
-        }
-        TextView Qtdrebuy = (TextView) findViewById(R.id.edqtdrebuy);
-        sQtdrebuy = Qtdrebuy.getText().toString();
-        if ( (sQtdrebuy.matches("")) || (sQtdrebuy.matches("0") )) {
-            Toast.makeText(this, "Favor preencher a quantidade de ficha do Rebuy", Toast.LENGTH_SHORT).show();
-            Qtdrebuy.requestFocus();
-            return;
-        }
-
-        TextView Vldaddon = (TextView) findViewById(R.id.edvaloraddon);
-        sVldaddon = Vldaddon.getText().toString();
-        sVldaddon = sVldaddon.replaceAll(replaceable, "");
-        sVldaddon = sVldaddon.replaceAll(",", "");
-        if ((sVldaddon.matches("")) || (sVldaddon.matches("000")) ) {
-            Toast.makeText(this, "Favor preencher o valor da Addon", Toast.LENGTH_SHORT).show();
-            Vldaddon.requestFocus();
-            return;
-        }
-
-        TextView Qtdaddon = (TextView) findViewById(R.id.edqtdaddon);
-        sQtdaddon = Qtdaddon.getText().toString();
-        if ( (sQtdaddon.matches("")) || (sQtdaddon.matches("0") )) {
-            Toast.makeText(this, "Favor preencher a quantidade de ficha do Addon", Toast.LENGTH_SHORT).show();
-            Qtdaddon.requestFocus();
-            return;
-        }
-
-
-
-        new InsertJogo().execute();
-
-        closeKeyboard();
                     /*Poker.reload = false;
             ((InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE))
                     .hideSoftInputFromWindow(name.getWindowToken(), 0);*/
@@ -346,7 +355,7 @@ public class Poker_new extends AppCompatActivity implements
                     //finish();
                 } else if (success == 0) {
                     Log.d("successo jogo criado!", json.toString());
-                    idjogo = nweid;
+                    newidjogo = nweid;
                     //finish();
                     return json.getString(TAG_MESSAGE);
                 } else{
@@ -377,10 +386,10 @@ public class Poker_new extends AppCompatActivity implements
                 };
             }
             //new Poker_main.GetDados_jogos();
-            //Intent intent=new Intent();
-            //intent.putExtra("MESSAGE",message);
-            //setResult(2,intent);
-            //finish();
+            Intent intent=new Intent();
+            intent.putExtra("ID",newidjogo);
+            setResult(2,intent);
+            finish();
 
 
         }
@@ -605,7 +614,7 @@ public class Poker_new extends AppCompatActivity implements
                 HashMap<String,String> HashMapParams = new HashMap<String,String>();
 
                 HashMapParams.put(ImageNameFieldOnServer, GetImageNameFromEditText);
-                HashMapParams.put("id", idjogo);
+                HashMapParams.put("id", newidjogo);
                 HashMapParams.put(ImagePathFieldOnServer, ConvertImage);
 
                 String FinalData = imageProcessClass.ImageHttpRequest(ImageUploadPathOnSever, HashMapParams);

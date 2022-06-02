@@ -9,6 +9,7 @@ import static com.example.luiseduardo.infrafacil.MoneyTextWatcher.getCurrencySym
 import static com.example.luiseduardo.infrafacil.Poker.lsplayer;
 import static com.example.luiseduardo.infrafacil.Poker.myrecyclerview;
 import static com.example.luiseduardo.infrafacil.Poker.v;
+import static com.example.luiseduardo.infrafacil.Poker.vlrentrada;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -378,7 +379,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                                 String formatted;
                                 formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
                                 //holder.tv_valor.setText(formatted);
-                                tv_valortotal.setText(formatted);
+                                //tv_valortotal.setText(formatted);
                                 tv_qtdrebuy.setText(String.valueOf(reb));
                                 tv_qtdaddon.setText(addon);
                                 new UpdatePlayer().execute();
@@ -653,6 +654,8 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
             BigDecimal parsed = parseToBigDecimal(total);
             String formatted;
             formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
+
+
 
             Poker.vltotaljogo.setText(formatted);
             Poker.ttplayers.setText(totalplayers);

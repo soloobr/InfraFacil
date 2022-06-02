@@ -11,19 +11,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="5dp">
-        <ImageView
+        android:paddingStart="5dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/_imagem_prod"
             android:layout_width="72dp"
-            android:layout_height="match_parent"
-            android:paddingLeft="5dp"
-            app:srcCompat="@mipmap/chip" />
+            android:layout_height="82dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/chip"
+            app:civ_border_color="@android:color/transparent"
+            app:civ_border_width="3dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="5dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvdescrijogo"
@@ -38,13 +40,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvqtdtv"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:paddingLeft="5dp"
                     android:text="Data:"

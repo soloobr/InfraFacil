@@ -235,8 +235,16 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 Intent intent = new Intent(Poker_main.this, Poker.class);
                 idjogo = itens.get(position).getId();
                 descrijogo = itens.get(position).getDescricao();
+
+                sVldentrada = itens.get(position).getVlentrada();
+                sVldrebuy = itens.get(position).getVlrebuy();
+                sVldaddon = itens.get(position).getVladdon();
+
                 intent.putExtra("id", idjogo);
                 intent.putExtra("Drisc", descrijogo);
+                intent.putExtra("ENTRADA", sVldentrada);
+                intent.putExtra("REBUY", sVldrebuy);
+                intent.putExtra("ADDON", sVldaddon);
                 startActivityForResult(intent,2);
             }
         });
@@ -286,6 +294,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             @Override
             public void onRefresh() {
                 idjogo = "0";
+                descrijogo = "";
                 new GetDados_jogos().execute();
                 pullToRefresh.setRefreshing(false);
             }
@@ -760,6 +769,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 if (Delete){
 
                     new DeleteJogo().execute();
+
                     //itens.remove(Pozi);
                     //notifyItemRemoved(Pozi);
                     Toast.makeText(context, "Jogo Excluido", Toast.LENGTH_SHORT).show();
@@ -1186,7 +1196,9 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         }
 
         protected void onPostExecute(String file_url) {
-            new Poker_main.GetDados_jogos().execute();
+            idjogo = "0";
+            descrijogo = "";
+            new GetDados_jogos().execute();
         }
 
     }
@@ -1552,7 +1564,18 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
 
         }
+        if(resultCode == 2){
+            Intent iin= getIntent();
+            Bundle b = iin.getExtras();
 
+            if(b!=null)
+            {
+                idjogo =(String) b.get("ID");
+            }else{
+                idjogo = "0";
+            }
+            new GetDados_jogos().execute();
+        }
     }
     private void closeKeyboard(){
         View view = this.getCurrentFocus();
