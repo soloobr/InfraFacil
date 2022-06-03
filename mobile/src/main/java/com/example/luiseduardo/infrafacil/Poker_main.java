@@ -1,8 +1,6 @@
 package com.example.luiseduardo.infrafacil;
 
 import static com.example.luiseduardo.infrafacil.JSONParser.json;
-import static com.example.luiseduardo.infrafacil.PecaFragment.Somavebdas;
-import static com.example.luiseduardo.infrafacil.PecaFragment.lsvendas;
 import static com.example.luiseduardo.infrafacil.Poker_new.MoneyTextWatcher.getCurrencySymbol;
 
 import android.Manifest;
@@ -19,7 +17,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
@@ -35,7 +32,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -46,7 +42,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
@@ -68,12 +63,10 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -214,6 +207,8 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                 new GetDados_jogos().execute();
             }
         });
+
+/*
         Intent iin= getIntent();
         Bundle b = iin.getExtras();
 
@@ -222,7 +217,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             Origem =(String) b.get("STRING_ORIGEM");
         }else{
             Origem = "ADDITEM";
-        }
+        }*/
         //idjogo = "0";
         //OcorList = new ArrayList<>();
         new GetDados_jogos().execute();
@@ -711,16 +706,70 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
 
         //if (title.equals("Deletar")){
-            final ImageView img = promptView.findViewById(R.id.imgaddplayers);
-            img.setImageResource(R.mipmap.usercircledelete);
+        CircleImageView img = (CircleImageView) promptView.findViewById(R.id.imgaddplayers);
+        /*img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //((Poker) getActivity()).turnOffFrag();
+                //Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
+                if (ContextCompat.checkSelfPermission(Poker_main.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                {
+                    ActivityCompat.requestPermissions((Activity) Poker_main.this, new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+                    Toast.makeText(Poker_main.this, "sem permissão", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                }
 
-            final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
-            tvaction.setText("Excluir Jogo");
+            }
+        });*/
 
-            final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
-            ednome.setText(descrijogo);
+        if(sImg.equals("0")){
+            Picasso.with(Poker_main.this).load("http://futsexta.16mb.com/Poker/imgplayer/useredit.png").into(img);
+        }else{
+            if(Poker.reload){
+                Picasso.with(Poker_main.this).load(sImg).networkPolicy(NetworkPolicy.NO_CACHE)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE).into(img);
+
+            }else{
+                Picasso.with(Poker_main.this).load(sImg).into(img);
+            }
+
+
+            //Picasso.with(getContext()).load(data.get(pos).getFeed_thumb_image()).memoryPolicy(MemoryPolicy.NO_CACHE).into(img);
+        }
+            //final ImageView img = promptView.findViewById(R.id.imgaddplayers);
+            //img.setImageResource(R.mipmap.usercircledelete);
+
+        final TextView nameview = promptView.findViewById(R.id.tvname);
+        nameview.setText(descrijogo);
+
+        final TextView tvaction = promptView.findViewById(R.id.tvactionplayer);
+        tvaction.setVisibility(View.VISIBLE);
+        tvaction.setText("Excluir Jogo?");
+
+
+
+        final TextView txnome = promptView.findViewById(R.id.txnomep);
+        txnome.setVisibility(View.GONE);
+        final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
+        //ednome.setText(sUsername);
+        //ednome.setEnabled(false);
+        //ednome.setFocusable(false);
+        ednome.setVisibility(View.GONE);
+
+
+
+
+            //final TextView tvaction = promptView.findViewById(R.id.tvname);
+            //tvaction.setText("Excluir Jogo");
+
+            //final EditText ednome = promptView.findViewById(R.id.ednomePlayer);
+            //ednome.setText(descrijogo);
             //ednome.setEnabled(false);
-            ednome.setFocusable(false);
+            //ednome.setFocusable(false);
             Delete = true;
 
 
@@ -944,6 +993,9 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            pDialog = new ProgressDialog(Poker_main.this);
+            pDialog.setMessage("Buscando Jogos...");
+            pDialog.show();
         }
 
         @Override
@@ -1011,7 +1063,9 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
             if (json.isEmpty()) {
 
             }else {
@@ -1022,27 +1076,30 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
         }
     }
-    class GetDados_jogos_from_date extends AsyncTask<Void, Void, Void> {
+    class GetDados_jogos_from_date extends AsyncTask<Void, Void, String> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
+            pDialog = new ProgressDialog(Poker_main.this);
+            pDialog.setMessage("Buscando Jogos...");
+            pDialog.show();
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected String doInBackground(Void... voids) {
 
             List params = new ArrayList();
             params.add(new BasicNameValuePair("idjogo",idjogo));
             //params.add(new BasicNameValuePair("descri",descrijogo));
             params.add(new BasicNameValuePair("searchedata",searchidata));
 
-            JSONObject jsonD = new JSONObject();
-            jsonD = jsonParser.makeHttpRequest(urlGetJogoFordate,"POST",
+            JSONObject json = new JSONObject();
+            json = jsonParser.makeHttpRequest(urlGetJogoFordate,"POST",
                     params);
 
             if (json != null) {
+                int success;
                 try {
                     JSONObject parent = new JSONObject(String.valueOf(json));
                     JSONArray eventDetails = parent.getJSONArray("jogo");
@@ -1071,17 +1128,17 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                     }
 
 
-                } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                            "Jogos não encontrado nesta data." ,
-                                            Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    });
+                    success = json.getInt(TAG_SUCCESS);
+                    if (success == 1) {
+                        Log.d("successo!", json.toString());
+                        return json.getString(TAG_MESSAGE);
+
+                    } else {
+                        Log.d("Jogo não Atualizado", json.getString(TAG_MESSAGE));
+                        return json.getString(TAG_MESSAGE);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             } else{
                 Toast.makeText(getApplicationContext(),
@@ -1093,9 +1150,24 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         }
 
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+            if (result != null) {
+
+                if(result.equals("Jogo Não Localizado")){
+                    //LoadPhotos();
+                    // if(bitmap != null){
+
+                    //   ImageUploadToServerFunctionNewGame();
+                    // }
+
+                    Toast.makeText(Poker_main.this, result, Toast.LENGTH_LONG).show();
+                };
+            }
+            if (pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
             if (json.isEmpty()) {
 
             }else {
@@ -1565,15 +1637,17 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
 
         }
         if(resultCode == 2){
-            Intent iin= getIntent();
-            Bundle b = iin.getExtras();
+            //Intent intent= data;
+            final String result = data.getStringExtra("ID");
+            //Bundle b = data.getExtras();
 
-            if(b!=null)
-            {
-                idjogo =(String) b.get("ID");
-            }else{
-                idjogo = "0";
-            }
+            //if(b!=null)
+            //{
+             idjogo = result;
+            descrijogo = "0";//b.getString("ID");
+            //}else{
+                //idjogo = "0";
+            //}
             new GetDados_jogos().execute();
         }
     }
@@ -1605,8 +1679,8 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             //ImageView img = (ImageView) df.getView().findViewById(R.id.imgaddplayers);
             //img.setImageBitmap(photo);
             //new GetDados().execute();
-            idjogo = "0";
-            descrijogo = "";
+            //idjogo = "0";
+            //descrijogo = "";
             df.dismiss();
             ft.remove(df);
 

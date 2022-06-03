@@ -111,6 +111,7 @@ public class Poker_new extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newpoker);
 
+
         img = (CircleImageView) findViewById(R.id.imgaddplayers);
         btndata =  (ImageButton) findViewById(R.id.btn_date);
         btncanceljogo = (Button) findViewById(R.id.btnCancelarnjogo);
@@ -146,7 +147,7 @@ public class Poker_new extends AppCompatActivity implements
         btnsavejogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GetImageNameFromEditText = sUsername;
+
 
                 TextView dateEditText = (TextView) findViewById(R.id.editTextDate);
                 ssData = dateEditText.getText().toString();
@@ -162,6 +163,8 @@ public class Poker_new extends AppCompatActivity implements
                     Toast.makeText(Poker_new.this, "Favor Preencher o nome do Jogo", Toast.LENGTH_SHORT).show();
                     usernameEditText.requestFocus();
                     return;
+                }else{
+                    GetImageNameFromEditText = sUsername;
                 }
 
 
@@ -318,13 +321,9 @@ public class Poker_new extends AppCompatActivity implements
         @Override
         protected String doInBackground(String... args) {
 
-
-
-
             int success;
             String nweid;
             try {
-
                 // Building Parameters
                 List params = new ArrayList();
 
@@ -345,19 +344,14 @@ public class Poker_new extends AppCompatActivity implements
                 JSONObject json = jsonParser.makeHttpRequest(GETINFO_URL, "POST",
                         params);
 
-
-                // json success tag
                 success = json.getInt(TAG_SUCCESS);
                 nweid = json.getString(TAG_ID);
                 if (success == 1) {
                     Log.d("Jogo Atualizado", json.getString(TAG_MESSAGE));
                     return json.getString(TAG_MESSAGE);
-
-                    //finish();
                 } else if (success == 0) {
                     Log.d("successo jogo criado!", json.toString());
                     newidjogo = nweid;
-                    //finish();
                     return json.getString(TAG_MESSAGE);
                 } else{
                     Log.d("Jogo não Criado", json.getString(TAG_MESSAGE));
@@ -389,12 +383,13 @@ public class Poker_new extends AppCompatActivity implements
                 };
             }
             //new Poker_main.GetDados_jogos();
+            final Intent data = new Intent();
+            //intent.putExtra("someKey", someData);
             //Intent intent=new Intent();
-            //intent.putExtra("ID",newidjogo);
-            //setResult(2,intent);
-            //finish();
-
-
+            data.putExtra("ID", newidjogo);
+            //intent.putExtra(,);
+            setResult(2,data);
+            finish();
         }
 
 
