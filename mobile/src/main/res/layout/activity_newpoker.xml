@@ -34,7 +34,7 @@
                         android:layout_width="130dp"
                         android:layout_height="130dp"
                         android:padding="5dp"
-                        android:src="@drawable/chips_98557128"
+                        android:src="@mipmap/chip"
                         app:civ_border_color="@android:color/transparent"
                         app:civ_border_width="3dp" />
 
@@ -113,6 +113,35 @@
             </TableLayout>
 
             <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow android:layout_width="fill_parent">
+
+
+                    <TextView
+                        android:id="@+id/lnomecli"
+
+                        android:layout_width="78dp"
+                        android:text="Descrição:"
+                        android:textStyle="bold" />
+
+                    <AutoCompleteTextView
+                        android:id="@+id/namejogo"
+                        android:layout_width="348dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="false"
+                        android:layout_marginTop="0dp"
+                        android:imeOptions="actionNext"
+                        android:longClickable="false"
+                        android:singleLine="true">
+
+                    </AutoCompleteTextView>
+
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
@@ -154,35 +183,6 @@
                 </TableRow>
 
 
-            </TableLayout>
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TableRow android:layout_width="fill_parent">
-
-
-                    <TextView
-                        android:id="@+id/lnomecli"
-
-                        android:layout_width="78dp"
-                        android:text="Descrição:"
-                        android:textStyle="bold" />
-
-                    <AutoCompleteTextView
-                        android:id="@+id/namejogo"
-                        android:layout_width="348dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="false"
-                        android:layout_marginTop="0dp"
-                        android:imeOptions="actionNext"
-                        android:longClickable="false"
-                        android:singleLine="true">
-
-                    </AutoCompleteTextView>
-
-                </TableRow>
             </TableLayout>
 
             <TableLayout

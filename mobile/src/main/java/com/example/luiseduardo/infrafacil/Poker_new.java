@@ -78,12 +78,13 @@ public class Poker_new extends AppCompatActivity implements
     CircleImageView img;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private static String Mes,Dia,Ano,sData,sSdata;
-    TextView dateEditText;
-    private String datejogo ;
+    TextView dateEditText,Nextid;
+    public static String datejogo, nextid ;
     private EditText editvalorentrada,editvalorrebuy,editvaloraddon, editqtdentrada,editqtdrebuy,editqtdaddon;
     private ProgressDialog pDialog;
     JSONParser jsonParser = new JSONParser();
     private static String GETINFO_URL = "http://futsexta.16mb.com/Poker/Poker_insert_Jogo.php";
+    private static String GETNEXTID_URL = "http://futsexta.16mb.com/Poker/Poker_next_id_Jogo.php";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
     private static final String TAG_ID = "id";
@@ -113,6 +114,7 @@ public class Poker_new extends AppCompatActivity implements
 
 
         img = (CircleImageView) findViewById(R.id.imgaddplayers);
+        Nextid = (TextView)  findViewById(R.id.textViewNumJogo);
         btndata =  (ImageButton) findViewById(R.id.btn_date);
         btncanceljogo = (Button) findViewById(R.id.btnCancelarnjogo);
         btnsavejogo = (Button) findViewById(R.id.btnSalvarjogo);
@@ -136,6 +138,7 @@ public class Poker_new extends AppCompatActivity implements
         LinearLayout LButtons = (LinearLayout) findViewById(R.id.LayoutButtons);
         LButtons.setVisibility(View.VISIBLE);
 
+        new GetNextIDJogo().execute();
 
         btncanceljogo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,16 +150,6 @@ public class Poker_new extends AppCompatActivity implements
         btnsavejogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                TextView dateEditText = (TextView) findViewById(R.id.editTextDate);
-                ssData = dateEditText.getText().toString();
-                if (ssData.matches("")) {
-                    Toast.makeText(Poker_new.this, "Favor Selecionar a data do Jogo", Toast.LENGTH_SHORT).show();
-                    btndata.performClick();
-                    return;
-                }
-
                 AutoCompleteTextView usernameEditText = (AutoCompleteTextView) findViewById(R.id.namejogo);
                 sUsername = usernameEditText.getText().toString();
                 if (sUsername.matches("")) {
@@ -167,6 +160,14 @@ public class Poker_new extends AppCompatActivity implements
                     GetImageNameFromEditText = sUsername;
                 }
 
+
+                TextView dateEditText = (TextView) findViewById(R.id.editTextDate);
+                ssData = dateEditText.getText().toString();
+                if (ssData.matches("")) {
+                    Toast.makeText(Poker_new.this, "Favor Selecionar a data do Jogo", Toast.LENGTH_SHORT).show();
+                    btndata.performClick();
+                    return;
+                }
 
                 TextView Vldentrada = (TextView) findViewById(R.id.edvalorentrada);
                 sVldentrada = Vldentrada.getText().toString();
@@ -303,7 +304,6 @@ public class Poker_new extends AppCompatActivity implements
                     .hideSoftInputFromWindow(name.getWindowToken(), 0);*/
 
     }
-
     class InsertJogo extends AsyncTask<String, String, String> {
 
 
@@ -374,10 +374,10 @@ public class Poker_new extends AppCompatActivity implements
 
                 if(file_url.equals("Jogo Inserido com sucesso!")){
                     //LoadPhotos();
-                   // if(bitmap != null){
+                    // if(bitmap != null){
 
-                     //   ImageUploadToServerFunctionNewGame();
-                   // }
+                    //   ImageUploadToServerFunctionNewGame();
+                    // }
 
                     Toast.makeText(Poker_new.this, file_url, Toast.LENGTH_LONG).show();
                 };
@@ -390,6 +390,56 @@ public class Poker_new extends AppCompatActivity implements
             //intent.putExtra(,);
             setResult(2,data);
             finish();
+        }
+
+
+    }
+    class GetNextIDJogo extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        @Override
+        protected String doInBackground(String... args) {
+            int success;
+            //String nextid;
+            try {
+                List params = new ArrayList();
+                params.add(new BasicNameValuePair("id", "0"));
+
+                JSONObject json = jsonParser.makeHttpRequest(GETNEXTID_URL, "POST",
+                        params);
+
+                success = json.getInt(TAG_SUCCESS);
+                nextid = json.getString(TAG_ID);
+                if (success == 1) {
+                    Log.d("Next Jogo", json.getString(TAG_MESSAGE));
+                    return json.getString(TAG_MESSAGE);
+
+                } else{
+                    Log.d("Not Next Jogo", json.getString(TAG_MESSAGE));
+                    return json.getString(TAG_MESSAGE);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+
+        }
+
+
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog once product deleted
+           // pDialog.dismiss();
+            if (file_url != null) {
+
+                if(file_url.equals("Next Jogo")){
+                    Nextid.setText(nextid);
+                };
+            }
         }
 
 
