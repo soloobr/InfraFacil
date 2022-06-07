@@ -186,7 +186,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
-                closeKeyboard();
+                //closeKeyboard();
 
             }
         });
@@ -1609,10 +1609,6 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
     @Override
     protected void onResume() {
         super.onResume();
-        //new Poker_main.GetDados_jogos().execute();
-        //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        //imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-        //closeKeyboard();
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

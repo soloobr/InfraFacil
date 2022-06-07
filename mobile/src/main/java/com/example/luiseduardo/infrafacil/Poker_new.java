@@ -143,6 +143,7 @@ public class Poker_new extends AppCompatActivity implements
         btncanceljogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                closeKeyboard();
                 finish();
             }
         });

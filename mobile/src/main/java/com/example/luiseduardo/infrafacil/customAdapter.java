@@ -15,6 +15,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.icu.text.NumberFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -255,44 +257,72 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
 
-                    if(mContext != null) {
-                        int position = getAdapterPosition();
-                        AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-                        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-                        View promptView = layoutInflater.inflate(R.layout.custom_alertplayers, null);
+                    if (mContext != null) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        View view = ((Activity) mContext).getLayoutInflater().inflate(R.layout.custom_alertplayers,null);
+                        TextView tvcancel = (TextView)view.findViewById(R.id.btn_cancel);
+                        TextView tvdisconnect = (TextView)view.findViewById(R.id.btn_confirmar);
+
+                        builder.setView(view);
+                        final AlertDialog ad = builder.show();
+                        ad.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
 
                         idplayer = String.valueOf(tv_idplayer.getText());
                         //rebuy = String.valueOf(tv_qtdrebuy.getText());
                         //addon = String.valueOf(tv_qtdaddon.getText());
-                        //valor = String.valueOf(restotal);
+                        //valor = String.valueOf(tv_valortotal);
                         imageuser = tv_imgpatch;
 
-                        final TextView tvnome = promptView.findViewById(R.id.alnomeplayer);
+                        final CircleImageView imglist = (CircleImageView) view.findViewById(R.id.imgaddplayerslist);
+
+                        if(imageuser.equals("0")){
+                            Picasso.with(mContext).load("http://futsexta.16mb.com/Poker/imgplayer/useredit.png").into(imglist);
+                        }else{
+                            if(Poker.reload){
+                                Picasso.with(mContext).load(imageuser).networkPolicy(NetworkPolicy.NO_CACHE)
+                                        .memoryPolicy(MemoryPolicy.NO_CACHE).into(imglist);
+
+                            }else{
+                                Picasso.with(mContext).load(imageuser).into(imglist);
+                            }
+                        }
+
+                        final TextView tvqtdaddon = view.findViewById(R.id.alqtdaddon);
+                        tvqtdaddon.setText(String.valueOf(tv_qtdaddon.getText()));
+
+                        final TextView tvvalor = view.findViewById(R.id.tvvalor);
+                        tvvalor.setText(String.valueOf(tv_valortotal.getText()));
+
+                        final TextView tvnome = view.findViewById(R.id.alnomeplayer);
                         tvnome.setText(String.valueOf(tv_nome.getText()));
 
-                        final TextView tvid = promptView.findViewById(R.id.alidplayer);
+                        final TextView tvid = view.findViewById(R.id.alidplayer);
                         tvid.setText(String.valueOf(tv_idplayer.getText()));
 
-                        final TextView tvqtdreb = promptView.findViewById(R.id.alqtdrebuy);
+                        final TextView tvqtdreb = view.findViewById(R.id.alqtdrebuy);
                         tvqtdreb.setText(String.valueOf(tv_qtdrebuy.getText()));
 
-                        final CheckBox tvaddontrue = promptView.findViewById(R.id.aladdontrue);
+                        final CheckBox tvaddontrue = view.findViewById(R.id.aladdontrue);
                         tvaddontrue.setText(String.valueOf(tv_qtdaddon.getText()));
                         if (tv_qtdaddon.getText().equals("0")) {
                             tvaddontrue.setText(String.valueOf("Não"));
                             tvaddontrue.setChecked(false);
+
+
                         }
                         if (tv_qtdaddon.getText().equals("1")) {
                             tvaddontrue.setText(String.valueOf("Sim"));
                             tvaddontrue.setChecked(true);
+
+
                         }
-                        final TextView tvqtdaddon = promptView.findViewById(R.id.alqtdaddon);
-                        tvqtdaddon.setText(String.valueOf(tv_qtdaddon.getText()));
 
-                        alert.setView(promptView);
-                        alert.setCancelable(false);
 
-                        ImageButton btn_1 = (ImageButton) promptView.findViewById(R.id.btndeleterebuy);
+                        //alert.setView(promptView);
+                        //alert.setCancelable(false);
+
+                        ImageButton btn_1 = (ImageButton) view.findViewById(R.id.btndeleterebuy);
                         btn_1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -301,7 +331,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                                 //do required function
                                 // don't forget to call alertD.dismiss()
                                 //Toast.makeText(mContext, "DELETE Rebuy", Toast.LENGTH_SHORT).show();
-
+                                addon = String.valueOf(tvqtdaddon.getText());
 
                                 if (tvqtdreb.getText().equals("0")) {
                                     Toast.makeText(mContext, "Rebuy não pode ser negativo!", Toast.LENGTH_SHORT).show();
@@ -314,12 +344,29 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                                     tvqtdreb.setText(String.valueOf(reb));
                                 }
 
+                                int ent = (int) Double.parseDouble(vlentrada);
+                                int vlreb = (int) Double.parseDouble(vlrebuy);
+                                int vlad = (int) Double.parseDouble(vladdon);
 
-                                //tv_qtdrebuy.setText(String.valueOf(reb));
+                                int reb = (int) Double.parseDouble(String.valueOf(tvqtdreb.getText()));
+                                int rebparcial = reb * vlreb;
+
+                                int ads = (int) Double.parseDouble(addon);
+                                int adparcial = ads * vlad;
+
+                                int total = rebparcial + adparcial + ent;
+
+
+                                String valorr = String.valueOf(total);
+
+                                BigDecimal parsed = parseToBigDecimal(valorr);
+                                String formatted;
+                                formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
+                                tvvalor.setText(formatted);
 
                             }
                         });
-                        ImageButton btn_2 = (ImageButton) promptView.findViewById(R.id.btnaddrebuy);
+                        ImageButton btn_2 = (ImageButton) view.findViewById(R.id.btnaddrebuy);
                         btn_2.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -328,6 +375,7 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                                 // don't forget to call alertD.dismiss()
                                 //Toast.makeText(mContext, "ADD Rebuy", Toast.LENGTH_SHORT).show();
                                 rebuy = String.valueOf(tvqtdreb.getText());
+                                addon = String.valueOf(tvqtdaddon.getText());
 
                                 int reb = (int) Double.parseDouble(rebuy);
 
@@ -335,23 +383,37 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                                 tvqtdreb.setText(String.valueOf(reb));
                                 //tv_qtdrebuy.setText(String.valueOf(reb));
 
+                                int ent = (int) Double.parseDouble(vlentrada);
+                                int vlreb = (int) Double.parseDouble(vlrebuy);
+                                int vlad = (int) Double.parseDouble(vladdon);
+
+                                int reb1 = (int) Double.parseDouble(String.valueOf(tvqtdreb.getText()));
+                                int rebparcial = reb1 * vlreb;
+
+                                int ads = (int) Double.parseDouble(addon);
+                                int adparcial = ads * vlad;
+
+                                int total = rebparcial + adparcial + ent;
+
+
+                                String valorr = String.valueOf(total);
+
+                                BigDecimal parsed = parseToBigDecimal(valorr);
+                                String formatted;
+                                formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
+                                tvvalor.setText(formatted);
                             }
                         });
 
-                        alert.setCancelable(false);
+                        //alert.setCancelable(true);
 
-                        alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        Button btn_cancel = (Button) view.findViewById(R.id.btn_cancel);
 
+
+                        Button btn_confirmar = (Button) view.findViewById(R.id.btn_confirmar);
+                        btn_confirmar.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(mContext, "Movimentação cancelada", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                        alert.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+                            public void onClick(View view) {
 
                                 idplayer = String.valueOf(tv_idplayer.getText());
                                 rebuy = String.valueOf(tvqtdreb.getText());
@@ -366,8 +428,8 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                                 int reb = (int) Double.parseDouble(rebuy);
                                 int rebparcial = reb * vlreb;
 
-                                int ad = (int) Double.parseDouble(addon);
-                                int adparcial = ad * vlad;
+                                int ads = (int) Double.parseDouble(addon);
+                                int adparcial = ads * vlad;
 
                                 int total = rebparcial + adparcial + ent;
 
@@ -383,9 +445,11 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                                 tv_qtdrebuy.setText(String.valueOf(reb));
                                 tv_qtdaddon.setText(addon);
                                 new UpdatePlayer().execute();
-
+                               ad.dismiss();
                                 //Poker.vltotaljogo.setText(formatted);
                             }
+
+
                         });
 
                         //CheckBox btn_1= (ImageButton) promptView.findViewById(R.id.btndeleterebuy);
@@ -398,18 +462,107 @@ public class customAdapter extends RecyclerView.Adapter<customAdapter.ViewHolder
                                     tvaddontrue.setText(String.valueOf("Não"));
                                     tvaddontrue.setChecked(false);
                                     tvqtdaddon.setText("0");
+
+                                    rebuy = String.valueOf(tvqtdreb.getText());
+                                    addon = String.valueOf(tvqtdaddon.getText());
+
+                                    int ent = (int) Double.parseDouble(vlentrada);
+                                    int vlreb = (int) Double.parseDouble(vlrebuy);
+                                    int vlad = (int) Double.parseDouble(vladdon);
+
+                                    int reb = (int) Double.parseDouble(String.valueOf(tvqtdreb.getText()));
+                                    int rebparcial = reb * vlreb;
+
+                                    int ads = (int) Double.parseDouble(addon);
+                                    int adparcial = ads * vlad;
+
+                                    int total = rebparcial + adparcial + ent;
+
+
+                                    String valorr = String.valueOf(total);
+
+                                    BigDecimal parsed = parseToBigDecimal(valorr);
+                                    String formatted;
+                                    formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
+                                    tvvalor.setText(formatted);
                                 } else if (tvaddontrue.getText() == "Não") {
                                     tvaddontrue.setText(String.valueOf("Sim"));
                                     tvaddontrue.setChecked(true);
                                     tvqtdaddon.setText("1");
+
+                                    rebuy = String.valueOf(tvqtdreb.getText());
+                                    addon = String.valueOf(tvqtdaddon.getText());
+
+                                    int ent = (int) Double.parseDouble(vlentrada);
+                                    int vlreb = (int) Double.parseDouble(vlrebuy);
+                                    int vlad = (int) Double.parseDouble(vladdon);
+
+                                    int reb = (int) Double.parseDouble(String.valueOf(tvqtdreb.getText()));
+                                    int rebparcial = reb * vlreb;
+
+                                    int ads = (int) Double.parseDouble(addon);
+                                    int adparcial = ads * vlad;
+
+                                    int total = rebparcial + adparcial + ent;
+
+
+                                    String valorr = String.valueOf(total);
+
+                                    BigDecimal parsed = parseToBigDecimal(valorr);
+                                    String formatted;
+                                    formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
+                                    tvvalor.setText(formatted);
                                 }
 
 
                             }
                         });
 
-                        final AlertDialog dialog = alert.create();
-                        dialog.show();
+
+
+                        //final AlertDialog dialog = alert.create();
+                        //final AlertDialog dialog = alert.show();
+                        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        //dialog.show();
+
+                        btn_cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Toast.makeText(mContext, "Movimentação cancelada", Toast.LENGTH_SHORT).show();
+                                ad.dismiss();
+                            }
+                        });
+
+
+
+
+                       /* tvdisconnect.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ad.dismiss();
+
+                            }
+                        });*/
+/*
+                        tvcancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ad.dismiss();
+                            }
+                        });*/
+                        /*
+                        int position = getAdapterPosition();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+                        View promptView = inflater.inflate(R.layout.custom_alertplayers, null);
+                        //View promptView = inflater.inflate(R.layout.custom_alertplayers, null);
+
+                        //LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+                        builder.setView(promptView);
+                        final AlertDialog ad = builder.show();*/
+
+
+
                     }
                 }
             });
