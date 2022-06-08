@@ -28,6 +28,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".CalendarActivity"
+            android:label="Standard calendar" />
+
+        <activity
             android:name="com.example.luiseduardo.infrafacil.Poker_main"
             android:label="Poker - Jogo."
             android:windowSoftInputMode="stateHidden"

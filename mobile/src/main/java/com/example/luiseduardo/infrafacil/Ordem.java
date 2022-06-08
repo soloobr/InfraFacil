@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +15,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -136,8 +137,8 @@ public class Ordem extends AppCompatActivity implements AdapterView.OnItemClickL
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
+        //super.onStart();
         super.onStart();
         new GetDados().execute();
         new CountDados().execute();

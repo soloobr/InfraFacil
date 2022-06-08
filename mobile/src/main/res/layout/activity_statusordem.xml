@@ -418,25 +418,25 @@
                     android:orientation="vertical"
                     android:paddingLeft="5dp">
 
-                    <android.support.design.widget.TabLayout
+                    <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tablayout"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical">
 
-                        <android.support.design.widget.TabItem
+                        <com.google.android.material.tabs.TabItem
                             android:id="@+id/tabservico"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Serviços" />
 
-                        <android.support.design.widget.TabItem
+                        <com.google.android.material.tabs.TabItem
                             android:id="@+id/tabpeca"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Peças" />
 
-                    </android.support.design.widget.TabLayout>
+                    </com.google.android.material.tabs.TabLayout>
 
                 </TableRow>
             </TableLayout>
@@ -466,7 +466,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
-                            <android.support.v4.view.ViewPager
+                            <androidx.viewpager.widget.ViewPager
                                 android:id="@+id/viwerpage"
                                 android:layout_width="match_parent"
                                 android:layout_height="300dp"
@@ -479,7 +479,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="TextView" />
-                            </android.support.v4.view.ViewPager>
+                            </androidx.viewpager.widget.ViewPager>
                         </LinearLayout>
                     </ScrollView>
 

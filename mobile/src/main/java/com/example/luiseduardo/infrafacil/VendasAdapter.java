@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+//import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,8 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.example.luiseduardo.infrafacil.PecaFragment.lsvendas;
+
+//import androidx.recyclerview.widget.RecyclerView;
 
 public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHolder> {
 

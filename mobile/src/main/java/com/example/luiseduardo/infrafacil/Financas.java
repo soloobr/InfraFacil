@@ -8,8 +8,6 @@ import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +15,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -30,7 +31,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class Financas extends AppCompatActivity  implements View.OnClickListener{
+public class Financas extends AppCompatActivity implements View.OnClickListener{
 
     private Context context;
     JSONParser jsonParser = new JSONParser();

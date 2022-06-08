@@ -1,21 +1,15 @@
 package com.example.luiseduardo.infrafacil;
 
 import static com.example.luiseduardo.infrafacil.MoneyTextWatcher.getCurrencySymbol;
-import static com.example.luiseduardo.infrafacil.Poker.idplayer;
-import static com.example.luiseduardo.infrafacil.Poker.lsplayer;
-import static com.example.luiseduardo.infrafacil.customAdapter.addon;
 import static com.example.luiseduardo.infrafacil.customAdapter.idjogo;
 import static com.example.luiseduardo.infrafacil.customAdapter.imageuser;
-import static com.example.luiseduardo.infrafacil.customAdapter.rebuy;
 import static com.example.luiseduardo.infrafacil.customAdapter.sUsername;
 import static com.example.luiseduardo.infrafacil.customAdapter.totaladdon;
 import static com.example.luiseduardo.infrafacil.customAdapter.totalplayers;
 import static com.example.luiseduardo.infrafacil.customAdapter.totalrebuy;
-import static com.example.luiseduardo.infrafacil.customAdapter.valor;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -25,15 +19,6 @@ import android.graphics.Bitmap;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +30,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
@@ -72,7 +63,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.crypto.Cipher;
 import javax.net.ssl.HttpsURLConnection;
 
 import de.hdodenhof.circleimageview.CircleImageView;

@@ -12,12 +12,12 @@ import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabItem;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+//import android.support.annotation.Nullable;
+//import android.support.design.widget.TabItem;
+//import android.support.design.widget.TabLayout;
+//import android.support.v4.view.PagerAdapter;
+//import android.support.v4.view.ViewPager;
+//import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -35,6 +35,13 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -204,7 +211,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         editDescri = (EditText) findViewById(R.id.editDescri);
         DataPrev = (EditText) findViewById(R.id.editEmailcli);
         //editServRealizado = (EditText) findViewById(R.id.editServRealizado);
-        //editServRealizado2 = (EditText) findViewById(R.id.editServRealizado2);
+        editServRealizado2 = (EditText) findViewById(R.id.editServRealizado2);
         editData = (EditText) findViewById(R.id.editEmailcli);
 
 
@@ -683,8 +690,8 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             edtnome.setText(nnome);
             editDescri.setText(neditDescri);
             DataPrev.setText(nDataPrev);
-            ServicoFragment.editServRealizado2.setText(neditServRealizado);
-            ServicoFragment.editServRealizado2.setEnabled(false);
+            //ServicoFragment.editServRealizado2.setText(neditServRealizado);
+            //ServicoFragment.editServRealizado2.setEnabled(false);
             PecaFragment.btnadd.setEnabled(false);
             PecaFragment.myrecyclerview.setEnabled(false);
 

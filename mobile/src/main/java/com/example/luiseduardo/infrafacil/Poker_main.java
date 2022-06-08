@@ -21,12 +21,6 @@ import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -49,6 +43,13 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
@@ -157,7 +158,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
         btnDatePicker.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                final Calendar c = Calendar.getInstance();
+               /* final Calendar c = Calendar.getInstance();
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
@@ -186,8 +187,11 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
+                /*
+                */
                 //closeKeyboard();
-
+                Intent intent = new Intent(Poker_main.this, CalendarActivity.class);
+                startActivity(intent);
             }
         });
         imgaddnew.setOnClickListener(new View.OnClickListener(){
@@ -1588,10 +1592,7 @@ public class Poker_main extends AppCompatActivity implements AdapterView.OnItemC
             return s.replaceAll("[.]", "").replaceAll("[-]", "").replaceAll("[/]", "").replaceAll("[(]", "").replaceAll("[ ]","").replaceAll("[:]", "").replaceAll("[)]", "");
         }
     }
-    public void onStart(){
-        super.onStart();
-        //new Poker_main.GetDados_jogos().execute();
-    }
+
     public void onStop() {
         super.onStop();
     }

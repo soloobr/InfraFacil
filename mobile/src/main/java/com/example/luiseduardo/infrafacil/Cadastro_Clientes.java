@@ -1,5 +1,7 @@
 package com.example.luiseduardo.infrafacil;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,9 +16,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+//import android.support.v4.app.ActivityCompat;
+//import android.support.v4.content.ContextCompat;
+//import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -46,6 +48,10 @@ import java.util.List;
 import java.util.Map;
 
 import static com.example.luiseduardo.infrafacil.JSONParser.json;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
 /**

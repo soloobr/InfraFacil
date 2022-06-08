@@ -3,7 +3,6 @@ package com.example.luiseduardo.infrafacil;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.luiseduardo.infrafacil.JSONParser.json;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Despesas extends AppCompatActivity {
 

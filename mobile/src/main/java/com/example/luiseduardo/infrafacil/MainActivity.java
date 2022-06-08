@@ -11,17 +11,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+//import android.support.design.widget.FloatingActionButton;
+//import android.support.design.widget.NavigationView;
+//import android.support.v4.app.ActivityCompat;
+//import android.support.v4.app.NavUtils;
+//import android.support.v4.content.ContextCompat;
+//import android.support.v4.view.GravityCompat;
+//import android.support.v4.widget.DrawerLayout;
+//import android.support.v4.widget.SwipeRefreshLayout;
+//import android.support.v7.app.ActionBarDrawerToggle;
+//import android.support.v7.app.AppCompatActivity;
+//import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +43,19 @@ import lecho.lib.hellocharts.model.SliceValue;
 
 import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NavUtils;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
@@ -53,7 +66,7 @@ public class MainActivity extends AppCompatActivity
     public static ArrayList<Map<String, String>> mPeopleList;
 
     private static final int CONTACTS_PERMISSION_CODE = 101;
-
+    private static final int CONTACTS_REQUEST = 1889;
 
     private ListView lv;
     ArrayList<HashMap<String, String>> newItemlist = new ArrayList<HashMap<String, String>>();
@@ -73,7 +86,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+         setContentView(R.layout.activity_main);
 
         checkPermission(Manifest.permission.READ_CONTACTS, CONTACTS_PERMISSION_CODE);
 
@@ -307,6 +320,15 @@ public class MainActivity extends AppCompatActivity
 
             mPeopleList.clear();
             ContentResolver cr = getContentResolver();
+
+            if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, CONTACTS_PERMISSION_CODE);
+                Toast.makeText(MainActivity.this, "sem permissão", Toast.LENGTH_SHORT).show();
+            } else {
+                //Intent cameraIntent = new Intent(ContactsContract.Contacts..MediaStore.ACTION_IMAGE_CAPTURE);
+                //startActivityForResult(cameraIntent, CONTACTS_REQUEST);
+            }
+
 
             Cursor people = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +38,8 @@ import java.util.List;
 import static com.example.luiseduardo.infrafacil.JSONParser.json;
 import static com.example.luiseduardo.infrafacil.PecaFragment.Somavebdas;
 import static com.example.luiseduardo.infrafacil.PecaFragment.lsvendas;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 //import android.support.v7.app.AlertDialog;
 

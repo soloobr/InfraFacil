@@ -12,9 +12,6 @@ import android.content.DialogInterface;
 import android.database.DataSetObserver;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +20,9 @@ import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
