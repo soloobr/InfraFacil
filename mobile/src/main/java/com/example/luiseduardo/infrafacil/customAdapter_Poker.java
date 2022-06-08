@@ -1,5 +1,8 @@
 package com.example.luiseduardo.infrafacil;
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+import static androidx.core.content.ContextCompat.startActivity;
+import static com.example.luiseduardo.infrafacil.CalendarActivity.descrijogo;
 import static com.example.luiseduardo.infrafacil.CalendarActivity.lsjogo;
 import static com.example.luiseduardo.infrafacil.MoneyTextWatcher.getCurrencySymbol;
 import static com.example.luiseduardo.infrafacil.Poker.lsplayer;
@@ -68,7 +71,7 @@ public class customAdapter_Poker extends RecyclerView.Adapter<customAdapter_Poke
     private int rowLayout;
     private Context mContext;
     private ItemClickListener clickListener;
-    public static String  sUsername,idplayer,idjogo,rebuy, addon, valor, vlrebuy,vladdon,vlentrada,totalrebuy,totaladdon,totalplayers,imageuser;
+    public static String  sUsername,idplayer,idjogo,rebuy, addon, valor, vlrebuy,vladdon,vlentrada,totalrebuy,totaladdon,totalplayers,imagejogo;
 
     private static String total = "0";
     JSONParser jsonParser = new JSONParser();
@@ -103,6 +106,7 @@ public class customAdapter_Poker extends RecyclerView.Adapter<customAdapter_Poke
     private static View layout;
     private WeakReference<CircleImageView> imageViewReference;
 
+    public static  String   ssData, sVldentrada,sVldrebuy,sVldaddon,sQtdentrada,sQtdrebuy,sQtdaddon,sImg;
 
     public final String APP_TAG = "MyCustomApp";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
@@ -140,6 +144,11 @@ public class customAdapter_Poker extends RecyclerView.Adapter<customAdapter_Poke
         myViewHolder.tv_Data.setText(city.getData());
         myViewHolder.tv_qtdplayers.setText(city.getQtdplayers());
         myViewHolder.tv_image_path = city.getImage_path();
+        myViewHolder.tv_vlentrada = city.getVlentrada();
+        myViewHolder.tv_vlrebuy = city.getVlrebuy();
+        myViewHolder.tv_vladdon = city.getVladdon();
+        myViewHolder.tv_id = city.getId();
+
 
 
 
@@ -151,19 +160,20 @@ public class customAdapter_Poker extends RecyclerView.Adapter<customAdapter_Poke
         vladdon = city.getVladdon();
         valor = city.getValor();
         sUsername = city.getNome();*/
-        imageuser = city.getImage_path();
+        imagejogo = city.getImage_path();
 
-       /* if(imageuser.equals("0")){
+        if(imagejogo.equals("0")){
             Picasso.with(mContext).load("http://futsexta.16mb.com/Poker/imgjogo/default.png").into(myViewHolder.tv_image);
         }else{
             if(Poker.reload){
-                Picasso.with(mContext).load(imageuser).networkPolicy(NetworkPolicy.NO_CACHE)
+                Picasso.with(mContext).load(imagejogo).networkPolicy(NetworkPolicy.NO_CACHE)
                         .memoryPolicy(MemoryPolicy.NO_CACHE).into(myViewHolder.tv_image);
 
             }else{
-                Picasso.with(mContext).load(imageuser).into(myViewHolder.tv_image);
+                Picasso.with(mContext).load(imagejogo).into(myViewHolder.tv_image);
             }
         }
+        /*
         //Picasso.with(mContext).load(imageuser).into(myViewHolder.tv_imglist);
         //rebuy = city.getRebuy();
         //addon = city.getAddon();
@@ -202,11 +212,11 @@ public class customAdapter_Poker extends RecyclerView.Adapter<customAdapter_Poke
         public TextView title;
         public ImageButton btnaddon;
         public ImageButton btnrebuy;
-        private TextView tv_id;
+        private String tv_id;
         //private TextView tv_nome;
         private TextView tv_Descricao;
         private TextView tv_Data;
-        private TextView tv_vlentrada;
+        private String tv_vlentrada;
         private String tv_qtdfichaentrada;
         private String tv_vlrebuy;
         private String tv_qtdficharebuy;
@@ -244,6 +254,22 @@ public class customAdapter_Poker extends RecyclerView.Adapter<customAdapter_Poke
                 public void onClick(View v) {
 
                     if (mContext != null) {
+
+
+                        idjogo = tv_id;
+                        descrijogo = String.valueOf(tv_Descricao.getText());
+                        sVldentrada = tv_vlentrada;
+                        sVldrebuy = tv_vlrebuy;
+                        sVldaddon = tv_vladdon;
+
+                        Intent intent = new Intent(mContext, Poker.class);
+                        intent.putExtra("id", idjogo);
+                        intent.putExtra("Drisc", descrijogo);
+                        intent.putExtra("ENTRADA", sVldentrada);
+                        intent.putExtra("REBUY", sVldrebuy);
+                        intent.putExtra("ADDON", sVldaddon);
+                        v.getContext().startActivity(intent);
+
                         /*
                         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                         View view = ((Activity) mContext).getLayoutInflater().inflate(R.layout.custom_alertplayers,null);
@@ -259,19 +285,19 @@ public class customAdapter_Poker extends RecyclerView.Adapter<customAdapter_Poke
                         //rebuy = String.valueOf(tv_qtdrebuy.getText());
                         //addon = String.valueOf(tv_qtdaddon.getText());
                         //valor = String.valueOf(tv_valortotal);
-                        imageuser = tv_imgpatch;
+                        imagejogo = tv_imgpatch;
 
                         final CircleImageView imglist = (CircleImageView) view.findViewById(R.id.imgaddplayerslist);
 
-                        if(imageuser.equals("0")){
+                        if(imagejogo.equals("0")){
                             Picasso.with(mContext).load("http://futsexta.16mb.com/Poker/imgplayer/useredit.png").into(imglist);
                         }else{
                             if(Poker.reload){
-                                Picasso.with(mContext).load(imageuser).networkPolicy(NetworkPolicy.NO_CACHE)
+                                Picasso.with(mContext).load(imagejogo).networkPolicy(NetworkPolicy.NO_CACHE)
                                         .memoryPolicy(MemoryPolicy.NO_CACHE).into(imglist);
 
                             }else{
-                                Picasso.with(mContext).load(imageuser).into(imglist);
+                                Picasso.with(mContext).load(imagejogo).into(imglist);
                             }
                         }
 
@@ -598,6 +624,9 @@ public class customAdapter_Poker extends RecyclerView.Adapter<customAdapter_Poke
             });
        }
 
+        private void startActivityForResult(Intent intent, int i) {
+        }
+
         @Override
         public void onClick(View view) {
 
@@ -856,10 +885,10 @@ public class customAdapter_Poker extends RecyclerView.Adapter<customAdapter_Poke
         if (title.equals("Deletar")){
             final ImageView img = promptView.findViewById(R.id.imgaddplayers);
             //img.setImageResource(R.mipmap.usercircledelete);
-            if(imageuser.equals("0")){
+            if(imagejogo.equals("0")){
                 Picasso.with(mContext).load("http://futsexta.16mb.com/Poker/imgplayer/userdelete.png").into(img);
             }else{
-                Picasso.with(mContext).load(imageuser).into(img);
+                Picasso.with(mContext).load(imagejogo).into(img);
             }
 
             final TextView nameview = promptView.findViewById(R.id.tvname);
@@ -887,10 +916,10 @@ public class customAdapter_Poker extends RecyclerView.Adapter<customAdapter_Poke
             //img.setImageResource(R.mipmap.boxout128);
             //Picasso.with(mContext).load("https://lh3.googleusercontent.com/-RYaeIsr3gxQ/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclMBGUWtlvkOi5n-9B_ltzdNbJzvQ/photo.jpg?sz=46").into(img);
 
-            if(imageuser.equals("0")){
+            if(imagejogo.equals("0")){
                 Picasso.with(mContext).load("http://futsexta.16mb.com/Poker/imgplayer/useredit.png").into(img);
             }else{
-                Picasso.with(mContext).load(imageuser).into(img);
+                Picasso.with(mContext).load(imagejogo).into(img);
             }
             layout = View.inflate(mContext, R.layout.custom_alertnewplayer, null);
             CircleImageView imgg = promptView.findViewById(R.id.imgaddplayers);

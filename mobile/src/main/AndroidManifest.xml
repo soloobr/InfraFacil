@@ -29,7 +29,7 @@
         </activity>
         <activity
             android:name=".CalendarActivity"
-            android:label="Standard calendar" />
+            android:label="Calendário dos Jogos" />
 
         <activity
             android:name="com.example.luiseduardo.infrafacil.Poker_main"

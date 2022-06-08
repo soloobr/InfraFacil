@@ -275,7 +275,7 @@ public class CalendarActivity extends AppCompatActivity implements ItemClickList
 
 
                 );
-
+/*
                 Button setDateButton = (Button) findViewById(R.id.setDateButton);
                 setDateButton.setOnClickListener(v -> {
                     try {
@@ -291,6 +291,7 @@ public class CalendarActivity extends AppCompatActivity implements ItemClickList
                                 Toast.LENGTH_LONG).show();
                     }
                 });
+                */
             }
 
 
