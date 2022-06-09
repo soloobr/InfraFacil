@@ -69,9 +69,6 @@ public class PecaFragment   extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
         //if (lsvendas != null && lsvendas.isEmpty()) {
        // }else {
             lsvendas = new ArrayList<>();
@@ -273,5 +270,14 @@ public class PecaFragment   extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    public static PecaFragment newInstance(int page, String title) {
+        PecaFragment fragmentFirst = new PecaFragment();
+        Bundle args = new Bundle();
+        args.putInt("someInt", page);
+        args.putString("someTitle", title);
+        fragmentFirst.setArguments(args);
+        return fragmentFirst;
     }
 }

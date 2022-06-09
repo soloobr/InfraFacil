@@ -89,7 +89,7 @@
         <activity
             android:name="com.example.luiseduardo.infrafacil.Status_Ordem"
             android:label="Infra - Descrição Ocor."
-            android:windowSoftInputMode="stateHidden"
+            android:windowSoftInputMode="adjustResize|adjustPan"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

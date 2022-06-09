@@ -18,11 +18,12 @@ import androidx.fragment.app.Fragment;
  */
 public class ServicoFragment extends Fragment {
 
-    /**
-     * @param context
-     */
+    static View v;
 
-    public static EditText editServRealizado2 = Status_Ordem.editServRealizado2;
+    private String title;
+    private int page;
+
+    public static EditText editServRealizado = Status_Ordem.editServRealizado2;
 
     @Override
     public void onAttach(Context context) {
@@ -39,6 +40,14 @@ public class ServicoFragment extends Fragment {
     public ServicoFragment() {
         // Required empty public constructor
     }
+    public static ServicoFragment newInstance(int page, String title) {
+        ServicoFragment fragmentFirst = new ServicoFragment();
+        Bundle args = new Bundle();
+        args.putInt("someInt", page);
+        args.putString("someTitle", title);
+        fragmentFirst.setArguments(args);
+        return fragmentFirst;
+    }
 
 
     @Override
@@ -49,11 +58,11 @@ public class ServicoFragment extends Fragment {
 
        // editServRealizado2 = (EditText) findViewById(R.id.editServRealizado2);
 
-        View view = inflater.inflate(R.layout.fragment_servico,null);
-        editServRealizado2 = (EditText) view.findViewById(R.id.editServRealizado2);
-        editServRealizado2.setText(editServRealizado2.getText());
+        v = inflater.inflate(R.layout.fragment_servico,container, false);
+        editServRealizado = (EditText) v.findViewById(R.id.editServRealizado);
+        //editServRealizado.setText("oi");
         //return inflater.inflate(R.layout.fragment_servico, container, false);
-        return (view);
+        return (v);
     }
 
 }

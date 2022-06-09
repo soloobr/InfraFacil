@@ -1,5 +1,7 @@
 package com.example.luiseduardo.infrafacil;
 
+import static com.example.luiseduardo.infrafacil.ServicoFragment.editServRealizado;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -38,6 +40,9 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabItem;
@@ -136,6 +141,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
     private static final String TAG_MESSAGE = "message";
     //private static final String TAG_PRODUCT = "ocorencia";
     //private static final String TAG_ID = "NUM_Ocorrencia";
+    FragmentPagerAdapter adapterViewPager;
 
     public static String IDORDEM ;
 
@@ -168,6 +174,11 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statusordem);
+
+        ViewPager vpPager = (ViewPager) findViewById(R.id.viwerpage);
+        adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
+        vpPager.setAdapter(adapterViewPager);
+
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -211,7 +222,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         editDescri = (EditText) findViewById(R.id.editDescri);
         DataPrev = (EditText) findViewById(R.id.editEmailcli);
         //editServRealizado = (EditText) findViewById(R.id.editServRealizado);
-        editServRealizado2 = (EditText) findViewById(R.id.editServRealizado2);
+        editServRealizado2 = (EditText) findViewById(R.id.editServRealizado);
         editData = (EditText) findViewById(R.id.editEmailcli);
 
 
@@ -225,15 +236,15 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         editStatus = (Spinner) findViewById(R.id.editStatus);
 
 
-        tabLayout = findViewById(R.id.tablayout);
-        tabpeca = findViewById(R.id.tabpeca);
-        tabservico = findViewById(R.id.tabservico);
+        //tabLayout = findViewById(R.id.tablayout);
+        //tabpeca = findViewById(R.id.tabpeca);
+        //tabservico = findViewById(R.id.tabservico);
         viewPager = findViewById(R.id.viwerpage);
 
-        pagerAdapter = new com.example.luiseduardo.infrafacil.PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(pagerAdapter);
+        //pagerAdapter = new com.example.luiseduardo.infrafacil.PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        //viewPager.setAdapter(pagerAdapter);
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+       /* tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 //editServRealizado2.setEnabled(true);
@@ -249,7 +260,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });
+        });*/
 
         editValorpca.addTextChangedListener(new MoneyTextWatcher(editValorpca));
         editValormo.addTextChangedListener(new MoneyTextWatcher(editValormo));
@@ -373,7 +384,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                         edtnome.setEnabled(false);
                         editDescri.setEnabled(false);
                         editTec.setEnabled(false);
-                        //editServRealizado.setEnabled(false);
+                        editServRealizado.setEnabled(false);
 
                         editValorpca.setEnabled(false);
                         editValormo.setEnabled(false);
@@ -412,7 +423,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                     btnaddtar.setEnabled(true);
                     btnDatePicker.setEnabled(true);
                     btnedit.setText("SALVAR");
-                    ServicoFragment.editServRealizado2.setEnabled(true);
+                    editServRealizado.setEnabled(true);
                     PecaFragment.btnadd.setEnabled(true);
                     PecaFragment.myrecyclerview.setEnabled(true);
                     btnfinaliza.setText("CANCELAR");
@@ -690,7 +701,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             edtnome.setText(nnome);
             editDescri.setText(neditDescri);
             DataPrev.setText(nDataPrev);
-            //ServicoFragment.editServRealizado2.setText(neditServRealizado);
+            editServRealizado.setText(neditServRealizado);
             //ServicoFragment.editServRealizado2.setEnabled(false);
             PecaFragment.btnadd.setEnabled(false);
             PecaFragment.myrecyclerview.setEnabled(false);
@@ -810,8 +821,8 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                 Data_Previ = ((EditText) findViewById(R.id.editEmailcli)).getText().toString();
                 String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
                 Data_Local = date;
-                //Servi_realizado = ((EditText) findViewById(R.id.editServRealizado)).getText().toString();
-                Servi_realizado = ServicoFragment.editServRealizado2.getText().toString();
+                Servi_realizado = ((EditText) findViewById(R.id.editServRealizado)).getText().toString();
+                Servi_realizado = editServRealizado.getText().toString();
                 Status = status;//((AutoCompleteTextView)findViewById(R.id.editStatus)).getText().toString();
 
 
@@ -1372,5 +1383,47 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         btn_date.setEnabled(false);
         btnaddtar.setEnabled(false);
         VendasAdapter.notifyItemChanged();
+    }
+
+    public static class MyPagerAdapter extends FragmentPagerAdapter {
+        private static int NUM_ITEMS = 2;
+
+        public MyPagerAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+        }
+
+        // Returns total number of pages
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
+
+        // Returns the fragment to display for that page
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0: // Fragment # 0 - This will show FirstFragment
+                    return ServicoFragment.newInstance(0, "Page # 1");
+                case 1: // Fragment # 0 - This will show FirstFragment different title
+                    return PecaFragment.newInstance(1, "Page # 2");
+                default:
+                    return null;
+            }
+        }
+
+        // Returns the page title for the top indicator
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0: // Fragment # 0 - This will show FirstFragment
+                    return "SERVIÇOS";
+                case 1: // Fragment # 0 - This will show FirstFragment different title
+                    return "PEÇAS";
+                default:
+                    return "Page " + position;
+            }
+
+        }
+
     }
 }
