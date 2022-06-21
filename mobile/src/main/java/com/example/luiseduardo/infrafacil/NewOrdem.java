@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
@@ -44,14 +45,15 @@ import java.util.List;
  */
 
 public class NewOrdem extends AppCompatActivity implements
-        OnClickListener{
+        OnClickListener, AdapterView.OnItemSelectedListener {
 
         private String TAG = NewOrdem.class.getSimpleName();
         private ProgressDialog pDialog;
         private Context context;
 
         EditText editDescri, editDesc, editData;
-        AutoCompleteTextView autoNome, autoTec;
+        AutoCompleteTextView autoNome ;
+        Spinner autoTec;
         ImageButton btnDatePicker;
 
         private int mYear, mMonth, mDay, mHour, mMinute;
@@ -60,6 +62,8 @@ public class NewOrdem extends AppCompatActivity implements
         private static String GETINFO_URL = "http://futsexta.16mb.com/Poker/insert_OrdemMobile.php";
         private static String GETINFO_USER = "http://futsexta.16mb.com/Poker/Get_UserMobile.php";
         private static String urlCont = "http://futsexta.16mb.com/Poker/ordem_cont.php";
+        private static String urlfunc = "http://futsexta.16mb.com/Poker/Infra_Get_func.php";
+
 
 
         private static final String TAG_SUCCESS = "success";
@@ -73,6 +77,8 @@ public class NewOrdem extends AppCompatActivity implements
         private static String Data_Local = "";
         private static String Nomeok = "";
         public static String USERNAME = null;
+
+        public  static List<String> categories;
 
 
         JSONParser jsonParser = new JSONParser();
@@ -99,14 +105,16 @@ public class NewOrdem extends AppCompatActivity implements
         AutoCompleteTextView acTextView = (AutoCompleteTextView) findViewById(R.id.autoComplete);
         acTextView.setAdapter(new SuggestionAdapter(this, acTextView.getText().toString()));
 
-        AutoCompleteTextView acTextView1 = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewTec);
-        acTextView1.setAdapter(new SuggestionAdapterTec(this, acTextView1.getText().toString()));
+        //Spinner acTextView1 = (Spinner) findViewById(R.id.spinnertecnico);
+        //acTextView1.setAdapter(new SuggestionAdapterTec(this, acTextView1.getText().toString()));
 
          getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         autoNome = (AutoCompleteTextView) findViewById(R.id.autoComplete);
         editDesc = (EditText) findViewById(R.id.editDescri);
-        autoTec = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewTec);
+        autoTec = (Spinner) findViewById(R.id.spinnertecnico);
+        autoTec.setOnItemSelectedListener(this);
+
         editData = (EditText) findViewById(R.id.editEmailcli);
         editDescri = (EditText) findViewById(R.id.editDescri);
 
@@ -129,7 +137,9 @@ public class NewOrdem extends AppCompatActivity implements
             spin.setAdapter(aa);
             spin.setSelection(0);
 
-        new NewOrdem.CountDados().execute();
+            new NewOrdem.CountDados().execute();
+            new NewOrdem.GetFunc().execute();
+
 
 
     }
@@ -244,6 +254,16 @@ public class NewOrdem extends AppCompatActivity implements
 
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
 
     class InsertDadosChamado extends AsyncTask<String, String, String> {
 
@@ -270,7 +290,7 @@ public class NewOrdem extends AppCompatActivity implements
             if (nome != null) {
                 Nome = ((AutoCompleteTextView)findViewById(R.id.autoComplete)).getText().toString();
                 Descri_Servi = ((EditText) findViewById(R.id.editDescri)).getText().toString();
-                Tec_Resp = ((EditText) findViewById(R.id.autoCompleteTextViewTec)).getText().toString();
+                Tec_Resp = ((Spinner) findViewById(R.id.spinnertecnico)).toString();
                 Data_Previ = ((EditText) findViewById(R.id.editEmailcli)).getText().toString();
                 String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
                 Data_Local = date;
@@ -454,6 +474,65 @@ public class NewOrdem extends AppCompatActivity implements
 
 
 
+    }
+
+    class GetFunc extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Showing progress dialog
+            //pDialog = new ProgressDialog(Status_Ordem.this);
+            //pDialog.setMessage("Aguarde Por Favor... ");
+            //pDialog.setCancelable(false);
+            //pDialog.show();
+
+        }
+
+        @Override
+        protected String  doInBackground(String... args) {
+
+            List params = new ArrayList();
+            params.add(new BasicNameValuePair("NUM_Ocor","%%"));
+
+            JSONObject json = jsonParser.makeHttpRequest(urlfunc,"GET",
+                    params);
+
+            Log.i("Profile JSON: ", json.toString());
+
+            if (json != null) {
+                try {
+                    JSONObject parent = new JSONObject(String.valueOf(json));
+                    JSONArray eventDetails = parent.getJSONArray("funcionario");
+
+                    categories = new ArrayList<String>();
+
+                    for (int i = 0; i < eventDetails.length(); i++)
+                    {
+                        object = eventDetails.getJSONObject(i);
+                        String tecresp = object.getString("nome");
+
+                        categories.add(tecresp);
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+            //super.onPostExecute(result);
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(NewOrdem.this, android.R.layout.simple_spinner_item, categories);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            autoTec.setAdapter(dataAdapter);
+        }
     }
 
     private class CountDados extends AsyncTask<Void, Void, Void> {

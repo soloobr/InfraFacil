@@ -150,7 +150,7 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="64dp">
 
                     <TextView
                         android:id="@+id/ltarefa"
@@ -175,27 +175,37 @@
 
             </TableLayout>
 
-            <TableLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-                <TableRow>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp">
 
                     <TextView
                         android:id="@+id/lfone"
                         android:layout_width="wrap_content"
+                        android:gravity="center"
                         android:text="Tec. Resp.:"
-                        android:textAppearance="@style/TextAppearance.Compat.Notification" />
+                        android:textAppearance="@style/TextAppearance.Compat.Notification"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_height="39dp"/>
 
-                    <AutoCompleteTextView
-                        android:id="@+id/autoCompleteTextViewTec"
-                        android:layout_width="330dp"
-                        android:layout_height="wrap_content"
-                        android:imeOptions="actionNext"
-                        android:singleLine="true" />
+                    <Spinner
+                        android:id="@+id/spinnertecnico"
+                        android:layout_width="0dp"
+                        android:layout_height="39dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/lfone"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                </TableRow>
-            </TableLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
             <TableLayout
                 android:layout_width="wrap_content"

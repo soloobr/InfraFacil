@@ -20,7 +20,7 @@
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_financas.xml" value="0.33" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_mainpoker.xml" value="0.1" />
-        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_newordem.xml" value="0.17760416666666667" />
+        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_newordem.xml" value="0.4778156996587031" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_newpoker.xml" value="0.25" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_ordemserv.xml" value="0.17760416666666667" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_poker.xml" value="0.3176470588235294" />
@@ -43,6 +43,7 @@
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/fragment_peca.xml" value="0.25" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/fragment_servico.xml" value="0.25" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/item_cars_list.xml" value="0.20416666666666666" />
+        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/item_clientes.xml" value="0.12105263157894737" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/item_players.xml" value="0.3167701863354037" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/item_vendas.xml" value="0.75" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/list_item.xml" value="0.20416666666666666" />
