@@ -164,7 +164,7 @@
                     <Spinner
                         android:id="@+id/spinnertarefa"
                         android:layout_width="237dp"
-                        android:layout_height="match_parent" />
+                        android:layout_height="66dp" />
 
                     <ImageButton
                         android:id="@+id/btnaddtar"
