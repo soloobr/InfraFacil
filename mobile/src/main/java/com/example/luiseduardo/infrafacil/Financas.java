@@ -1,5 +1,6 @@
 package com.example.luiseduardo.infrafacil;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.text.DateFormat;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cursoradapter.widget.SimpleCursorAdapter;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -41,6 +43,7 @@ public class Financas extends AppCompatActivity implements View.OnClickListener{
     public String ntotalmo;
     public String ntotalpc;
     public String ntotallucropc;
+    public static ProgressDialog pDialog;
    
 
 
@@ -176,14 +179,18 @@ public class Financas extends AppCompatActivity implements View.OnClickListener{
        
 
         String MES = (c.getDisplayName(Calendar.MONTH, Calendar.LONG, local ) );
-        mySpinner.setSelection (getIndex(mySpinner, MES));
+
+        mySpinner.setSelection (getIndexMes(mySpinner, MES));
+
+        //selectSpinnerItemByValue(mySpinner, Long.parseLong(MES));
 
         mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                String selectedItem = parent.getItemAtPosition(position).toString();
+                //String selectedItem = parent.getItemAtPosition(position).toString();
+                String selectedItem = (String) mySpinner.getSelectedItem().toString();
                 if(selectedItem.equals("Janeiro"))
                 {
                     //System.out.println("FOI" );
@@ -440,8 +447,8 @@ public class Financas extends AppCompatActivity implements View.OnClickListener{
                 YearMonth yearMonthObject = YearMonth.of(1999, 1);
                 int daysInMonth = yearMonthObject.lengthOfMonth();
                 datafinal = currentYear+Month+daysInMonth;
-                new GetValores().execute();
-                new GetValorlucropc().execute();
+                //new GetValores().execute();
+                //new GetValorlucropc().execute();
             }
 
             @Override
@@ -454,6 +461,15 @@ public class Financas extends AppCompatActivity implements View.OnClickListener{
 
 
     }
+    public static void selectSpinnerItemByValue(Spinner spnr, long value) {
+        SimpleCursorAdapter adapter = (SimpleCursorAdapter) spnr.getAdapter();
+        for (int position = 0; position < adapter.getCount(); position++) {
+            if(adapter.getItemId(position) == value) {
+                spnr.setSelection(position);
+                return;
+            }
+        }
+    }
     private int getIndexyear(Spinner spinneryear, String myString){
 
         int index = 0;
@@ -465,12 +481,12 @@ public class Financas extends AppCompatActivity implements View.OnClickListener{
         }
         return index;
     }
-    private int getIndex(Spinner spinner, String myString){
+    private int getIndexMes(Spinner spinner, String myString){
 
         int index = 0;
 
         for (int i=0;i<spinner.getCount();i++){
-            if (spinner.getItemAtPosition(i).equals(myString)){
+            if ((spinner.getItemAtPosition(i).toString()).toUpperCase().equals(myString.toUpperCase())){
                 index = i;
             }
         }
@@ -492,6 +508,7 @@ public class Financas extends AppCompatActivity implements View.OnClickListener{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
         }
 
         @Override
@@ -565,6 +582,10 @@ public class Financas extends AppCompatActivity implements View.OnClickListener{
         protected void onPostExecute(String file_url) {
             //super.onPostExecute(result);
 
+            //if (pDialog.isShowing()) {
+            //    pDialog.dismiss();
+           // }
+
             //txvalorfaturado = (TextView) findViewById(R.id.txvalorfaturado);
             //totalpc = (TextView) findViewById(R.id.txvalorfaturadopc);
             //totalmo = (TextView) findViewById(R.id.txvalorfaturadoliqd);
@@ -604,6 +625,10 @@ public class Financas extends AppCompatActivity implements View.OnClickListener{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            pDialog = new ProgressDialog(Financas.this);
+            pDialog.setMessage("Aguarde Calculando... ");
+            pDialog.setCancelable(true);
+            pDialog.show();
         }
 
         @Override
@@ -673,7 +698,7 @@ public class Financas extends AppCompatActivity implements View.OnClickListener{
         @Override
         protected void onPostExecute(String file_url) {
             //super.onPostExecute(result);
-
+            pDialog.dismiss();
             if (TextUtils.isEmpty(ntotalfatu) || ntotalfatu == "0") {
                 txvalorfaturado.setText("R$ 0,00");
                 totalmo.setText("R$ 0,00");
