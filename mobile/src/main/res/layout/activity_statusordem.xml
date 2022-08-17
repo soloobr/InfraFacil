@@ -257,14 +257,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <AutoCompleteTextView
-                android:id="@+id/editTecResp"
+            <Spinner
+                android:id="@+id/spinnertecnicostts"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_gravity="fill_vertical"
-                android:enabled="false"
-                android:imeOptions="actionNext"
-                android:singleLine="true"
+                android:layout_height="39dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/lfone"

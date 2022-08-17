@@ -290,7 +290,7 @@ public class NewOrdem extends AppCompatActivity implements
             if (nome != null) {
                 Nome = ((AutoCompleteTextView)findViewById(R.id.autoComplete)).getText().toString();
                 Descri_Servi = ((EditText) findViewById(R.id.editDescri)).getText().toString();
-                Tec_Resp = ((Spinner) findViewById(R.id.spinnertecnico)).toString();
+                Tec_Resp = ((Spinner) findViewById(R.id.spinnertecnico)).getSelectedItem().toString();
                 Data_Previ = ((EditText) findViewById(R.id.editEmailcli)).getText().toString();
                 String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
                 Data_Local = date;

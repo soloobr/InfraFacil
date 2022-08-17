@@ -20,12 +20,12 @@
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_financas.xml" value="0.33" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_mainpoker.xml" value="0.1" />
-        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_newordem.xml" value="0.1" />
+        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_newordem.xml" value="0.33" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_newpoker.xml" value="0.25" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_ordemserv.xml" value="0.17760416666666667" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_poker.xml" value="0.3176470588235294" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_produtos.xml" value="0.20416666666666666" />
-        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_statusordem.xml" value="0.4985781990521327" />
+        <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/activity_statusordem.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/app_bar_main.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/cadastro_clientes.xml" value="0.1" />
         <entry key="..\:/Android/Projetos/InfraFacil/mobile/src/main/res/layout/calendar_activity.xml" value="0.2222222222222222" />
@@ -65,6 +65,7 @@
         <entry key="..\:/Projetos/Android/InfraFacil/mobile/src/main/res/layout/list_item_pecas_pecas.xml" value="0.1" />
         <entry key="..\:/Projetos/Android/InfraFacil/mobile/src/main/res/layout/spinner_fornecedor_layout.xml" value="0.17074275362318841" />
         <entry key="..\:/Users/Luis/.gradle/caches/transforms-3/91a8596b79ba47609f47715b02e59cd1/transformed/material-calendar-view-1.7.0/res/layout/calendar_view.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Luis/AppData/Local/Android/Sdk/platforms/android-28/data/res/layout/simple_spinner_dropdown_item.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

@@ -116,6 +116,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
     private static String COMCLUIR_URL = "http://futsexta.16mb.com/InfraFacil/Infra_ordem_servico_Comcluir.php";
     private static String urlAll = "http://futsexta.16mb.com/Poker/ordem_servicomobile_GetAll.php";
     private static String IsertItem = "http://futsexta.16mb.com/Poker/IsertItem_OrdemMobile.php";
+    private static String urlfunc = "http://futsexta.16mb.com/Poker/Infra_Get_func.php";
 
     ArrayList<HashMap<String, String>> OcorList;
     ArrayList<HashMap<String, String>> newItemlist = new ArrayList<HashMap<String, String>>();
@@ -126,8 +127,9 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
     private int mYear, mMonth, mDay, mHour, mMinute;
 
     private AdapterListView adapterListView;
-    Spinner spinner, editStatus, spin;
+    Spinner spinner, editStatus, spin, spintec;
 
+    public  static List<String> categories;
 
     TabLayout tabLayout;
     ViewPager viewPager;
@@ -184,7 +186,6 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
         //TarefaName=new ArrayList<>();
         spin = (Spinner) findViewById(R.id.spinnertarefa);
-
         spin.setEnabled(false);
 
         //spin.setOnItemSelectedListener(this);
@@ -201,8 +202,12 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         AutoCompleteTextView acTextView = (AutoCompleteTextView) findViewById(R.id.editNome);
         acTextView.setAdapter(new SuggestionAdapter(this, acTextView.getText().toString()));
 
-        AutoCompleteTextView acTextView1 = (AutoCompleteTextView) findViewById(R.id.editTecResp);
-        acTextView1.setAdapter(new SuggestionAdapterTec(this, acTextView1.getText().toString()));
+
+        spintec = (Spinner) findViewById(R.id.spinnertecnicostts);
+        spintec.setEnabled(false);
+        new GetFunc().execute();
+        //AutoCompleteTextView acTextView1 = (AutoCompleteTextView) findViewById(R.id.editTecResp);
+        //acTextView1.setAdapter(new SuggestionAdapterTec(this, acTextView1.getText().toString()));
 
         btnedit = (Button) findViewById(R.id.btnedit);
         btnedit.requestFocus();
@@ -228,7 +233,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
         //autotext
         edtnome = (AutoCompleteTextView) findViewById(R.id.editNome);
-        editTec = (AutoCompleteTextView) findViewById(R.id.editTecResp);
+       // editTec = (AutoCompleteTextView) findViewById(R.id.editTecResp);
         editValorpca = (EditText) findViewById(R.id.editValor);
         editValormo = (EditText) findViewById(R.id.editValormo);
         editValorTotal = (EditText) findViewById(R.id.editValorTotal);
@@ -348,7 +353,64 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         //Toast.makeText(Status_Ordem.this, "Item selecionado: " + neditStatus, Toast.LENGTH_LONG).show();
 
     }
+    class GetFunc extends AsyncTask<String, String, String> {
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Showing progress dialog
+            //pDialog = new ProgressDialog(Status_Ordem.this);
+            //pDialog.setMessage("Aguarde Por Favor... ");
+            //pDialog.setCancelable(false);
+            //pDialog.show();
+
+        }
+
+        @Override
+        protected String  doInBackground(String... args) {
+
+            List params = new ArrayList();
+            params.add(new BasicNameValuePair("NUM_Ocor","%%"));
+
+            JSONObject json = jsonParser.makeHttpRequest(urlfunc,"GET",
+                    params);
+
+            Log.i("Profile JSON: ", json.toString());
+
+            if (json != null) {
+                try {
+                    JSONObject parent = new JSONObject(String.valueOf(json));
+                    JSONArray eventDetails = parent.getJSONArray("funcionario");
+
+                    categories = new ArrayList<String>();
+
+                    for (int i = 0; i < eventDetails.length(); i++)
+                    {
+                        object = eventDetails.getJSONObject(i);
+                        String tecresp = object.getString("nome");
+
+                        categories.add(tecresp);
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+            //super.onPostExecute(result);
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(Status_Ordem.this, android.R.layout.simple_spinner_item, categories);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spintec.setAdapter(dataAdapter);
+        }
+    }
 
     public void onClickAddtar(View v) {
         editDescri.setText(editDescri.getText().toString()+"\n"+spin.getSelectedItem().toString());
@@ -383,7 +445,8 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
                         edtnome.setEnabled(false);
                         editDescri.setEnabled(false);
-                        editTec.setEnabled(false);
+                        //editTec.setEnabled(false);
+                        spintec.setEnabled(false);
                         editServRealizado.setEnabled(false);
 
                         editValorpca.setEnabled(false);
@@ -412,7 +475,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
                     edtnome.setEnabled(true);
                     editDescri.setEnabled(true);
-                    editTec.setEnabled(true);
+                    spintec.setEnabled(true);
                     //editServRealizado.setEnabled(true);
                     //editServRealizado2.setEnabled(true);
                     editValorpca.setEnabled(true);
@@ -706,7 +769,8 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             PecaFragment.btnadd.setEnabled(false);
             PecaFragment.myrecyclerview.setEnabled(false);
 
-            editTec.setText(neditTec);
+            //---editTec.setText(neditTec);
+            selectValue(spintec,neditTec);
             editValorpca.setText(neditValorP);
 
             editValormo.setText(neditValorM);
@@ -730,10 +794,10 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
             //number1 = Integer.valueOf(Vlr_Peca);
             //number2 = Integer.valueOf(Vlr_MO);
-            //number1 = Integer.parseInt(Vlr_Peca);
-            //number2 = Integer.parseInt(Vlr_MO);
-            int number1 = (int)Double.parseDouble(Vlr_Peca);
-            int number2 = (int)Double.parseDouble(Vlr_MO);
+            number1 = Integer.parseInt(Vlr_Peca);
+            number2 = Integer.parseInt(Vlr_MO);
+            //int number1 = (int)Double.parseDouble(Vlr_Peca);
+            //int number2 = (int)Double.parseDouble(Vlr_MO);
 
             int res = number2 + number1;
             // editValorTotal.setText(res);
@@ -818,7 +882,8 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
                 Nome = ((AutoCompleteTextView)findViewById(R.id.editNome)).getText().toString();
                 Descri_Servi = ((EditText) findViewById(R.id.editDescri)).getText().toString();
-                Tec_Resp = ((EditText) findViewById(R.id.editTecResp)).getText().toString();
+                //Tec_Resp = ((EditText) findViewById(R.id.editTecResp)).getText().toString();
+                Tec_Resp = ((Spinner) findViewById(R.id.spinnertecnicostts)).getSelectedItem().toString();
                 Data_Previ = ((EditText) findViewById(R.id.editEmailcli)).getText().toString();
                 String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
                 Data_Local = date;
@@ -919,7 +984,14 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         }
 
     }
-
+    private void selectValue(Spinner spinner, Object value) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).equals(value)) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+    }
     class ConcluirChamado extends AsyncTask<String, String, String> {
 
 
