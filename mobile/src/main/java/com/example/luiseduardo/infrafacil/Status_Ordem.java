@@ -780,24 +780,25 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             Vlr_Peca = (((EditText)findViewById(R.id.editValor)).getText().toString());
             String Vlr_Pexaold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
             Vlr_Peca = Vlr_Peca.replaceAll(Vlr_Pexaold, "");
-            Vlr_Peca = Vlr_Peca.replaceAll(",", "");
+            Vlr_Peca = Vlr_Peca.replaceAll("[.]", "");
 
             Vlr_MO = ((EditText)findViewById(R.id.editValormo)).getText().toString();
             String Vlr_MOold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
             Vlr_MO = Vlr_MO.replaceAll(Vlr_MOold, "");
-            Vlr_MO = Vlr_MO.replaceAll(",", "");
+            Vlr_MO = Vlr_MO.replaceAll("[.]", "");
 
             Vlr_Total = ((EditText)findViewById(R.id.editValorTotal)).getText().toString();
             String Vlr_Totalold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
             Vlr_Total = Vlr_Total.replaceAll(Vlr_Totalold, "");
-            Vlr_Total = Vlr_Total.replaceAll(",", "");
+            Vlr_Total = Vlr_Total.replaceAll("[.]", "");
+
 
             //number1 = Integer.valueOf(Vlr_Peca);
             //number2 = Integer.valueOf(Vlr_MO);
-            number1 = Integer.parseInt(Vlr_Peca);
-            number2 = Integer.parseInt(Vlr_MO);
-            //int number1 = (int)Double.parseDouble(Vlr_Peca);
-            //int number2 = (int)Double.parseDouble(Vlr_MO);
+            //number1 = Integer.parseInt(Vlr_Peca);
+            //number2 = Integer.parseInt(Vlr_MO);
+            int number1 = (int)Double.parseDouble(Vlr_Peca);
+            int number2 = (int)Double.parseDouble(Vlr_MO);
 
             int res = number2 + number1;
             // editValorTotal.setText(res);
@@ -903,13 +904,20 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
                 String Vlr_MOold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
                 Vlr_MO = Vlr_MO.replaceAll(Vlr_MOold, "");
-                Vlr_MO = Vlr_MO.replaceAll(",", "");
+                Vlr_MO = Vlr_MO.replaceAll("[.]", "");
 
                 Vlr_Total = (((EditText)findViewById(R.id.editValorTotal)).getText().toString());
 
                 String Vlr_Totalold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
                 Vlr_Total = Vlr_Total.replaceAll(Vlr_Totalold, "");
-                Vlr_Total = Vlr_Total.replaceAll(",", "");
+                Vlr_Total = Vlr_Total.replaceAll("[.]", "");
+
+                int number1 = (int)Double.parseDouble(Vlr_Peca);
+                int number2 = (int)Double.parseDouble(Vlr_MO);
+
+                int res = number2 + number1;
+                // editValorTotal.setText(res);
+                Vlr_Total = (String.valueOf(res));
 
                 Vlr_Parc = parcial ;
 
@@ -992,6 +1000,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             }
         }
     }
+
     class ConcluirChamado extends AsyncTask<String, String, String> {
 
 
@@ -1403,7 +1412,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         public static String formatPrice(String price) {
             //Ex - price = 2222
             //retorno = 2222.00
-            DecimalFormat df = new DecimalFormat("0.00");
+            DecimalFormat df = new DecimalFormat("0,00");
             return String.valueOf(df.format(Double.valueOf(price)));
 
         }
@@ -1446,7 +1455,9 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         }
 
         public static String getCurrencySymbol() {
-            return NumberFormat.getCurrencyInstance(Locale.getDefault()).getCurrency().getSymbol();
+            Locale meuLocal = new Locale( "pt", "BR" );
+            //return NumberFormat.getCurrencyInstance(Locale.getDefault()).getCurrency().getSymbol();
+            return NumberFormat.getCurrencyInstance(meuLocal).getCurrency().getSymbol();
         }
     }
 

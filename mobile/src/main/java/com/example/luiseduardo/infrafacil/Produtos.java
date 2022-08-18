@@ -235,11 +235,13 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                         String Vlr_Pexaold = String.format("[%s\\s]", Status_Ordem.MoneyTextWatcher.getCurrencySymbol());
                         valoruni = valoruni.replaceAll(Vlr_Pexaold, "");
                         valoruni = valoruni.replaceAll(",", "");
+                        valoruni = valoruni.replaceAll("[.]", "");
 
                         valorpago = valordecompra.getText().toString();
                         String Vlr_pagoold = String.format("[%s\\s]", Status_Ordem.MoneyTextWatcher.getCurrencySymbol());
                         valorpago = valorpago.replaceAll(Vlr_pagoold, "");
                         valorpago = valorpago.replaceAll(",", "");
+                        valorpago = valorpago.replaceAll("[.]", "");
 
 
                         qtdprodvend = qtd.getText().toString();
@@ -266,6 +268,7 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                                      int isoma = (iqtd*ivluni);
                                      valortotal = String.valueOf(isoma);
                                      formadepagamento = "Dinheiro - Avista";
+
 
                                      lsvendas.add(new Vendas(idvenda, idprod, qtdprodvend, IDCLIENTE, IDORDEM, datavenda, idforne, valoruni, valorpago, valortotal, formadepagamento, status, qtdparcel,parcela, valorparcela, descri));
                                     finish();
