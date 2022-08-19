@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/main_line_id"
+            android:layout_width="43dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="ID" />
+
+        <TextView
+            android:id="@+id/main_line_venc"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="Vencimento"
+            android:textAlignment="gravity" />
+
+        <TextView
+            android:id="@+id/main_line_parc"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Nº" />
+
+        <TextView
+            android:id="@+id/main_line_valorparc"
+            android:layout_width="79dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="Valor"
+            android:textColor="#4CAF50" />
+
+        <TextView
+            android:id="@+id/main_line_status"
+            android:layout_width="43dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Status" />
+
+        <ImageButton
+            android:id="@+id/main_next"
+            android:layout_width="39dp"
+            android:layout_height="30dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_chevron_right_black_24dp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

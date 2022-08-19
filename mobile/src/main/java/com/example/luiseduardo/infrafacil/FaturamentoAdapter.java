@@ -1,16 +1,14 @@
 package com.example.luiseduardo.infrafacil;
 
+import static com.example.luiseduardo.infrafacil.FaturamentoFragment.lsfaturamento;
+import static com.example.luiseduardo.infrafacil.PecaFragment.lsvendas;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
-import androidx.annotation.NonNull;
-//import android.support.v7.widget.RecyclerView;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +16,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -28,16 +29,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.luiseduardo.infrafacil.PecaFragment.lsvendas;
-
 //import androidx.recyclerview.widget.RecyclerView;
 
-public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHolder> {
+public class FaturamentoAdapter extends RecyclerView.Adapter<FaturamentoAdapter.MyViwerHolder> {
 
     Context mContext;
-    List<Vendas> mData;
+    List<Faturamento> mData;
     public static String idocor = Status_Ordem.IDORDEM;
-    public static String  idvenda, idprod, idforne, valorvenda, valorpg, qtdprodvend, descri;
+    public static String  idparcela, idfatura,  numeroparcela,  valorparcela,  datavencimento, datapagamento,  statusparcela,  idcliente, nomecliente;
     private static String urldelvenda = "http://futsexta.16mb.com/Poker/Infra_Delete_produtosvendido.php";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
@@ -45,9 +44,9 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
     JSONParser jsonParser = new JSONParser();
     private final Locale locale = Locale.getDefault();
 
-    public VendasAdapter(Context mContext, List<Vendas> mData) {
+    public FaturamentoAdapter(Context mContext, List<Faturamento> mData) {
         this.mContext = mContext;
-        this.mData = lsvendas;
+        this.mData = lsfaturamento;
     }
 
 
@@ -58,7 +57,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
     public MyViwerHolder onCreateViewHolder(ViewGroup parent, int viwType) {
         //mData = Status_Ordem.
         View v;
-        v = LayoutInflater.from(mContext).inflate(R.layout.item_vendas,parent,false);
+        v = LayoutInflater.from(mContext).inflate(R.layout.item_faturamento,parent,false);
         MyViwerHolder vHolder = new MyViwerHolder(v);
         return vHolder;
     }
@@ -67,23 +66,24 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
     }
     @Override
     public void onBindViewHolder(final MyViwerHolder holder, @SuppressLint("RecyclerView") final int position) {
-        holder.tv_nome.setText(mData.get(position).getName());
-        holder.tv_qtd.setText(mData.get(position).getQtd());
 
-        String valor = mData.get(position).getValoruni();
+
+
+        //holder.tv_idparcela.setText(mData.get(position).getIdparcela());
+        holder.tv_idfatura.setText(mData.get(position).getIdfatura());
+        holder.tv_datavencimento.setText(mData.get(position).getDatavencimento());
+        holder.tv_numeroparcela.setText(mData.get(position).getNumeroparcela());
+
+        String valor = mData.get(position).getValorparcela();
         BigDecimal parsed = parseToBigDecimal(valor);
         String formatted;
         formatted = NumberFormat.getCurrencyInstance(locale).format(parsed);
-        holder.tv_valor.setText(formatted);
+        holder.tv_valorparcela.setText(formatted);
+        holder.tv_statusparcela.setText(mData.get(position).getStatusparcela());
 
-        //holder.tv_valor.setText(mData.get(position).getValoruni());
-
-        holder.idvenda = (mData.get(position).getIdvenda());
-        holder.idproduto = (mData.get(position).getIdprod());
-        holder.idocor = (mData.get(position).getIdocor());
-        if(!mData.get(position).getQtdparcel().equals("0")) {
-            holder.imgparce.setImageResource(R.mipmap.parce100);
-        }
+        //if(!mData.get(position).getQtdparcel().equals("0")) {
+        //    holder.imgparce.setImageResource(R.mipmap.parce100);
+        //}
 
         holder.img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,25 +91,25 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setTitle("Excluir item:");
-                builder.setMessage(holder.tv_nome.getText());
+                builder.setMessage(holder.tv_idfatura.getText());
                 builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
-                        idvenda = (String) holder.idvenda;
+                        //idvenda = (String) holder.idvenda;
                         //idvenda = PecaFragment.lsvendas.get(counter).getIdvenda();
-                        idprod = (String) holder.idproduto;
+                        //idprod = (String) holder.idproduto;
 
-                        String sVlr_venda = String.valueOf(holder.tv_valor.getText());
-                        String sVlr_vendaold = String.format("[%s\\s]", Status_Ordem.MoneyTextWatcher.getCurrencySymbol());
-                        sVlr_venda = sVlr_venda.replaceAll(sVlr_vendaold, "");
-                        sVlr_venda = sVlr_venda.replaceAll("[.]", "");
-                        sVlr_venda = sVlr_venda.replaceAll("[,]", "");
-                        int iVlr_venda = (int)Double.parseDouble(sVlr_venda);
+                        //String sVlr_venda = String.valueOf(holder.tv_valor.getText());
+                        //String sVlr_vendaold = String.format("[%s\\s]", Status_Ordem.MoneyTextWatcher.getCurrencySymbol());
+                        //sVlr_venda = sVlr_venda.replaceAll(sVlr_vendaold, "");
+                        //sVlr_venda = sVlr_venda.replaceAll("[.]", "");
+                        //sVlr_venda = sVlr_venda.replaceAll("[,]", "");
+                        //int iVlr_venda = (int)Double.parseDouble(sVlr_venda);
 
-                        new ExcluiDadosVenda().execute();
-                        removeAt(position);
-                        Status_Ordem.somatValue.SubitraiVendas(iVlr_venda);
-                        int number1 = (int)Double.parseDouble(Status_Ordem.Vlr_Peca);
-                        int number2 = (int)Double.parseDouble(Status_Ordem.Vlr_MO);
+                        //new ExcluiDadosVenda().execute();
+                        //removeAt(position);
+                        //Status_Ordem.somatValue.SubitraiVendas(iVlr_venda);
+                        //int number1 = (int)Double.parseDouble(Status_Ordem.Vlr_Peca);
+                        //int number2 = (int)Double.parseDouble(Status_Ordem.Vlr_MO);
                        // int number3 = (int)Double.parseDouble(Vlr_venda);
 
                        // int res = number1 - number3;
@@ -137,7 +137,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(mContext, holder.tv_nome.getText(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, holder.tv_idfatura.getText(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -160,13 +160,20 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
 
     public class MyViwerHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView tv_nome;
-        private TextView tv_qtd;
-        private TextView tv_valor;
+        private TextView tv_idparcela;
+        private TextView tv_idfatura;
+        private TextView tv_valorparcela;
+        private TextView tv_numeroparcela;
+        private TextView tv_datavencimento;
+        private TextView tv_datapagamento;
+        private TextView tv_statusparcela;
+        private TextView tv_idcliente;
+        private TextView tv_nomecliente;
+
         private ImageButton img;
-        private ImageButton imgparce;
-        private String idvenda;
-        private String idproduto;
+        //private ImageButton imgparce;
+        private String idparcela;
+        private String idfatura;
         private String idocor;
 
 
@@ -174,11 +181,19 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
         public MyViwerHolder(@NonNull View itemView) {
             super(itemView);
 
-            tv_nome = (TextView) itemView.findViewById(R.id.main_line_nome);
-            tv_qtd = (TextView)itemView.findViewById(R.id.main_line_qtd);
-            tv_valor = (TextView)itemView.findViewById(R.id.main_line_valor);
-            img = (ImageButton) itemView.findViewById(R.id.main_delete);
-            imgparce = (ImageButton) itemView.findViewById(R.id.main_parce);
+            //tv_idparcela = (TextView) itemView.findViewById(R.id.main_line_id);
+            tv_idfatura = (TextView)itemView.findViewById(R.id.main_line_id);
+            tv_datavencimento = (TextView)itemView.findViewById(R.id.main_line_venc);
+            tv_numeroparcela = (TextView)itemView.findViewById(R.id.main_line_parc);
+            tv_valorparcela = (TextView)itemView.findViewById(R.id.main_line_valorparc);
+            tv_statusparcela = (TextView)itemView.findViewById(R.id.main_line_status);
+            img = (ImageButton) itemView.findViewById(R.id.main_next);
+
+            //tv_datapagamento = (TextView)itemView.findViewById(R.id.main_line_valor);
+            //tv_idcliente = (TextView)itemView.findViewById(R.id.main_line_valor);
+            //tv_nomecliente = (TextView)itemView.findViewById(R.id.main_line_valor);
+
+
 
 
         }
@@ -186,11 +201,11 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            Toast.makeText(mContext, tv_nome.getText(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, tv_valorparcela.getText(), Toast.LENGTH_SHORT).show();
             if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
                 //User user = users.get(position);
                 // We can access the data within the views
-                Toast.makeText(mContext, tv_nome.getText(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, tv_valorparcela.getText(), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -210,8 +225,8 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
 
              List params = new ArrayList();
              params.add(new BasicNameValuePair("idocorrencia",idocor));
-             params.add(new BasicNameValuePair("idvenda",idvenda));
-             params.add(new BasicNameValuePair("idproduto",idprod));
+             params.add(new BasicNameValuePair("idparcela",idparcela));
+             params.add(new BasicNameValuePair("idfatura",idfatura));
 
              JSONObject newjson = jsonParser.makeHttpRequest(urldelvenda,"POST",
                      params);
@@ -239,7 +254,7 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
             if (file_url != null) {
                 //Toast.makeText(Context.this,  file_url, Toast.LENGTH_LONG).show();
             }
-            VendasAdapter.notifyItemChanged();
+            FaturamentoAdapter.notifyItemChanged();
         }
     }
     private BigDecimal parseToBigDecimal(String value) {
@@ -257,5 +272,9 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
 
         }
     }
-
+    public void updateList(List<Faturamento> newList) {
+        lsfaturamento.clear();
+        lsfaturamento.addAll(newList);
+        notifyDataSetChanged();
+    }
 }

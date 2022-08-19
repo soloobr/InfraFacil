@@ -24,6 +24,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -246,6 +247,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         //tabservico = findViewById(R.id.tabservico);
         viewPager = findViewById(R.id.viwerpage);
 
+
         //pagerAdapter = new com.example.luiseduardo.infrafacil.PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         //viewPager.setAdapter(pagerAdapter);
 
@@ -281,6 +283,8 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         }
 
         new GetDados().execute();
+
+
         //new GetDadosVenda().execute();
 
         // Spinner element
@@ -781,16 +785,19 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             String Vlr_Pexaold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
             Vlr_Peca = Vlr_Peca.replaceAll(Vlr_Pexaold, "");
             Vlr_Peca = Vlr_Peca.replaceAll("[.]", "");
+            Vlr_Peca = Vlr_Peca.replaceAll("[,]", "");
 
             Vlr_MO = ((EditText)findViewById(R.id.editValormo)).getText().toString();
             String Vlr_MOold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
             Vlr_MO = Vlr_MO.replaceAll(Vlr_MOold, "");
             Vlr_MO = Vlr_MO.replaceAll("[.]", "");
+            Vlr_MO = Vlr_MO.replaceAll("[,]", "");
 
             Vlr_Total = ((EditText)findViewById(R.id.editValorTotal)).getText().toString();
             String Vlr_Totalold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
             Vlr_Total = Vlr_Total.replaceAll(Vlr_Totalold, "");
             Vlr_Total = Vlr_Total.replaceAll("[.]", "");
+            Vlr_Total = Vlr_Total.replaceAll("[,]", "");
 
 
             //number1 = Integer.valueOf(Vlr_Peca);
@@ -905,12 +912,14 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                 String Vlr_MOold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
                 Vlr_MO = Vlr_MO.replaceAll(Vlr_MOold, "");
                 Vlr_MO = Vlr_MO.replaceAll("[.]", "");
+                Vlr_MO = Vlr_MO.replaceAll("[,]", "");
 
                 Vlr_Total = (((EditText)findViewById(R.id.editValorTotal)).getText().toString());
 
                 String Vlr_Totalold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
                 Vlr_Total = Vlr_Total.replaceAll(Vlr_Totalold, "");
                 Vlr_Total = Vlr_Total.replaceAll("[.]", "");
+                Vlr_Total = Vlr_Total.replaceAll("[,]", "");
 
                 int number1 = (int)Double.parseDouble(Vlr_Peca);
                 int number2 = (int)Double.parseDouble(Vlr_MO);
@@ -998,6 +1007,65 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                 spinner.setSelection(i);
                 break;
             }
+        }
+    }
+    public static class somatValue {
+
+        public static void SomaVendas(int vlvenda) {
+
+                String Vlr_Pexaold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
+                Vlr_Peca = Vlr_Peca.replaceAll(Vlr_Pexaold, "");
+                Vlr_Peca = Vlr_Peca.replaceAll("[.]", "");
+                Vlr_Peca = Vlr_Peca.replaceAll("[,]", "");
+
+
+                String Vlr_MOold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
+                Vlr_MO = Vlr_MO.replaceAll(Vlr_MOold, "");
+                Vlr_MO = Vlr_MO.replaceAll("[.]", "");
+                Vlr_MO = Vlr_MO.replaceAll("[,]", "");
+
+                int number1 = (int)Double.parseDouble(Vlr_Peca);
+                int number2 = vlvenda;
+                int number3 = (int)Double.parseDouble(Vlr_MO);
+
+                int vlttvendas = number1 + vlvenda;
+
+                int res = number1 + number2 + number3;
+
+                Vlr_Total = (String.valueOf(res));
+                editValorTotal.setText(String.valueOf(res));
+                editValorpca.setText(String.valueOf(vlttvendas));
+
+            return ;
+        }
+
+        public static void SubitraiVendas(int vlvenda) {
+
+            Vlr_Peca = Status_Ordem.editValorpca.getText().toString();
+            String Vlr_Pexaold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
+            Vlr_Peca = Vlr_Peca.replaceAll(Vlr_Pexaold, "");
+            Vlr_Peca = Vlr_Peca.replaceAll("[.]", "");
+            Vlr_Peca = Vlr_Peca.replaceAll("[,]", "");
+
+
+            String Vlr_MOold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
+            Vlr_MO = Vlr_MO.replaceAll(Vlr_MOold, "");
+            Vlr_MO = Vlr_MO.replaceAll("[.]", "");
+            Vlr_MO = Vlr_MO.replaceAll("[,]", "");
+
+            int number1 = (int)Double.parseDouble(Vlr_Peca);
+            int number2 = vlvenda;
+            int number3 = (int)Double.parseDouble(Vlr_MO);
+
+            int vlttvendas = number1 - vlvenda;
+
+            int res = vlttvendas + number3;
+
+            Vlr_Total = (String.valueOf(res));
+            editValorTotal.setText(String.valueOf(res));
+            editValorpca.setText(String.valueOf(vlttvendas));
+
+            return ;
         }
     }
 
@@ -1348,6 +1416,15 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (s.equals("")){
+
+            }else {
+                if (s.length() > 2)
+                {
+                    //somatValue.SomaVendas(0);
+                }
+
+            }
 
         }
 
@@ -1370,6 +1447,9 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             //editText.setSelection(cleanString.length());
             editText.setSelection(formatted.length());
             editText.addTextChangedListener(this);
+
+
+
         }
 
 
@@ -1468,6 +1548,19 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         btnaddtar.setEnabled(false);
         VendasAdapter.notifyItemChanged();
     }
+
+
+    //@Override
+    //public void onBackPressed() {
+     //   somatValue.SomaVendas(0);
+    //}
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
         private static int NUM_ITEMS = 2;
