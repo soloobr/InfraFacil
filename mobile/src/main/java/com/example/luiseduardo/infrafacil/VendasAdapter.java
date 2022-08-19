@@ -97,9 +97,17 @@ public class VendasAdapter extends RecyclerView.Adapter<VendasAdapter.MyViwerHol
                         idvenda = (String) holder.idvenda;
                         //idvenda = PecaFragment.lsvendas.get(counter).getIdvenda();
                         idprod = (String) holder.idproduto;
-                        String Vlr_venda = String.valueOf(holder.tv_valor.getText());
+
+                        String sVlr_venda = String.valueOf(holder.tv_valor.getText());
+                        String sVlr_vendaold = String.format("[%s\\s]", Status_Ordem.MoneyTextWatcher.getCurrencySymbol());
+                        sVlr_venda = sVlr_venda.replaceAll(sVlr_vendaold, "");
+                        sVlr_venda = sVlr_venda.replaceAll("[.]", "");
+                        sVlr_venda = sVlr_venda.replaceAll("[,]", "");
+                        int iVlr_venda = (int)Double.parseDouble(sVlr_venda);
+
                         new ExcluiDadosVenda().execute();
                         removeAt(position);
+                        Status_Ordem.somatValue.SubitraiVendas(iVlr_venda);
                         int number1 = (int)Double.parseDouble(Status_Ordem.Vlr_Peca);
                         int number2 = (int)Double.parseDouble(Status_Ordem.Vlr_MO);
                        // int number3 = (int)Double.parseDouble(Vlr_venda);

@@ -423,7 +423,10 @@
                 android:enabled="false"
                 android:inputType="number"
                 android:text="000,00"
-                android:textAlignment="textStart" />
+                android:textAlignment="textStart"
+                android:textColor="@color/green_dark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
         </TableRow>
     </TableLayout>

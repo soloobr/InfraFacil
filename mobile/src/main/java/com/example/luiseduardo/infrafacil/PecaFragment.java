@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import org.apache.http.message.BasicNameValuePair;
@@ -223,6 +224,9 @@ public class PecaFragment   extends Fragment {
 
 
             Status_Ordem.editValorpca.setText(String.valueOf(Somavebdas));
+
+            Status_Ordem.Vlr_Peca = String.valueOf(Somavebdas);
+            //Status_Ordem.Vlr_MO = ((EditText)findViewById(R.id.editValormo)).getText().toString();
 
 
             int number1 = (int)Double.parseDouble(Status_Ordem.Vlr_MO);

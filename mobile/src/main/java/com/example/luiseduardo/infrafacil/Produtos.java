@@ -269,6 +269,7 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                                      valortotal = String.valueOf(isoma);
                                      formadepagamento = "Dinheiro - Avista";
 
+                                     Status_Ordem.somatValue.SomaVendas(isoma);
 
                                      lsvendas.add(new Vendas(idvenda, idprod, qtdprodvend, IDCLIENTE, IDORDEM, datavenda, idforne, valoruni, valorpago, valortotal, formadepagamento, status, qtdparcel,parcela, valorparcela, descri));
                                     finish();
