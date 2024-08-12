@@ -1563,7 +1563,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
-        private static int NUM_ITEMS = 2;
+        private static int NUM_ITEMS = 3;
 
         public MyPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -1583,6 +1583,8 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                     return ServicoFragment.newInstance(0, "Page # 1");
                 case 1: // Fragment # 0 - This will show FirstFragment different title
                     return PecaFragment.newInstance(1, "Page # 2");
+                case 2: // Fragment # 0 - This will show FirstFragment different title
+                    return FaturamentoFragment.newInstance(2, "Page # 3");
                 default:
                     return null;
             }
@@ -1596,6 +1598,8 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                     return "SERVIÇOS";
                 case 1: // Fragment # 0 - This will show FirstFragment different title
                     return "PEÇAS";
+                case 2: // Fragment # 0 - This will show FirstFragment different title
+                    return "FATURAMENTO";
                 default:
                     return "Page " + position;
             }
