@@ -176,39 +176,28 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_statusordem);
 
+        setContentView(R.layout.activity_statusordem);
         ViewPager vpPager = (ViewPager) findViewById(R.id.viwerpage);
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
         vpPager.setAdapter(adapterViewPager);
-
-
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        //TarefaName=new ArrayList<>();
         spin = (Spinner) findViewById(R.id.spinnertarefa);
         spin.setEnabled(false);
-
-        //spin.setOnItemSelectedListener(this);
 
         ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,Itemtar);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         newItemlist = new ArrayList<HashMap<String, String>>();
-
-
         spin.setAdapter(aa);
         spin.setSelection(0);
 
         AutoCompleteTextView acTextView = (AutoCompleteTextView) findViewById(R.id.editNome);
         acTextView.setAdapter(new SuggestionAdapter(this, acTextView.getText().toString()));
 
-
         spintec = (Spinner) findViewById(R.id.spinnertecnicostts);
         spintec.setEnabled(false);
         new GetFunc().execute();
-        //AutoCompleteTextView acTextView1 = (AutoCompleteTextView) findViewById(R.id.editTecResp);
-        //acTextView1.setAdapter(new SuggestionAdapterTec(this, acTextView1.getText().toString()));
 
         btnedit = (Button) findViewById(R.id.btnedit);
         btnedit.requestFocus();
@@ -217,58 +206,22 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         btnaddtar = (ImageButton) findViewById(R.id.btnaddtar);
         btn_date = (ImageButton) findViewById(R.id.btn_date);
         btnadd = (ImageButton) findViewById(R.id.itemadd);
-
-        //btnDatePicker.setOnClickListener(this);
-
         numocor = (TextView) findViewById(R.id.textViewNumCli);
         status = (TextView) findViewById(R.id.textViewStatus);
-
-
-        //Edittext
         editDescri = (EditText) findViewById(R.id.editDescri);
         DataPrev = (EditText) findViewById(R.id.editEmailcli);
         //editServRealizado = (EditText) findViewById(R.id.editServRealizado);
         editServRealizado2 = (EditText) findViewById(R.id.editServRealizado);
         editData = (EditText) findViewById(R.id.editEmailcli);
-
-
         //autotext
         edtnome = (AutoCompleteTextView) findViewById(R.id.editNome);
-       // editTec = (AutoCompleteTextView) findViewById(R.id.editTecResp);
+        // editTec = (AutoCompleteTextView) findViewById(R.id.editTecResp);
         editValorpca = (EditText) findViewById(R.id.editValor);
         editValormo = (EditText) findViewById(R.id.editValormo);
         editValorTotal = (EditText) findViewById(R.id.editValorTotal);
         //editStatus = (AutoCompleteTextView)findViewById(R.id.editStatus);
         editStatus = (Spinner) findViewById(R.id.editStatus);
-
-
-        //tabLayout = findViewById(R.id.tablayout);
-        //tabpeca = findViewById(R.id.tabpeca);
-        //tabservico = findViewById(R.id.tabservico);
         viewPager = findViewById(R.id.viwerpage);
-
-
-        //pagerAdapter = new com.example.luiseduardo.infrafacil.PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        //viewPager.setAdapter(pagerAdapter);
-
-       /* tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                //editServRealizado2.setEnabled(true);
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });*/
-
         editValorpca.addTextChangedListener(new MoneyTextWatcher(editValorpca));
         editValormo.addTextChangedListener(new MoneyTextWatcher(editValormo));
         editValorTotal.addTextChangedListener(new MoneyTextWatcher(editValorTotal));
@@ -281,19 +234,10 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             String j =(String) bb.get("key");
             IDORDEM = j;
         }
-
         new GetDados().execute();
 
-
-        //new GetDadosVenda().execute();
-
-        // Spinner element
         final Spinner spinner = (Spinner) findViewById(R.id.editStatus);
 
-        // Spinner click listener
-
-
-        // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
         categories.add("Concluido");
         categories.add("Executando");
@@ -303,28 +247,16 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         categories.add("Orçamento não aprovado");
         categories.add("Cancelado");
 
-
-        // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-
-        // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-
         editStatus.setEnabled(false);
         editStatus.setClickable(false);
         editStatus.setAdapter(dataAdapter);
-
-
         //Toast.makeText(Status_Ordem.this, "Item selecionado: " + SStatus, Toast.LENGTH_LONG).show();
         String valorBanco = SStatus;
         int posicaoArray = 0;
-
         for (int i = 0; (i <= categories.size() - 1); i++) {
-
             if (categories.get(i).equals(valorBanco)) {
-
                 posicaoArray = i;
                 break;
             } else {
@@ -332,44 +264,24 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             }
         }
         editStatus.setSelection(posicaoArray);
-
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-
-
                 if ("Concluido".matches(spinner.getSelectedItem().toString())) {
                    // SStatus = spinner.getSelectedItem().toString();
-
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-
-
             }
-
         });
-
-        //spinner.setSelection(getIndex(spinner, SStatus));
-        //Toast.makeText(Status_Ordem.this, "Item selecionado: " + neditStatus, Toast.LENGTH_LONG).show();
-
     }
     class GetFunc extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Showing progress dialog
-            //pDialog = new ProgressDialog(Status_Ordem.this);
-            //pDialog.setMessage("Aguarde Por Favor... ");
-            //pDialog.setCancelable(false);
-            //pDialog.show();
-
         }
-
         @Override
         protected String  doInBackground(String... args) {
 
@@ -385,48 +297,36 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                 try {
                     JSONObject parent = new JSONObject(String.valueOf(json));
                     JSONArray eventDetails = parent.getJSONArray("funcionario");
-
                     categories = new ArrayList<String>();
-
                     for (int i = 0; i < eventDetails.length(); i++)
                     {
                         object = eventDetails.getJSONObject(i);
                         String tecresp = object.getString("nome");
-
-                        categories.add(tecresp);
-
+                       categories.add(tecresp);
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
             return null;
-
         }
 
         @Override
         protected void onPostExecute(String file_url) {
             //super.onPostExecute(result);
-
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(Status_Ordem.this, android.R.layout.simple_spinner_item, categories);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spintec.setAdapter(dataAdapter);
         }
     }
-
     public void onClickAddtar(View v) {
         editDescri.setText(editDescri.getText().toString()+"\n"+spin.getSelectedItem().toString());
     }
     @SuppressLint("ResourceAsColor")
     public void onClickEdit(View v) throws JSONException, IOException {
         switch (v.getId()) {
-
             case R.id.btnedit:
-
                 String nome ;
-
                 AutoCompleteTextView usernameEditText = (AutoCompleteTextView) findViewById(R.id.editNome);
                 nome = usernameEditText.getText().toString();
                 if ("SALVAR".matches(btnedit.getText().toString())) {
@@ -452,31 +352,23 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                         //editTec.setEnabled(false);
                         spintec.setEnabled(false);
                         editServRealizado.setEnabled(false);
-
                         editValorpca.setEnabled(false);
                         editValormo.setEnabled(false);
                         editValorTotal.setEnabled(false);
                         editStatus.setEnabled(false);
                         btnDatePicker.setEnabled(false);
                         btnedit.setText("Editar");
-
                         btnedit.setBackgroundColor(Color.GRAY);
                         btnedit.setTextColor(Color.BLACK);
                         spin.setEnabled(false);
-
                         //Status_Comp = "";
                         Spinner spinner = (Spinner)findViewById(R.id.editStatus);
                         SStatus = spinner.getSelectedItem().toString();
-
                         new EditarChamado().execute();
-
                     }
                     break;
                 }
                 else {
-
-
-
                     edtnome.setEnabled(true);
                     editDescri.setEnabled(true);
                     spintec.setEnabled(true);
@@ -500,9 +392,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                     btnfinaliza.setBackgroundColor(Color.RED);
                     btnfinaliza.setTextColor(Color.WHITE);
                     spin.setEnabled(true);
-
                     break;
-
                 }
 
             case R.id.btnfinaliza:
@@ -526,7 +416,6 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which) {
                            // Toast.makeText(Status_Ordem.this, "Cancelar Escolhido", Toast.LENGTH_SHORT).show();
-
                             final EditText edittext = new EditText(Status_Ordem.this);
                             edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
                             edittext.addTextChangedListener(new MoneyTextWatcher(edittext));
@@ -540,7 +429,6 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                             //alerta.setView(edittext.addTextChangedListener(new MoneyTextWatcher('0000'));
                             alerta.setCancelable(false);
 
-
                             alerta.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int which) {
@@ -551,20 +439,13 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                                     nDataConc = Data_Local;
                                     SStatus = "Aguardando Pag.";
                                     Id_Comp = "2";
-
                                     SParcial = edittext.getText().toString();
-
                                     String SParcialold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
-
                                     SParcial = SParcial.replaceAll(SParcialold, "");
                                     SParcial = SParcial.replaceAll(",", "");
-
                                     //SParcial = edittext.getText().toString();
-
                                     new EditarChamado().execute();
-
                                     // Toast.makeText(Status_Ordem.this, SParcial, Toast.LENGTH_SHORT).show();
-
                                 }
                             });
                             alerta.setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -577,32 +458,23 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                                     nDataConc = Data_Local;
                                     SStatus = "Aguardando Pag.";
                                     Id_Comp = "2";
-
                                     new EditarChamado().execute();
-
                                     // Toast.makeText(Status_Ordem.this, "OK Escolhido", Toast.LENGTH_SHORT).show();
-
                                 }
                             });
                             alerta.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
-
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int which) {
-
                                    // Toast.makeText(Status_Ordem.this, "Cancelado", Toast.LENGTH_SHORT).show();
-
                                 }
                             });
                             AlertDialog alertDialog =alerta.create();
                             alertDialog.show();
-
                         }
                     });
                     alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which) {
-
-
                             Status_Comp = "Compensado";
                             new ConcluirChamado().execute();
                             String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
@@ -612,26 +484,18 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                             Id_Comp = "1";
                             ncomp = "1";
                             new EditarChamado().execute();
-
                         }
                     });
                     alerta.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which) {
-
                              //Toast.makeText(Status_Ordem.this, "Cancelado", Toast.LENGTH_SHORT).show();
-
                         }
                     });
                     AlertDialog alertDialog =alerta.create();
                     alertDialog.show();
-
-
-
                 }
-
-
                 break;
             case R.id.btn_date:
                     // Get Current Date// Get Current Date
@@ -639,7 +503,6 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                     mYear = c.get(Calendar.YEAR);
                     mMonth = c.get(Calendar.MONTH);
                     mDay = c.get(Calendar.DAY_OF_MONTH);
-
 
                     DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                             new DatePickerDialog.OnDateSetListener() {
@@ -657,30 +520,22 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                 break;
         }
     }
-
     public void onClickDate(View v) {
 
 
     }
-
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
-
-
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
     }
-
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
-
     class GetDados extends AsyncTask<String, String, String> {
 
         @Override
@@ -860,11 +715,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                     editStatus.setSelection(posicaoArray);
          }
     }
-
-
     class EditarChamado extends AsyncTask<String, String, String>  {
-
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -874,19 +725,13 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             pDialog.setCancelable(true);
             pDialog.show();
         }
-
-
         @Override
         protected String doInBackground(String... args) {
-
 
             String nome = ((EditText) findViewById(R.id.editNome)).getText().toString();
             String status = SStatus;
             String parcial = SParcial;
-
-
             if (nome != null) {
-
 
                 Nome = ((AutoCompleteTextView)findViewById(R.id.editNome)).getText().toString();
                 Descri_Servi = ((EditText) findViewById(R.id.editDescri)).getText().toString();
@@ -898,17 +743,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                 Servi_realizado = ((EditText) findViewById(R.id.editServRealizado)).getText().toString();
                 Servi_realizado = editServRealizado.getText().toString();
                 Status = status;//((AutoCompleteTextView)findViewById(R.id.editStatus)).getText().toString();
-
-
-                //Vlr_Peca = (((EditText)findViewById(R.id.editValor)).getText().toString());
-
-                //String Vlr_Pexaold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
-                //Vlr_Peca = Vlr_Peca.replaceAll(Vlr_Pexaold, "");
-                //Vlr_Peca = Vlr_Peca.replaceAll(",", "");
-
-
                 Vlr_MO = ((EditText)findViewById(R.id.editValormo)).getText().toString();
-
                 String Vlr_MOold = String.format("[%s\\s]", MoneyTextWatcher.getCurrencySymbol());
                 Vlr_MO = Vlr_MO.replaceAll(Vlr_MOold, "");
                 Vlr_MO = Vlr_MO.replaceAll("[.]", "");
@@ -925,13 +760,8 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                 int number2 = (int)Double.parseDouble(Vlr_MO);
 
                 int res = number2 + number1;
-                // editValorTotal.setText(res);
                 Vlr_Total = (String.valueOf(res));
-
                 Vlr_Parc = parcial ;
-
-
-
             } else {
 
                 Log.d("Não", "Nome não preenchido");
@@ -944,7 +774,6 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                 String Conclusao = nDataConc;
                 String Id_Compensa = ncomp;
 
-                // Building Parameters
                 List params = new ArrayList();
 
                 params.add(new BasicNameValuePair("id", NUM_Ocor));
@@ -961,15 +790,9 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                 params.add(new BasicNameValuePair("Id_Compensa", Id_Compensa));
                 params.add(new BasicNameValuePair("Vlr_Parc", Vlr_Parc));
 
-
                 Log.d("Debug!", "starting");
-
-                // getting product details by making HTTP request
                 JSONObject newjson = jsonParser.makeHttpRequest(GETINFO_URL, "POST",
                         params);
-
-                //Id_Comp = "0";
-                // json success tag
                 success = newjson.getInt(TAG_SUCCESS);
                 if (success == 1) {
                     Log.d("Editar successo!", newjson.toString());
@@ -984,22 +807,16 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             return null;
         }
-
         protected void onPostExecute(String file_url) {
-            // dismiss the dialog once product deleted
-
             if (pDialog.isShowing()) {
                 pDialog.dismiss();
             }
             if (file_url != null) {
                 Toast.makeText(Status_Ordem.this,  file_url, Toast.LENGTH_LONG).show();
             }
-
         }
-
     }
     private void selectValue(Spinner spinner, Object value) {
         for (int i = 0; i < spinner.getCount(); i++) {
@@ -1038,7 +855,6 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
             return ;
         }
-
         public static void SubitraiVendas(int vlvenda) {
 
             Vlr_Peca = Status_Ordem.editValorpca.getText().toString();
@@ -1068,9 +884,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             return ;
         }
     }
-
     class ConcluirChamado extends AsyncTask<String, String, String> {
-
 
         @Override
         protected void onPreExecute() {
@@ -1081,8 +895,6 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             pDialog.setCancelable(true);
             pDialog.show();
         }
-
-
         @Override
         protected String doInBackground(String... args) {
 
@@ -1090,9 +902,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                 Data_Local = date;
             int success;
             try {
-
                 String NUM_Ocor = IDORDEM;
-
                 List params = new ArrayList();
 
                 params.add(new BasicNameValuePair("id", NUM_Ocor));
@@ -1101,12 +911,8 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
                 Log.d("Debug!", "starting");
 
-                // getting product details by making HTTP request
                 JSONObject newjson = jsonParser.makeHttpRequest(COMCLUIR_URL, "POST",
                         params);
-
-
-                // json success tag
                 success = newjson.getInt(TAG_SUCCESS);
                 if (success == 1) {
                     Log.d("Finalizado com successo!", newjson.toString());
@@ -1121,12 +927,8 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             return null;
-
         }
-
-
         protected void onPostExecute(String file_url) {
             // dismiss the dialog once product deleted
 
@@ -1134,10 +936,7 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
                 pDialog.dismiss();
             }
         }
-
-
     }
-
     public static class ExcluiDadosVenda extends AsyncTask<String, String, String> {
 
         private JSONParser jsonParser;
@@ -1198,64 +997,11 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             VendasAdapter.notifyItemChanged();
         }
     }
-
-    class InserirPeca extends AsyncTask<String, String, String>  {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... args) {
-            int success;
-            try {
-                String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-                String NUM_Ocor = IDORDEM;
-                List params = new ArrayList();
-                params.add(new BasicNameValuePair("idvenda", idvenda));
-                params.add(new BasicNameValuePair("NUM_Ocor", NUM_Ocor));
-                params.add(new BasicNameValuePair("idprod", idprod));
-                params.add(new BasicNameValuePair("quantidadeproduto", qtdprodvend));
-                params.add(new BasicNameValuePair("idfornecedor", idforne));
-                params.add(new BasicNameValuePair("valorvendido", valorvenda));
-                params.add(new BasicNameValuePair("formadepagamento", "Dinheiro - Avista"));
-                params.add(new BasicNameValuePair("datavenda", date));
-
-
-                Log.e("Debug!", "starting");
-
-                // getting product details by making HTTP request
-                JSONObject newjson = jsonParser.makeHttpRequest(IsertItem, "POST",
-                        params);
-                // json success tag
-                success = newjson.getInt(TAG_SUCCESS);
-                if (success == 1) {
-                    Log.d("Insert Item successo!", newjson.toString());
-                    //finish();
-                    return newjson.getString(TAG_MESSAGE);
-
-                } else {
-                    Log.d("Item não Atualizado", newjson.getString(TAG_MESSAGE));
-                    //finish();
-                    return newjson.getString(TAG_MESSAGE);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-        protected void onPostExecute(String file_url) {
-        }
-    }
-
     class InserirPecanew extends AsyncTask<String, String, String> {
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
-
         @Override
         protected String doInBackground(String... args) {
 
@@ -1315,56 +1061,6 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
 
                 }
 
-                /*}else{
-                    idvenda = PecaFragment.lsvendas.get(counter).getIdvenda();
-                    idprod = PecaFragment.lsvendas.get(counter).getIdprod();
-                    qtdprodvend = PecaFragment.lsvendas.get(counter).getQtd();
-                    idcliente = PecaFragment.lsvendas.get(counter).getIdcliente();
-
-                    datavenda =  PecaFragment.lsvendas.get(counter).getDatavenda();
-                    idforne = PecaFragment.lsvendas.get(counter).getIdforne();
-                    valorvenda = PecaFragment.lsvendas.get(counter).getValoruni();
-                    valortotal = PecaFragment.lsvendas.get(counter).getValortotal();
-                    //formadepagamento
-                    //status
-                    qtdparcela = PecaFragment.lsvendas.get(counter).getQtdparcel();
-                    valorparcela = PecaFragment.lsvendas.get(counter).getValorparcela();
-                    descri = PecaFragment.lsvendas.get(counter).getName();
-
-                    //qtdparcela = PecaFragment.lsvendas.get(counter).getQtdparcela();
-
-                    int i = Integer.parseInt (qtdparcela);
-                    int contador = 1;
-
-                    for (int counterr = 0; counterr < i; counterr++) {
-
-
-                        String qtdparcelanew = String.valueOf(contador)+qtdparcela ;
-
-                        JSONObject obj_new = new JSONObject();
-                        try {
-                            obj_new.put("idproduto", idprod);
-                            obj_new.put("quantidadeproduto", qtdprodvend);
-                            obj_new.put("idcliente", idcliente);
-                            obj_new.put("idocorrencia", IDORDEM);
-                            obj_new.put("datavenda", datavenda);
-                            obj_new.put("idfornecedor", idforne);
-                            obj_new.put("volorvendido", valorvenda);
-                            obj_new.put("valortotal", valortotal);
-                            obj_new.put("formadepagamento", "Dinheiro - Avista");
-                            obj_new.put("status", "Executando");
-                            obj_new.put("qtdparcela", qtdparcela);
-                            obj_new.put("valorparcela", valorparcela);
-
-                            json_string = json_string + obj_new.toString() + ",";
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-
-                        }
-                        contador = contador+1;
-                    }
-                } */
-
             }
 
             //Close JSON string
@@ -1400,7 +1096,6 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             return date;
         }
     }
-
     public static class MoneyTextWatcher implements TextWatcher {
         private WeakReference<EditText> editTextWeakReference;
         private final Locale locale = Locale.getDefault();
@@ -1540,7 +1235,6 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
             return NumberFormat.getCurrencyInstance(meuLocal).getCurrency().getSymbol();
         }
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -1548,20 +1242,11 @@ public class Status_Ordem extends AppCompatActivity implements AdapterView.OnIte
         btnaddtar.setEnabled(false);
         VendasAdapter.notifyItemChanged();
     }
-
-
-    //@Override
-    //public void onBackPressed() {
-     //   somatValue.SomaVendas(0);
-    //}
     @Override
     protected void onResume() {
         super.onResume();
 
     }
-
-
-
     public static class MyPagerAdapter extends FragmentPagerAdapter {
         private static int NUM_ITEMS = 3;
 

@@ -41,55 +41,45 @@ import static com.example.luiseduardo.infrafacil.PecaFragment.lsvendas;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-//import android.support.v7.app.AlertDialog;
-
 public class Produtos extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    private ProgressDialog pDialog;
+    //private ProgressDialog pDialog;
     private static String urlAll = "http://futsexta.16mb.com/Poker/Infra_Get_produtos.php";
-    private static String url = "http://futsexta.16mb.com/Poker/ordem_servicomobile.php";
+    //private static String url = "http://futsexta.16mb.com/Poker/ordem_servicomobile.php";
     private static String urlvenda = "http://festabrinka.com.br/Infra_Get_produtosvendido.php";
     ArrayList<HashMap<String, String>> OcorList;
-private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_fornecedor.php";
+    private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_fornecedor.php";
     private AdapterListViewPecas adapterListView;
-    //public static ArrayList itens = null;
     ArrayList<ItemListViewPecas> itens = new ArrayList<>();
     ArrayList<ItemListViewFornecedor> itensfornecedor = new ArrayList<>();
     ArrayList<HashMap<String, String>> newItemlist = new ArrayList<HashMap<String, String>>();
-    //List<ItemListViewFornecedor> rowItems;
     private ListView lv;
-    List<ItemListViewFornecedor> rowItems;
-    String[] Itemtar1 = { "Adicionar Tarefa", "Formatação", "Visita Técnica", "Conf. Router", "Instalar Office", "Outro"};
-
+    //List<ItemListViewFornecedor> rowItems;
+    //String[] Itemtar1 = { "Adicionar Tarefa", "Formatação", "Visita Técnica", "Conf. Router", "Instalar Office", "Outro"};
     private String TAG = Produtos.class.getSimpleName();
     private String qtdvendalaste, qtdvendanow, somaqtdnew,qtdprodvend, idvenda, idprod,  qtd,    idocor, datavenda,  idforne,  valoruni, valorpago,  valortotal,  formadepagamento,  status,  parcela, qtdparcel,  valorparcela,  name, descri;
     public String DescriProd = "%",nome;
     private  String Origem;
-	private  RadioButton buttonavista, buttonparcelado;
-
+	//private  RadioButton buttonavista, buttonparcelado;
     private  ArrayList<ItemListViewFornecedor> mFornecedorList;
-    private  AdapterSpinnerFornecedor mAdapter;
-    private  Spinner spinnerteste;
+    //private  AdapterSpinnerFornecedor mAdapter;
+    //private  Spinner spinnerteste;
     private String idf;
     SearchView searchView;
     JSONParser jsonParser = new JSONParser();
     JSONObject object =null;
-    ListView listView;
-    ArrayList<String> list;
-    ArrayList<String> listfornecedor;
-    ArrayAdapter<String > adapter;
+    //ListView listView;
+    //ArrayList<String> list;
+    //ArrayList<String> listfornecedor;
+    //ArrayAdapter<String > adapter;
     private static String IsertItem = "http://futsexta.16mb.com/Poker/IsertItem_OrdemMobile.php";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
     private ImageView imgaddnew;
-
-    private View v;
+    //private View v;
     public static String IDORDEM = Status_Ordem.IDORDEM;
     public static String IDCLIENTE = Status_Ordem.idcliente;
-    public VendasAdapter vendasAdapter;
-    //public static RecyclerView myrecyclerview;
-    //public static List<Vendas> lsvendas;
-
+    //public VendasAdapter vendasAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,8 +87,6 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
 
         searchView = (SearchView) findViewById (R.id.searchprod);
         imgaddnew = (ImageView) findViewById(R.id.imgaddnewprod);
-
-
         imgaddnew.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Log.v(TAG, " click");
@@ -121,9 +109,6 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
         new GetDados1().execute();
 
         new GetDadosFornecedor().execute();
-
-
-
 
         lv = (ListView) findViewById(R.id.listviwerprod);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -161,9 +146,6 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                 //final EditText idfornecedor = alertLayout.findViewById(R.id.edtidforne);
                 final Spinner spinnerfornecedor = alertLayout.findViewById(R.id.spinnerfornecedor);
 
-               // mAdapter = new AdapterSpinnerFornecedor(getApplicationContext(),mFornecedorList);
-               // spinnerfornecedor.setAdapter(mAdapter);
-
                 AdapterSpinnerFornecedor adapter = new AdapterSpinnerFornecedor(Produtos.this,
                         R.layout.spinner_fornecedor_layout, R.id.spinnerdescricao, mFornecedorList);
                 spinnerfornecedor.setAdapter(adapter);
@@ -171,14 +153,8 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                 spinnerfornecedor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        //first,  we have to retrieve the item position as a string
-                        // then, we can change string value into integer
                         String item_position = String.valueOf(position);
-
-                        //int positonInt = Integer.valueOf();
-                         idf = spinnerfornecedor.getSelectedItem().toString();
-
-                        //Toast.makeText(Produtos.this, "value is "+ idf, Toast.LENGTH_SHORT).show();
+                        idf = spinnerfornecedor.getSelectedItem().toString();
                     }
 
                     @Override
@@ -186,14 +162,6 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
 
                     }
                 });
-
-                //String idfornecedor = spinnerfornecedor.getPositionForView()
-
-                // spinnerfornecedor.setAdapter(aa);
-                //spinnerfornecedor.setSelection(0);
-
-
-
 
                 final EditText valordevenda = alertLayout.findViewById(R.id.editvalorvendido);
                 valordevenda.addTextChangedListener(new Status_Ordem.MoneyTextWatcher(valordevenda));
@@ -214,7 +182,7 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
 
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(Produtos.this);
-                alert.setTitle("Adicionar item");
+                alert.setTitle("Adicionar item na Venda");
                 alert.setView(alertLayout);
                 alert.setCancelable(false);
 
@@ -256,12 +224,7 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                             qtdparcel = "0";
                             valorparcela = "0";
 
-
                             final int position = getAdapterItemPosition(Integer.parseInt(idprod));
-
-                            //Toast.makeText(getBaseContext(), "Position: "+ position , Toast.LENGTH_SHORT).show();
-
-                           // String positionn = String.valueOf(position);
                             if (position == -1) {
                                      int iqtd = Integer.parseInt (qtdprodvend);
                                      int ivluni = Integer.parseInt (valoruni);
@@ -282,10 +245,8 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                                         final EditText qtd = alertLayoutitemparce.findViewById(R.id.edtquantidade);
                                         final EditText addqtd = alertLayoutitemparce.findViewById(R.id.addedtquantidade);
 
-
                                         tvdescriproduto.setText(descri);
-                                        //txnumeroid.setText(idprod);
-                                        //valordevenda.setText(valoruni);
+
                                         qtd.setText(PecaFragment.lsvendas.get(position).getQtd());
                                         addqtd.setText(qtdprodvend);
 
@@ -495,26 +456,18 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
                 return false;
             }
         });
-
-
     }
-
-
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
     }
-    public int getAdapterItemPosition(long id)
-    {
+    public int getAdapterItemPosition(long id){
 
         for (int position = 0; position < PecaFragment.lsvendas.size(); position++)
             if (Integer.parseInt(PecaFragment.lsvendas.get(position).getIdprod()) == id)
                 return position;
         return -1;
     }
-
     public int getAdapterItemPositiondel(int id) {
 
         for (int position = 0; position < PecaFragment.lsvendas.size(); position++){
@@ -532,8 +485,6 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
         return -1;
 
     }
-
-
     class GetDados1 extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -634,8 +585,6 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
 
         }
     }
-
-
     class InserirPeca extends AsyncTask<String, String, String>  {
 
         @Override
@@ -685,8 +634,6 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
         protected void onPostExecute(String file_url) {
         }
     }
-
-    
     private class GetDadosVenda extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -790,7 +737,7 @@ private static String urlFornecedor = "http://futsexta.16mb.com/Poker/Infra_Get_
             //Somavebdas=0;
         }
     }
-class GetDadosFornecedor extends AsyncTask<Void, Void, Void> {
+    class GetDadosFornecedor extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
